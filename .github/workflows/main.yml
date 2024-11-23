@@ -20,8 +20,10 @@ jobs:
       - run: flutter clean
       - run: flutter pub get
       - run: flutter build apk --release --split-per-abi
+      - name: Generate dynamic tag
+        run: echo "TAG=v$(date +'%Y%m%d%H%M%S')" >> $GITHUB_ENV
       - uses: ncipollo/release-action@v1
         with:
-          tag: v1.0.3
+          tag: ${{ env.TAG }}
           artifacts: 'build/app/outputs/apk/release/*'
           token: ${{ secrets.AGRO_MITRA_KEY }}
