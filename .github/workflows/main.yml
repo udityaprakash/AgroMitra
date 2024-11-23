@@ -1,0 +1,27 @@
+name: Build Agro Mitra APK
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Build and release APK
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-java@v1
+        with:
+          java-version: '17'
+      - uses: subosito/flutter-action@v1
+        with:
+          channel: 'stable'
+      - run: flutter clean
+      - run: flutter pub get
+      - run: flutter build apk --release --split-per-abi
+      - uses: ncipollo/release-action@v1
+        with:
+          tag: v1.0.3
+          artifacts: 'build/app/outputs/apk/release/*'
+          token: ${{ secrets.AGRO_MITRA_KEY }}
