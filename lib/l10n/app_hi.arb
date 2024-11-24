@@ -1,0 +1,10 @@
+{
+    "hello":"स्वागत है",
+    "@hello":{
+        "description":"it is hello in hindi"
+    },
+    "nointernet": "कोई इंटरनेट कनेक्शन नहीं है",
+    "@nointernet": {
+        "description": "it shows no internet connection message in hindi"
+    }
+}

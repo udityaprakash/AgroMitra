@@ -1,0 +1,10 @@
+{
+    "hello":"Welcome",
+    "@hello":{
+        "description":"it is hello in english"
+    },
+    "nointernet": "No Internet Connection",
+    "@nointernet": {
+        "description": "it shows no internet connection message in english"
+    }
+}

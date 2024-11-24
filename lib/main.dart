@@ -1,9 +1,11 @@
 import 'package:agromitra/constant/color.dart';
 import 'package:agromitra/functions/internet-connectivity.dart';
 import 'package:agromitra/routes.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 
 Future main() async{
@@ -12,6 +14,8 @@ Future main() async{
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((value) => runApp(const MyApp()));
 }
+
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -21,11 +25,24 @@ class MyApp extends StatelessWidget {
       create: (context) => ConnectivityProvider(),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        initialRoute: '/',
-    
+        supportedLocales: const [
+          Locale('en'),
+          Locale('hi')
+        ],
+        localizationsDelegates: [
+          AppLocalizations.delegate,
+          DefaultMaterialLocalizations.delegate,
+          DefaultCupertinoLocalizations.delegate,
+          DefaultWidgetsLocalizations.delegate,
+        ],
+
+        locale: Locale('en'),
+
+        initialRoute: '/',    
         onGenerateRoute: CustomRoute.allRoutes,
         theme:
          ThemeData(
+          fontFamily: 'Parkinsans',
           scaffoldBackgroundColor: AppColors.background,
           textTheme: Typography().white,
         ),

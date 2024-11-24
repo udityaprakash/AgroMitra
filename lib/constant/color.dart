@@ -4,10 +4,12 @@ class AppColors {
   // Primary Color
   static const Color primary = Color(0xFF123D40);
 
+
   // Secondary Color
   static const Color secondary = Color(0xFF648D76);
 
   // Background Colors
+  static const Color appLogoBackground = Color(0xFFDFD8B1);
   static const Color background = Color(0xFFFAF2DB);
   static const Color cardShadow = Color(0xFF7D623F);
 
