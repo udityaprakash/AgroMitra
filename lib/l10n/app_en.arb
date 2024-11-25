@@ -27,6 +27,35 @@
     "or": "OR",
     "continueWithGoogle": "Continue with Google",
     "dontHaveAccount": "Don't have an account?",
-    "register": "Register"
+    "register": "Register",
+    "enterFullName": "Enter your full name",
+    "@enterFullName": {
+        "description": "Placeholder text for full name input field"
+    },
+    "fullNameRequired": "Full name is required",
+    "@fullNameRequired": {
+        "description": "Validation message for missing full name"
+    },
+    "reEnterPassword": "Re-enter your password",
+    "@reEnterPassword": {
+        "description": "Placeholder text for re-enter password input field"
+    },
+    "reEnterPasswordRequired": "Please re-enter your password",
+    "@reEnterPasswordRequired": {
+        "description": "Validation message for missing re-enter password"
+    },
+    "passwordMismatch": "Passwords do not match",
+    "@passwordMismatch": {
+        "description": "Validation message for mismatched passwords"
+    },
+    "alreadyHaveAccount": "Already have an account?",
+    "@alreadyHaveAccount": {
+        "description": "Prompt for users to login if they already have an account"
+    },
+    "login": "Login",
+    "@login": {
+        "description": "Text for the login button"
+    }
+
 
 }

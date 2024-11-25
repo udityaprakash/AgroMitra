@@ -5,9 +5,11 @@ import 'package:agromitra/utils/ui/custom-text.dart';
 import 'package:agromitra/utils/ui/custom-button.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class LoginScreen extends StatelessWidget {
+class SignupScreen extends StatelessWidget {
+  final TextEditingController fullNameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController rePasswordController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>(); // Add GlobalKey
 
   @override
@@ -40,7 +42,20 @@ class LoginScreen extends StatelessWidget {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 80.0),
+                    const SizedBox(height: 40.0),
+
+                    // Full Name TextField
+                    CustomTextField(
+                      hintText: AppLocalizations.of(context)!.enterFullName,
+                      controller: fullNameController,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return AppLocalizations.of(context)!.fullNameRequired;
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 16.0),
 
                     // Email TextField
                     CustomTextField(
@@ -73,35 +88,35 @@ class LoginScreen extends StatelessWidget {
                         return null;
                       },
                     ),
-                    const SizedBox(height: 8.0),
+                    const SizedBox(height: 16.0),
 
-                    // Forgot Password Button
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: TextButton(
-                        onPressed: () {
-                          // Handle forgot password action
-                        },
-                        child: CustomTextWidget(
-                          text: AppLocalizations.of(context)!.forgotPassword,
-                          textColor: AppColors.primary,
-                          fontSize: 14.0,
-                        ),
-                      ),
+                    // Re-enter Password TextField
+                    CustomTextField(
+                      hintText: AppLocalizations.of(context)!.reEnterPassword,
+                      controller: rePasswordController,
+                      obscureText: true,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return AppLocalizations.of(context)!.reEnterPasswordRequired;
+                        }
+                        if (value != passwordController.text) {
+                          return AppLocalizations.of(context)!.passwordMismatch;
+                        }
+                        return null;
+                      },
                     ),
                     const SizedBox(height: 24.0),
 
-                    // Sign In Button
+                    // Register Button
                     CustomButton(
                       backgroundColor: AppColors.primary,
                       textColor: Colors.white,
-                      text: AppLocalizations.of(context)!.signIn,
+                      text: AppLocalizations.of(context)!.register,
                       onPressed: () {
                         if (_formKey.currentState?.validate() ?? false) {
-                          // Handle successful login
+                          // Handle registration logic here
                           print("Form is valid");
                         } else {
-                          // Handle validation errors
                           print("Form is invalid");
                         }
                       },
@@ -145,21 +160,21 @@ class LoginScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 24.0),
 
-                    // Don't have an account? Register
+                    // Already have an account? Login
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         CustomTextWidget(
-                          text: AppLocalizations.of(context)!.dontHaveAccount,
+                          text: AppLocalizations.of(context)!.alreadyHaveAccount,
                           textColor: AppColors.textHint,
                           fontSize: 14.0,
                         ),
                         TextButton(
                           onPressed: () {
-                            Navigator.pushReplacementNamed(context, '/signup');
+                            Navigator.pushReplacementNamed(context, '/login');
                           },
                           child: CustomTextWidget(
-                            text: AppLocalizations.of(context)!.register,
+                            text: AppLocalizations.of(context)!.login,
                             textColor: AppColors.primary,
                             fontSize: 14.0,
                             isBold: true,

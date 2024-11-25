@@ -27,6 +27,35 @@
     "or": "या",
     "continueWithGoogle": "गूगल के साथ जारी रखें",
     "dontHaveAccount": "खाता नहीं है?",
-    "register": "पंजीकरण करें"
+    "register": "पंजीकरण करें",
+    "enterFullName": "अपना पूरा नाम दर्ज करें",
+    "@enterFullName": {
+        "description": "Placeholder text for full name input field in Hindi"
+    },
+    "fullNameRequired": "पूरा नाम अनिवार्य है",
+    "@fullNameRequired": {
+        "description": "Validation message for missing full name in Hindi"
+    },
+    "reEnterPassword": "अपना पासवर्ड फिर से दर्ज करें",
+    "@reEnterPassword": {
+        "description": "Placeholder text for re-enter password input field in Hindi"
+    },
+    "reEnterPasswordRequired": "कृपया अपना पासवर्ड फिर से दर्ज करें",
+    "@reEnterPasswordRequired": {
+        "description": "Validation message for missing re-enter password in Hindi"
+    },
+    "passwordMismatch": "पासवर्ड मेल नहीं खाते",
+    "@passwordMismatch": {
+        "description": "Validation message for mismatched passwords in Hindi"
+    },
+    "alreadyHaveAccount": "पहले से खाता है?",
+    "@alreadyHaveAccount": {
+        "description": "Prompt for users to login if they already have an account in Hindi"
+    },
+    "login": "लॉगिन करें",
+    "@login": {
+        "description": "Text for the login button in Hindi"
+    }
+
 
 }
