@@ -6,6 +6,7 @@ import 'package:agromitra/utils/ui/custom-text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
+import 'dart:developer';
 
 class LanguageSelection extends StatefulWidget {
   @override
@@ -93,24 +94,29 @@ class _LanguageSelectionState extends State<LanguageSelection> {
                   onTap: () {
                     setState(() {
                       selectedLanguageIndex = index;
-                      context.read<LanguageProvider>().setLocale(Locale(languages[index]['code']!));
+                      context
+                          .read<LanguageProvider>()
+                          .setLocale(Locale(languages[index]['code']!));
                     });
                   },
                   child: AnimatedContainer(
-                    duration: Duration(milliseconds: 300), // Add a smooth transition
+                    duration:
+                        Duration(milliseconds: 300), // Add a smooth transition
                     height: 80, // Increased height for better rectangle
                     width: double.infinity,
                     decoration: BoxDecoration(
                       color: languages[index]['color'],
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(
-                        color: isSelected ? AppColors.primary : Colors.transparent,
+                        color:
+                            isSelected ? AppColors.primary : Colors.transparent,
                         width: isSelected ? 3.0 : 1.0,
                       ),
                     ),
                     child: Center(
-                      child: CustomTextWidget(text: languages[index]['name']!, textColor: AppColors.textPrimary)
-                    ),
+                        child: CustomTextWidget(
+                            text: languages[index]['name']!,
+                            textColor: AppColors.textPrimary)),
                   ),
                 );
               },
@@ -122,16 +128,23 @@ class _LanguageSelectionState extends State<LanguageSelection> {
               backgroundColor: AppColors.secondary,
               textColor: AppColors.textPrimary,
               text: AppLocalizations.of(context)!.contin,
-              onPressed: () {
+              onPressed: () async {
                 if (selectedLanguageIndex != null) {
-                  String selectedLanguage = languages[selectedLanguageIndex!]['code'];
-                  // StorageManager.saveData('Lang', selectedLanguage);
+                  String selectedLanguage =
+                      languages[selectedLanguageIndex!]['code'];
+                  await StorageManager.saveData('Lang', selectedLanguage);
+                  // log('Selected Language: $selectedLanguage');
                   // ScaffoldMessenger.of(context).showSnackBar(
                   //   SnackBar(content: Text('You have selected: $selectedLanguage')),
+                  // var j = await StorageManager.readData('Lang');
+                  // log(j);
                   // );
-                }else{
+                } else {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: CustomTextWidget(text: 'Please select a language', textColor: AppColors.textSecondary)),
+                    SnackBar(
+                        content: CustomTextWidget(
+                            text: 'Please select a language',
+                            textColor: AppColors.textSecondary)),
                   );
                 }
               },

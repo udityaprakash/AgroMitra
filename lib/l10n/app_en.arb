@@ -7,7 +7,7 @@
     "@nointernet": {
         "description": "it shows no internet connection message in english"
     },
-    "choosepreferedlang": "Choose your referred Language",
+    "choosepreferedlang": "Choose your preferred Language",
     "@nchoosepreferedlang": {
         "description": "it shows  message in english"
     },
