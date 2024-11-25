@@ -9,7 +9,7 @@ class ConnectivityProvider with ChangeNotifier {
 
   ConnectivityProvider() {
     _checkConnection();
-    _timer = Timer.periodic(Duration(seconds: 17), (timer) {
+    _timer = Timer.periodic(Duration(seconds: 5), (timer) {
       _checkConnection();
     });
   }

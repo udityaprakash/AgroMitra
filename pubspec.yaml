@@ -38,6 +38,7 @@ dependencies:
   provider: ^6.1.2
   http: ^1.2.2
   intl: ^0.19.0
+  flutter_svg: ^2.0.7
   flutter_localizations:
     sdk: flutter
 
@@ -68,8 +69,13 @@ flutter:
   assets:
     - assets/images/
     - assets/fonts/
+    - assets/svgs/
     - assets/images/app_logo/
     - assets/images/app_logo/appLogoPng.png
+    - assets/images/app_logo/appLogoImage.png
+    - assets/svgs/appLogo.svg
+    - assets/svgs/appLogo1.svg
+
     - assets/fonts/Parkinsans-VariableFont_wght.ttf
 
   # An image asset can refer to one or more resolution-specific "variants", see

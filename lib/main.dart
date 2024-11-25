@@ -4,6 +4,7 @@ import 'package:agromitra/routes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -31,12 +32,12 @@ class MyApp extends StatelessWidget {
         ],
         localizationsDelegates: [
           AppLocalizations.delegate,
-          DefaultMaterialLocalizations.delegate,
-          DefaultCupertinoLocalizations.delegate,
-          DefaultWidgetsLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
         ],
 
-        locale: Locale('en'),
+        locale: Locale('hi'),
 
         initialRoute: '/',    
         onGenerateRoute: CustomRoute.allRoutes,

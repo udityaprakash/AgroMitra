@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:agromitra/constant/color.dart';
 import 'package:agromitra/functions/internet-connectivity.dart';
+import 'package:agromitra/screens/authScreen/selectLangScreen.dart';
 import 'package:agromitra/screens/authScreen/somethingWentWrong.dart';
 import 'package:agromitra/screens/splashScreen.dart';
 import 'package:agromitra/utils/ui/custom-text.dart';
@@ -40,6 +41,8 @@ class CustomRoute {
       switch (settings.name) {
         case "/":
           return SplashScreen();
+        case "/selectLanguage":
+          return LanguageSelection();  
       }
       log("Settings name: " + (settings.name).toString());
       return SomethingWentWrong();

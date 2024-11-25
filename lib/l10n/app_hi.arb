@@ -6,5 +6,13 @@
     "nointernet": "कोई इंटरनेट कनेक्शन नहीं है",
     "@nointernet": {
         "description": "it shows no internet connection message in hindi"
+    },
+    "choosepreferedlang": "अपनी पसंदीदा भाषा चुनें",
+    "@choosepreferedlang": {
+    "description": "it shows message in hindi"
+    },
+    "contin": "हिंदी में जारी रखें",
+    "@contin": {
+    "description": "it shows message in hindi"
     }
 }

@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:agromitra/constant/color.dart';
-import 'package:agromitra/utils/ui/custom-input-field.dart';
 import 'package:agromitra/utils/ui/custom-text.dart';
 import 'package:flutter/material.dart';
 
@@ -18,9 +17,10 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    // Timer(const Duration(seconds: 3), () {
-    //   Navigator.pushReplacementNamed(context, '/homepageredirector');
-    // });
+    Timer(const Duration(seconds: 5), () {
+      // Navigator.pushReplacementNamed(context, '/homepageredirector');
+      Navigator.pushReplacementNamed(context, '/selectLanguage');
+    });
   }
 
   @override
@@ -32,7 +32,7 @@ class _SplashScreenState extends State<SplashScreen> {
               height: 500,
               child: Column(
                 children: [
-                  Image.asset("assets/images/app_logo/appLogoPng.png"),
+                  Image.asset("assets/images/app_logo/appLogoImage.png"),
                   const SizedBox(height: 20),
                   CustomTextWidget(
                     text: AppLocalizations.of(context)!.hello, 

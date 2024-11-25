@@ -33,6 +33,7 @@ class CustomTextWidget extends StatelessWidget {
       textAlign: textAlign ?? TextAlign.start,
       style: TextStyle(
         color: textColor,
+        fontFamily: 'Parkinsans',
         fontStyle: fontStyle,
         fontWeight: isBold ? FontWeight.bold : fontWeight,
         fontSize: fontSize,
