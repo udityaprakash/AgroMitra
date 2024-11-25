@@ -6,6 +6,8 @@ class CustomButton extends StatelessWidget {
   final double? width;
   final String text;
   final VoidCallback onPressed;
+  final Widget? prefixIcon; // Leading icon
+  final Widget? postfixIcon; // Trailing icon
 
   const CustomButton({
     Key? key,
@@ -14,6 +16,8 @@ class CustomButton extends StatelessWidget {
     this.width,
     required this.text,
     required this.onPressed,
+    this.prefixIcon, // Added this for prefix
+    this.postfixIcon, // Added this for postfix
   }) : super(key: key);
 
   @override
@@ -26,13 +30,27 @@ class CustomButton extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 16.0),
         ),
         onPressed: onPressed,
-        child: Text(
-          text,
-          style: TextStyle(
-            color: textColor,
-            fontSize: 16.0,
-            fontFamily: 'Parkinsans',
-          ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (prefixIcon != null) ...[
+              prefixIcon!,
+              const SizedBox(width: 8.0), // Spacing between icon and text
+            ],
+            Text(
+              text,
+              style: TextStyle(
+                color: textColor,
+                fontSize: 16.0,
+                fontFamily: 'Parkinsans',
+              ),
+            ),
+            if (postfixIcon != null) ...[
+              const SizedBox(width: 8.0), // Spacing between text and icon
+              postfixIcon!,
+            ],
+          ],
         ),
       ),
     );
@@ -43,7 +61,9 @@ class CustomButton extends StatelessWidget {
 // CustomButton(
 //   backgroundColor: AppColors.primary,
 //   textColor: AppColors.textSecondary,
-//   text: 'Click Me',
+//   text: 'Sign In',
+//   prefixIcon: Icon(Icons.login, color: Colors.white),
+//   postfixIcon: Icon(Icons.arrow_forward, color: Colors.white),
 //   onPressed: () {
 //     print('Button Clicked');
 //   },

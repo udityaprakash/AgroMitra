@@ -132,7 +132,10 @@ class _LanguageSelectionState extends State<LanguageSelection> {
                 if (selectedLanguageIndex != null) {
                   String selectedLanguage =
                       languages[selectedLanguageIndex!]['code'];
-                  await StorageManager.saveData('Lang', selectedLanguage);
+                  await StorageManager.saveData('Lang', selectedLanguage).then(
+                    (value) => Navigator.pushNamed(context, '/login'),
+                  );
+
                   // log('Selected Language: $selectedLanguage');
                   // ScaffoldMessenger.of(context).showSnackBar(
                   //   SnackBar(content: Text('You have selected: $selectedLanguage')),

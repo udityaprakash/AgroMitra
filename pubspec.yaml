@@ -73,6 +73,7 @@ flutter:
     - assets/images/app_logo/
     - assets/images/app_logo/appLogoPng.png
     - assets/images/app_logo/appLogoImage.png
+    - assets/images/app_images/googleLogo.png
     - assets/svgs/appLogo.svg
     - assets/svgs/appLogo1.svg
 

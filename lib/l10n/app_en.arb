@@ -14,5 +14,19 @@
     "contin": "Continue in English",
     "@contin": {
         "description": "it shows  message in english"
-    }
+    },
+    "agromitra": "AgroMitra",
+    "enterEmail": "Enter your email",
+    "emailRequired": "Email is required",
+    "invalidEmail": "Enter a valid email",
+    "enterPassword": "Enter your password",
+    "passwordRequired": "Password is required",
+    "passwordTooShort": "Password must be at least 6 characters",
+    "forgotPassword": "Forgot Password?",
+    "signIn": "Sign In",
+    "or": "OR",
+    "continueWithGoogle": "Continue with Google",
+    "dontHaveAccount": "Don't have an account?",
+    "register": "Register"
+
 }

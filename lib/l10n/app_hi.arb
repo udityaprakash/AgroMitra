@@ -14,5 +14,19 @@
     "contin": "हिंदी में जारी रखें",
     "@contin": {
     "description": "it shows message in hindi"
-    }
+    },
+    "agromitra": "एग्रोमित्र",
+    "enterEmail": "अपना ईमेल दर्ज करें",
+    "emailRequired": "ईमेल अनिवार्य है",
+    "invalidEmail": "एक मान्य ईमेल दर्ज करें",
+    "enterPassword": "अपना पासवर्ड दर्ज करें",
+    "passwordRequired": "पासवर्ड अनिवार्य है",
+    "passwordTooShort": "पासवर्ड कम से कम 6 अक्षरों का होना चाहिए",
+    "forgotPassword": "पासवर्ड भूल गए?",
+    "signIn": "साइन इन करें",
+    "or": "या",
+    "continueWithGoogle": "गूगल के साथ जारी रखें",
+    "dontHaveAccount": "खाता नहीं है?",
+    "register": "पंजीकरण करें"
+
 }

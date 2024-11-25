@@ -51,7 +51,7 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             fontFamily: 'Parkinsans',
             scaffoldBackgroundColor: AppColors.background,
-            textTheme: Typography().white,
+            textTheme: ThemeData.dark().textTheme,
           ),
         );
       },

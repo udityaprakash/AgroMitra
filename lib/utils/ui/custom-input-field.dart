@@ -1,3 +1,4 @@
+import 'package:agromitra/constant/color.dart';
 import 'package:flutter/material.dart';
 
 class CustomTextField extends StatefulWidget {
@@ -35,58 +36,52 @@ class _CustomTextFieldState extends State<CustomTextField> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        TextFormField(
-          controller: widget.controller,
-          obscureText: _obscureText,
-          decoration: InputDecoration(
-            hintText: widget.hintText,
-            suffixIcon: widget.obscureText
-                ? IconButton(
-                    icon: Icon(
-                      _obscureText ? Icons.visibility : Icons.visibility_off,
-                    ),
-                    onPressed: _toggleObscureText,
-                  )
-                : null,
-            border: OutlineInputBorder(),
-          ),
-          validator: widget.validator,
+    return TextFormField(
+      controller: widget.controller,
+      obscureText: _obscureText,
+      cursorColor: AppColors.primary,
+      style: TextStyle(
+        color: AppColors.textPrimary, // Text color
+        fontFamily: 'Parkinsans', // Set font family
+        fontSize: 16.0,
+        decoration: TextDecoration.none, // Remove underline while typing
+      ),
+      decoration: InputDecoration(
+        hintText: widget.hintText,
+        hintStyle: TextStyle(
+          color: AppColors.textHint, // Hint text color
+          fontFamily: 'Parkinsans', // Set font family for hint
+          fontSize: 14.0,
         ),
-        if (widget.validator != null)
-          Builder(
-            builder: (context) {
-              final errorText = widget.validator!(widget.controller.text);
-              return errorText != null
-                  ? Padding(
-                      padding: const EdgeInsets.only(top: 8.0),
-                      child: Text(
-                        errorText,
-                        style: TextStyle(
-                          color: Colors.red,
-                          fontSize: 12.0,
-                        ),
-                      ),
-                    )
-                  : SizedBox.shrink();
-            },
-          ),
-      ],
+        suffixIcon: widget.obscureText
+            ? IconButton(
+                icon: Icon(
+                  _obscureText ? Icons.visibility : Icons.visibility_off,
+                  color: AppColors.textHint,
+                ),
+                onPressed: _toggleObscureText,
+              )
+            : null,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(50.0), // Make borders rounded
+          borderSide: BorderSide(color: AppColors.textHint),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(50.0), // Rounded border
+          borderSide: BorderSide(color: AppColors.textHint),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(50.0), // Rounded border
+          borderSide: BorderSide(color: AppColors.primary),
+        ),
+        contentPadding: const EdgeInsets.symmetric(
+          vertical: 16.0,
+          horizontal: 20.0, // Add padding inside the input field
+        ),
+        filled: true,
+        fillColor: AppColors.background, // Slight background color
+      ),
+      validator: widget.validator,
     );
   }
 }
-
-// Usage Example in Flutter Widgets:
-// CustomTextField(
-//   hintText: 'Enter your password',
-//   controller: TextEditingController(),
-//   obscureText: true,
-//   validator: (value) {
-//     if (value == null || value.isEmpty) {
-//       return 'This field cannot be empty';
-//     }
-//     return null;
-//   },
-// );
