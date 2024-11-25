@@ -19,6 +19,7 @@ jobs:
           channel: 'stable'
       - run: flutter clean
       - run: flutter pub get
+      - run: flutter gen-l10n
       - run: flutter build apk --release --split-per-abi
       - name: Generate dynamic tag
         run: echo "TAG=v$(date +'%Y%m%d%H%M%S')" >> $GITHUB_ENV
