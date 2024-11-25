@@ -1,8 +1,11 @@
 import 'package:agromitra/constant/color.dart';
+import 'package:agromitra/functions/languageProvider.dart';
+import 'package:agromitra/utils/data/deviceStorage.dart';
 import 'package:agromitra/utils/ui/custom-button.dart';
 import 'package:agromitra/utils/ui/custom-text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
 
 class LanguageSelection extends StatefulWidget {
   @override
@@ -68,7 +71,8 @@ class _LanguageSelectionState extends State<LanguageSelection> {
                 CustomTextWidget(
                   text: AppLocalizations.of(context)!.choosepreferedlang,
                   textColor: AppColors.textPrimary,
-                  fontSize: 20,
+                  overflow: TextOverflow.clip,
+                  fontSize: 15,
                 ),
               ],
             ),
@@ -89,6 +93,7 @@ class _LanguageSelectionState extends State<LanguageSelection> {
                   onTap: () {
                     setState(() {
                       selectedLanguageIndex = index;
+                      context.read<LanguageProvider>().setLocale(Locale(languages[index]['code']!));
                     });
                   },
                   child: AnimatedContainer(
@@ -119,10 +124,11 @@ class _LanguageSelectionState extends State<LanguageSelection> {
               text: AppLocalizations.of(context)!.contin,
               onPressed: () {
                 if (selectedLanguageIndex != null) {
-                  String selectedLanguage = languages[selectedLanguageIndex!]['name'];
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('You have selected: $selectedLanguage')),
-                  );
+                  String selectedLanguage = languages[selectedLanguageIndex!]['code'];
+                  // StorageManager.saveData('Lang', selectedLanguage);
+                  // ScaffoldMessenger.of(context).showSnackBar(
+                  //   SnackBar(content: Text('You have selected: $selectedLanguage')),
+                  // );
                 }else{
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: CustomTextWidget(text: 'Please select a language', textColor: AppColors.textSecondary)),
