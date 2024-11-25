@@ -1,3 +1,9 @@
+import 'dart:convert';
+import 'dart:developer';
+import 'package:agromitra/utils/data/deviceStorage.dart';
+import 'package:http/http.dart' as http;
+import 'package:agromitra/utils/data/fetchInternetData.dart';
+import 'package:agromitra/utils/data/urls.dart';
 import 'package:flutter/material.dart';
 import 'package:agromitra/constant/color.dart';
 import 'package:agromitra/utils/ui/custom-input-field.dart';
@@ -5,10 +11,16 @@ import 'package:agromitra/utils/ui/custom-text.dart';
 import 'package:agromitra/utils/ui/custom-button.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {  // Change to StatefulWidget
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>(); // Add GlobalKey
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  bool isLoading = false;  
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +31,8 @@ class LoginScreen extends StatelessWidget {
           child: Center(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24.0),
-              child: Form( // Wrap in Form
+              child: Form(
+                // Wrap in Form
                 key: _formKey,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -29,7 +42,8 @@ class LoginScreen extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Image.asset('assets/images/app_logo/appLogoImage.png', height: 50),
+                        Image.asset('assets/images/app_logo/appLogoImage.png',
+                            height: 50),
                         SizedBox(width: 8),
                         CustomTextWidget(
                           text: AppLocalizations.of(context)!.agromitra,
@@ -92,21 +106,64 @@ class LoginScreen extends StatelessWidget {
                     const SizedBox(height: 24.0),
 
                     // Sign In Button
-                    CustomButton(
-                      backgroundColor: AppColors.primary,
-                      textColor: Colors.white,
-                      text: AppLocalizations.of(context)!.signIn,
-                      onPressed: () {
-                        if (_formKey.currentState?.validate() ?? false) {
-                          // Handle successful login
-                          print("Form is valid");
-                        } else {
-                          // Handle validation errors
-                          print("Form is invalid");
+                    isLoading 
+                    ? Center(
+                        child: CircularProgressIndicator(
+                          color: AppColors.primary,
+                        )
+                      )
+                    : CustomButton(
+                        backgroundColor: AppColors.primary,
+                        textColor: Colors.white,
+                        text: AppLocalizations.of(context)!.signIn,
+                        onPressed: () async {
+                          if (_formKey.currentState?.validate() ?? false) {
+                            setState(() {
+                              isLoading = true;  // Show loader
+                            });
+                            
+                            try {
+                              final lang = await StorageManager.readData('Lang');
+                              log(lang);
+                              final fetchData = FetchData(
+                                url: UrlProvider.loginUrl,
+                                headers: {'Content-Type': 'application/json'},
+                                body: {
+                                  "email": emailController.text,
+                                  "password": passwordController.text,
+                                  "language": (lang).toString()
+                                },
+                              );
+                              final response = await fetchData.post();
+                              log('POST Response: ${response}');
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: CustomTextWidget(
+                                    text: response['msg'],
+                                    textColor: AppColors.textSecondary
+                                  )
+                                ),
+                              );
+                            } catch (e) {
+                              log("here Error: $e");
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: CustomTextWidget(
+                                    text: "An error occurred during sign in",
+                                    textColor: AppColors.textSecondary
+                                  )
+                                ),
+                              );
+                            } finally {
+                              setState(() {
+                                isLoading = false;  // Hide loader regardless of success/failure
+                              });
+                            }
+                          } else {
+                            log("Form is invalid");
+                          }
                         }
-                      },
                     ),
-                    const SizedBox(height: 16.0),
 
                     // Or Divider
                     Row(
@@ -141,7 +198,9 @@ class LoginScreen extends StatelessWidget {
                       onPressed: () {
                         // Handle Google Sign-In
                       },
-                      prefixIcon: Image.asset('assets/images/app_images/googleLogo.png', height: 26),
+                      prefixIcon: Image.asset(
+                          'assets/images/app_images/googleLogo.png',
+                          height: 26),
                     ),
                     const SizedBox(height: 24.0),
 
