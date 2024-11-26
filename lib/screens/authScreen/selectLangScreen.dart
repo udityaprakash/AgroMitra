@@ -125,8 +125,8 @@ class _LanguageSelectionState extends State<LanguageSelection> {
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: CustomButton(
-              backgroundColor: AppColors.secondary,
-              textColor: AppColors.textPrimary,
+              backgroundColor: AppColors.primary,
+              textColor: AppColors.background,
               text: AppLocalizations.of(context)!.contin,
               onPressed: () async {
                 if (selectedLanguageIndex != null) {

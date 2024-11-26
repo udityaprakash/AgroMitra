@@ -133,10 +133,11 @@ class _LoginScreenState extends State<LoginScreen> {
                             )
                           : CustomButton(
                               backgroundColor: AppColors.primary,
-                              textColor: Colors.white,
+                              textColor: AppColors.background,
                               text: AppLocalizations.of(context)!.signIn,
                               onPressed: () async {
-                                if (_formKey.currentState?.validate() ?? false) {
+                                if (_formKey.currentState?.validate() ??
+                                    false) {
                                   setState(() {
                                     isLoading = true; // Show loader
                                   });
@@ -160,8 +161,26 @@ class _LoginScreenState extends State<LoginScreen> {
                                     log('POST Response: ${response}');
 
                                     // Show the response message
-                                    _showSnackbar(context, getMessageByCode(
-                                      context, response['msgCode']));
+                                    _showSnackbar(
+                                        context,
+                                        getMessageByCode(
+                                            context, response['msgCode']));
+                                    if (response['verified'] == false ) {
+                                      Navigator.pushReplacementNamed(
+                                          context, '/enterOtp');
+                                      return;
+                                    }
+                                    if (response['success'] == true) {
+                                      // Save the token in the device storage
+                                      await StorageManager.saveData(
+                                        'token',
+                                        response['token'],
+                                      );
+
+                                      // Navigate to the home screen
+                                      Navigator.pushReplacementNamed(
+                                          context, '/homescreen');
+                                    }
                                   } catch (e) {
                                     log("Error: $e");
                                     _showSnackbar(

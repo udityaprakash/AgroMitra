@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:agromitra/utils/data/deviceStorage.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:agromitra/constant/color.dart';
@@ -17,31 +18,34 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    Timer(const Duration(seconds: 5), () {
+    Timer(const Duration(seconds: 3), () async {
       // Navigator.pushReplacementNamed(context, '/homepageredirector');
-      Navigator.pushReplacementNamed(context, '/selectLanguage');
-    });
+      var token = await StorageManager.readData('token');
+      if(token != null){
+        Navigator.pushReplacementNamed(context, '/homescreen');
+      }else{
+        Navigator.pushReplacementNamed(context, '/selectLanguage');
+      }
+  });
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: AppColors.appLogoBackground,
         body: Center(
             child: Container(
-              height: 500,
-              child: Column(
-                children: [
-                  Image.asset("assets/images/app_logo/appLogoImage.png"),
-                  const SizedBox(height: 20),
-                  CustomTextWidget(
-                    text: AppLocalizations.of(context)!.hello, 
-                    textColor: AppColors.primary,
-                    fontSize: 30,
-                    isBold: true),
-                ],
-
-              ),
-            )));
+          height: 500,
+          child: Column(
+            children: [
+              Image.asset("assets/images/app_logo/appLogoImage.png"),
+              const SizedBox(height: 20),
+              CustomTextWidget(
+                  text: AppLocalizations.of(context)!.hello,
+                  textColor: AppColors.primary,
+                  fontSize: 30,
+                  isBold: true),
+            ],
+          ),
+        )));
   }
 }

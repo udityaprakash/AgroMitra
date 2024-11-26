@@ -6,6 +6,11 @@ class CustomTextField extends StatefulWidget {
   final TextEditingController controller;
   final String? Function(String?)? validator;
   final bool obscureText;
+  final Function(String)? onChanged;
+  final int? maxLength;
+  final TextInputType keyboardType;
+  final FocusNode? focusNode;
+  final EdgeInsetsGeometry? contentPadding; // New: Custom content padding
 
   const CustomTextField({
     Key? key,
@@ -13,6 +18,11 @@ class CustomTextField extends StatefulWidget {
     required this.controller,
     this.validator,
     this.obscureText = false,
+    this.onChanged,
+    this.maxLength,
+    this.keyboardType = TextInputType.text,
+    this.focusNode,
+    this.contentPadding, // New: Accept content padding
   }) : super(key: key);
 
   @override
@@ -39,20 +49,24 @@ class _CustomTextFieldState extends State<CustomTextField> {
     return TextFormField(
       controller: widget.controller,
       obscureText: _obscureText,
+      focusNode: widget.focusNode,
       cursorColor: AppColors.primary,
+      keyboardType: widget.keyboardType,
+      maxLength: widget.maxLength,
       style: TextStyle(
-        color: AppColors.textPrimary, // Text color
-        fontFamily: 'Parkinsans', // Set font family
+        color: AppColors.textPrimary,
+        fontFamily: 'Parkinsans',
         fontSize: 16.0,
-        decoration: TextDecoration.none, // Remove underline while typing
+        decoration: TextDecoration.none,
       ),
       decoration: InputDecoration(
         hintText: widget.hintText,
         hintStyle: TextStyle(
-          color: AppColors.textHint, // Hint text color
-          fontFamily: 'Parkinsans', // Set font family for hint
+          color: AppColors.textHint,
+          fontFamily: 'Parkinsans',
           fontSize: 14.0,
         ),
+        counterText: "",
         suffixIcon: widget.obscureText
             ? IconButton(
                 icon: Icon(
@@ -63,25 +77,27 @@ class _CustomTextFieldState extends State<CustomTextField> {
               )
             : null,
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(50.0), // Make borders rounded
+          borderRadius: BorderRadius.circular(50.0),
           borderSide: BorderSide(color: AppColors.textHint),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(50.0), // Rounded border
+          borderRadius: BorderRadius.circular(50.0),
           borderSide: BorderSide(color: AppColors.textHint),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(50.0), // Rounded border
+          borderRadius: BorderRadius.circular(50.0),
           borderSide: BorderSide(color: AppColors.primary),
         ),
-        contentPadding: const EdgeInsets.symmetric(
-          vertical: 16.0,
-          horizontal: 20.0, // Add padding inside the input field
-        ),
+        contentPadding: widget.contentPadding ??
+            const EdgeInsets.symmetric(
+              vertical: 16.0,
+              horizontal: 20.0, // Default padding if not provided
+            ),
         filled: true,
-        fillColor: AppColors.background, // Slight background color
+        fillColor: AppColors.background,
       ),
       validator: widget.validator,
+      onChanged: widget.onChanged,
     );
   }
 }

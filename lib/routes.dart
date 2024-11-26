@@ -7,6 +7,7 @@ import 'package:agromitra/screens/authScreen/loginScreen.dart';
 import 'package:agromitra/screens/authScreen/selectLangScreen.dart';
 import 'package:agromitra/screens/authScreen/signupScreen.dart';
 import 'package:agromitra/screens/authScreen/somethingWentWrong.dart';
+import 'package:agromitra/screens/homescreen.dart';
 import 'package:agromitra/screens/splashScreen.dart';
 import 'package:agromitra/utils/ui/custom-text.dart';
 import 'package:flutter/material.dart';
@@ -53,6 +54,8 @@ class CustomRoute {
         case "/enterOtp":
           final args = settings.arguments as Map<String, dynamic>; // Receive arguments
           return EnterOtpScreen(email: args['email']);  
+        case "/homescreen":
+          return HomeScreen();
       }
       log("Settings name: " + (settings.name).toString());
       return SomethingWentWrong();
