@@ -55,7 +55,35 @@
     "login": "Login",
     "@login": {
         "description": "Text for the login button"
-    }
+    },
+    "anerroroccurredduringsignin":"An error occurred during sign in",
+    
+    "msgCode_100": "Missing required fields: email, password, or language. Please fill them out. 😉",
+    "msgCode_101": "User not found. Please check your credentials or register. 😨",
+    "msgCode_102": "Password incorrect. Please try again. 😢",
+    "msgCode_103": "User not verified yet. Please verify your account. 😤",
+    "msgCode_104": "User exists and logged in successfully! 😍",
+    "msgCode_105": "Ready to login! 🤞",
+    "msgCode_200": "Missing required fields: fullname, password, email, or language. 😉",
+    "msgCode_201": "Invalid login type. 🤨",
+    "msgCode_202": "Invalid email format. 🙄",
+    "msgCode_203": "User already registered. Please log in to continue. 😑",
+    "msgCode_204": "User registered successfully! 😍",
+    "msgCode_205": "Ready to sign up! 🤞",
+    "msgCode_206": "Failed to send OTP. Please try again later. 😗",
+    "msgCode_207": "OTP sent to email successfully! 😊",
+    "msgCode_208": "User does not exist. 😒",
+    "msgCode_209": "Invalid OTP. 😑",
+    "msgCode_210": "User verified successfully! 🥰",
+    "msgCode_211": "Internal server error during OTP verification. 🤔",
+    "msgCode_212": "All fields (id, password, language) are required. 😞",
+    "msgCode_213": "User is not verified. Please complete OTP verification first. 🙂",
+    "msgCode_214": "Password reset successfully! 🎉",
+    "msgCode_215": "Internal server error during password reset. 🤔",
+    "msgCode_216": "Send a POST request with an email to initiate password reset.",
+    "msgCode_217": "Unable to update OTP. User not found in the database. 🤔",
+    "msgCode_500": "Internal server error. Please try again later. 😥",
+    "msgCode_default": "Unknown message code. Please check your implementation."
 
 
 }

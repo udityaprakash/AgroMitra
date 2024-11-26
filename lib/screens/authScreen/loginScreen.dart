@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'package:agromitra/utils/data/InternetMsgCodeDecoder.dart';
 import 'package:agromitra/utils/data/deviceStorage.dart';
 import 'package:http/http.dart' as http;
 import 'package:agromitra/utils/data/fetchInternetData.dart';
@@ -11,7 +12,7 @@ import 'package:agromitra/utils/ui/custom-text.dart';
 import 'package:agromitra/utils/ui/custom-button.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class LoginScreen extends StatefulWidget {  // Change to StatefulWidget
+class LoginScreen extends StatefulWidget {
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }
@@ -20,7 +21,21 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  bool isLoading = false;  
+  bool isLoading = false;
+
+  void _showSnackbar(BuildContext context, String message) {
+    // Clear any existing Snackbar before showing a new one
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: CustomTextWidget(
+          text: message,
+          textColor: AppColors.textSecondary,
+        ),
+        duration: Duration(seconds: 3), // Automatically dismiss after 3 seconds
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +47,6 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24.0),
               child: Form(
-                // Wrap in Form
                 key: _formKey,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -42,8 +56,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Image.asset('assets/images/app_logo/appLogoImage.png',
-                            height: 50),
+                        Image.asset(
+                          'assets/images/app_logo/appLogoImage.png',
+                          height: 50,
+                        ),
                         SizedBox(width: 8),
                         CustomTextWidget(
                           text: AppLocalizations.of(context)!.agromitra,
@@ -106,63 +122,63 @@ class _LoginScreenState extends State<LoginScreen> {
                     const SizedBox(height: 24.0),
 
                     // Sign In Button
-                    isLoading 
-                    ? Center(
-                        child: CircularProgressIndicator(
-                          color: AppColors.primary,
-                        )
-                      )
-                    : CustomButton(
-                        backgroundColor: AppColors.primary,
-                        textColor: Colors.white,
-                        text: AppLocalizations.of(context)!.signIn,
-                        onPressed: () async {
-                          if (_formKey.currentState?.validate() ?? false) {
-                            setState(() {
-                              isLoading = true;  // Show loader
-                            });
-                            
-                            try {
-                              final lang = await StorageManager.readData('Lang');
-                              log(lang);
-                              final fetchData = FetchData(
-                                url: UrlProvider.loginUrl,
-                                headers: {'Content-Type': 'application/json'},
-                                body: {
-                                  "email": emailController.text,
-                                  "password": passwordController.text,
-                                  "language": (lang).toString()
-                                },
-                              );
-                              final response = await fetchData.post();
-                              log('POST Response: ${response}');
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: CustomTextWidget(
-                                    text: response['msg'],
-                                    textColor: AppColors.textSecondary
-                                  )
-                                ),
-                              );
-                            } catch (e) {
-                              log("here Error: $e");
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: CustomTextWidget(
-                                    text: "An error occurred during sign in",
-                                    textColor: AppColors.textSecondary
-                                  )
-                                ),
-                              );
-                            } finally {
-                              setState(() {
-                                isLoading = false;  // Hide loader regardless of success/failure
-                              });
-                            }
-                          } else {
-                            log("Form is invalid");
-                          }
-                        }
+                    Container(
+                      height: 60,
+                      margin: const EdgeInsets.symmetric(vertical: 16.0),
+                      child: isLoading
+                          ? Center(
+                              child: CircularProgressIndicator(
+                                color: AppColors.primary,
+                              ),
+                            )
+                          : CustomButton(
+                              backgroundColor: AppColors.primary,
+                              textColor: Colors.white,
+                              text: AppLocalizations.of(context)!.signIn,
+                              onPressed: () async {
+                                if (_formKey.currentState?.validate() ?? false) {
+                                  setState(() {
+                                    isLoading = true; // Show loader
+                                  });
+
+                                  try {
+                                    final lang =
+                                        await StorageManager.readData('Lang');
+                                    log(lang);
+                                    final fetchData = FetchData(
+                                      url: UrlProvider.loginUrl,
+                                      headers: {
+                                        'Content-Type': 'application/json'
+                                      },
+                                      body: {
+                                        "email": emailController.text,
+                                        "password": passwordController.text,
+                                        "language": lang.toString(),
+                                      },
+                                    );
+                                    final response = await fetchData.post();
+                                    log('POST Response: ${response}');
+
+                                    // Show the response message
+                                    _showSnackbar(context, getMessageByCode(
+                                      context, response['msgCode']));
+                                  } catch (e) {
+                                    log("Error: $e");
+                                    _showSnackbar(
+                                      context,
+                                      AppLocalizations.of(context)!
+                                          .anerroroccurredduringsignin,
+                                    );
+                                  } finally {
+                                    setState(() {
+                                      isLoading = false; // Hide loader
+                                    });
+                                  }
+                                } else {
+                                  log("Form is invalid");
+                                }
+                              },
+                            ),
                     ),
 
                     // Or Divider
@@ -199,8 +215,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         // Handle Google Sign-In
                       },
                       prefixIcon: Image.asset(
-                          'assets/images/app_images/googleLogo.png',
-                          height: 26),
+                        'assets/images/app_images/googleLogo.png',
+                        height: 26,
+                      ),
                     ),
                     const SizedBox(height: 24.0),
 
