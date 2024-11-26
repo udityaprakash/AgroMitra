@@ -7,7 +7,8 @@ class UrlProvider {
 
   // Authentication Routes
   static const String loginUrl = "${authBaseUrl}/login";
-  static const String registerUrl = "$authBaseUrl/signup";
+  static const String registerUrl = "${authBaseUrl}/signup";
+  static const String sendOTP = "${registerUrl}/verifyotp/";
   static const String forgotPasswordUrl = "$authBaseUrl/forgot-password";
 
   // User Data Routes

@@ -1,3 +1,9 @@
+import 'dart:developer';
+
+import 'package:agromitra/utils/data/InternetMsgCodeDecoder.dart';
+import 'package:agromitra/utils/data/deviceStorage.dart';
+import 'package:agromitra/utils/data/fetchInternetData.dart';
+import 'package:agromitra/utils/data/urls.dart';
 import 'package:flutter/material.dart';
 import 'package:agromitra/constant/color.dart';
 import 'package:agromitra/utils/ui/custom-input-field.dart';
@@ -5,12 +11,32 @@ import 'package:agromitra/utils/ui/custom-text.dart';
 import 'package:agromitra/utils/ui/custom-button.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class SignupScreen extends StatelessWidget {
+class SignupScreen extends StatefulWidget {
+  @override
+  _SignupScreenState createState() => _SignupScreenState();
+}
+
+class _SignupScreenState extends State<SignupScreen> {
   final TextEditingController fullNameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController rePasswordController = TextEditingController();
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>(); // Add GlobalKey
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  bool isLoading = false; // For handling button state
+
+  void _showSnackbar(BuildContext context, String message) {
+    // Clear existing Snackbars
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: CustomTextWidget(
+          text: message,
+          textColor: AppColors.textSecondary,
+        ),
+        duration: Duration(seconds: 3), // Auto-dismiss after 3 seconds
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +47,7 @@ class SignupScreen extends StatelessWidget {
           child: Center(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24.0),
-              child: Form( // Wrap in Form
+              child: Form(
                 key: _formKey,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -31,7 +57,8 @@ class SignupScreen extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Image.asset('assets/images/app_logo/appLogoImage.png', height: 50),
+                        Image.asset('assets/images/app_logo/appLogoImage.png',
+                            height: 50),
                         SizedBox(width: 8),
                         CustomTextWidget(
                           text: AppLocalizations.of(context)!.agromitra,
@@ -108,20 +135,83 @@ class SignupScreen extends StatelessWidget {
                     const SizedBox(height: 24.0),
 
                     // Register Button
-                    CustomButton(
-                      backgroundColor: AppColors.primary,
-                      textColor: Colors.white,
-                      text: AppLocalizations.of(context)!.register,
-                      onPressed: () {
-                        if (_formKey.currentState?.validate() ?? false) {
-                          // Handle registration logic here
-                          print("Form is valid");
-                        } else {
-                          print("Form is invalid");
-                        }
-                      },
+                    Container(
+                      height: 60,
+                      margin: const EdgeInsets.symmetric(vertical: 16.0),
+                      child: isLoading
+                          ? Center(
+                              child: CircularProgressIndicator(
+                                color: AppColors.primary,
+                              ),
+                            )
+                          : CustomButton(
+                              backgroundColor: AppColors.primary,
+                              textColor: Colors.white,
+                              text: AppLocalizations.of(context)!.register,
+                              onPressed: () async {
+                                if (_formKey.currentState?.validate() ?? false) {
+                                  setState(() {
+                                    isLoading = true; // Disable button
+                                  });
+
+                                  try {
+                                    final lang = await StorageManager.readData('Lang');
+                                    log(lang);
+                                    final fetchData = FetchData(
+                                      url: UrlProvider.registerUrl,
+                                      headers: {
+                                        'Content-Type': 'application/json'
+                                      },
+                                      body: {
+                                        "fullname": fullNameController.text,
+                                        "email": emailController.text,
+                                        "password": passwordController.text,
+                                        "language": lang.toString(),
+                                        "loginType": "email"
+                                      },
+                                    );
+                                    final response = await fetchData.post();
+                                    log('POST Response: $response');
+
+                                    // Show the response message
+                                    if(response['success']==true){
+                                      final fetchData = FetchData(
+                                      url: UrlProvider.sendOTP + emailController.text,
+                                      headers: {
+                                        'Content-Type': 'application/json'
+                                      }
+                                    );
+                                    final response = await fetchData.get();
+                                    log('OTP send Response: $response');
+
+                                      Navigator.pushNamed(
+                                        context,
+                                        "/enterOtp",
+                                        arguments: {'email': emailController.text},
+                                      );  
+                                    }else{
+                                    _showSnackbar(context, getMessageByCode(
+                                      context, response['msgCode'])
+                                      );
+
+                                    }    
+                                  } catch (e) {
+                                    log("Error: $e");
+                                    _showSnackbar(
+                                      context,
+                                      AppLocalizations.of(context)!.anerroroccurredduringregister,
+                                    );
+                                  } finally {
+                                    setState(() {
+                                      isLoading = false; // Enable button
+                                    });
+                                  }
+                                } else {
+                                  log("Form is invalid");
+                                }
+                              },
+                            ),
                     ),
-                    const SizedBox(height: 16.0),
 
                     // Or Divider
                     Row(
@@ -156,7 +246,8 @@ class SignupScreen extends StatelessWidget {
                       onPressed: () {
                         // Handle Google Sign-In
                       },
-                      prefixIcon: Image.asset('assets/images/app_images/googleLogo.png', height: 26),
+                      prefixIcon: Image.asset('assets/images/app_images/googleLogo.png',
+                          height: 26),
                     ),
                     const SizedBox(height: 24.0),
 

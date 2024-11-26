@@ -57,6 +57,7 @@
         "description": "Text for the login button"
     },
     "anerroroccurredduringsignin":"An error occurred during sign in",
+    "anerroroccurredduringregister":"An error occurred during registration",
     
     "msgCode_100": "Missing required fields: email, password, or language. Please fill them out. 😉",
     "msgCode_101": "User not found. Please check your credentials or register. 😨",
@@ -83,7 +84,18 @@
     "msgCode_216": "Send a POST request with an email to initiate password reset.",
     "msgCode_217": "Unable to update OTP. User not found in the database. 🤔",
     "msgCode_500": "Internal server error. Please try again later. 😥",
-    "msgCode_default": "Unknown message code. Please check your implementation."
+    "msgCode_default": "Unknown message code. Please check your implementation.",
+
+    "enterOtp": "Enter OTP",
+    "otpSentTo": "OTP sent to",
+    "resendOtpIn": "Resend OTP in",
+    "resendOtpAvailable": "Resend OTP available",
+    "resendOtp": "Resend OTP",
+    "otpResentSuccessfully": "OTP resent successfully!",
+    "verifyOtp": "Verify OTP",
+    "invalidOtp": "Invalid OTP. Please check and try again.",
+    "otpVerifiedSuccessfully": "OTP verified successfully!",
+    "anerroroccurredduringotpverification": "An error occurred during OTP verification. Please try again."
 
 
 }

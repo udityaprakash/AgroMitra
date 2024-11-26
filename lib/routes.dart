@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:agromitra/constant/color.dart';
 import 'package:agromitra/functions/internet-connectivity.dart';
+import 'package:agromitra/screens/authScreen/enterOtpScreen.dart';
 import 'package:agromitra/screens/authScreen/loginScreen.dart';
 import 'package:agromitra/screens/authScreen/selectLangScreen.dart';
 import 'package:agromitra/screens/authScreen/signupScreen.dart';
@@ -49,6 +50,9 @@ class CustomRoute {
           return LoginScreen();
         case "/signup":
           return SignupScreen();
+        case "/enterOtp":
+          final args = settings.arguments as Map<String, dynamic>; // Receive arguments
+          return EnterOtpScreen(email: args['email']);  
       }
       log("Settings name: " + (settings.name).toString());
       return SomethingWentWrong();
