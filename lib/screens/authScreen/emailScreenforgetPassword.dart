@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:agromitra/utils/data/InternetMsgCodeDecoder.dart';
 import 'package:agromitra/utils/ui/custom-text.dart';
 import 'package:flutter/material.dart';
 import 'package:agromitra/utils/data/fetchInternetData.dart';
@@ -43,7 +44,7 @@ class _EmailScreenState extends State<EmailScreen> {
           },
         );
       } else {
-        _showSnackbar(context, response['msg']);
+        _showSnackbar(context, getMessageByCode(context, response['msg']));
       }
     } catch (e) {
       log("Error: $e");

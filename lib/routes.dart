@@ -54,14 +54,15 @@ class CustomRoute {
         case "/signup":
           return SignupScreen();
         case "/enterOtp":
-          final args = settings.arguments as Map<String, dynamic>; // Receive arguments
+          final args = settings.arguments as Map<String, dynamic>;
           return EnterOtpScreen(email: args['email'], destinationScreen: args['destinationScreen']);  
         case "/homescreen":
           return HomeScreen();
         case "/forgotPassword":
           return EmailScreen();
         case "/setNewPassword":
-          return ResetPasswordScreen();  
+          final args = settings.arguments as Map<String, dynamic>;
+          return ResetPasswordScreen(email:args['email']);  
       }
       log("Settings name: " + (settings.name).toString());
       return SomethingWentWrong();

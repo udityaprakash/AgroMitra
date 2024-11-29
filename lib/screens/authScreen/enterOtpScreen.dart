@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:developer';
+import 'package:agromitra/utils/data/InternetMsgCodeDecoder.dart';
 import 'package:agromitra/utils/data/fetchInternetData.dart';
 import 'package:agromitra/utils/data/urls.dart';
 import 'package:agromitra/utils/ui/custom-input-field.dart';
@@ -27,6 +28,7 @@ class _EnterOtpScreenState extends State<EnterOtpScreen> {
   bool isLoading = false;
   int _secondsRemaining = 15;
   Timer? _timer;
+  bool resendingotp = false;
 
   @override
   void initState() {
@@ -90,40 +92,38 @@ class _EnterOtpScreenState extends State<EnterOtpScreen> {
     try {
       log(widget.destinationScreen);
 
-
       if (widget.destinationScreen == '/setNewPassword') {
-          final fetchData = FetchData(
-            url: UrlProvider.resetPasswordSendOtp,
-            headers: {'Content-Type': 'application/json'},
-            body: {"email":widget.email, "otp": otp.toString()},
-          );
+        final fetchData = FetchData(
+          url: UrlProvider.resetPasswordSendOtp,
+          headers: {'Content-Type': 'application/json'},
+          body: {"email": widget.email, "otp": otp.toString()},
+        );
 
-          final response = await fetchData.post();
-          log('resetPasswordSendOtp Response: $response');
-          if (response['success'] == true) {
-            Navigator.pushNamed(context, '/setNewPassword');
-
-          }else{
-            _showSnackbar(context, response['msg']);
-
-          }
-      }else{
-
-      log('OTP: $otp');
-      final fetchData = FetchData(
-        url: UrlProvider.sendOTP + widget.email,
-        headers: {'Content-Type': 'application/json'},
-        body: {"otp": otp.toString()},
-      );
-      final response = await fetchData.post();
-      log('OTP Verification Response: $response');
-      if (response['success'] == true) {
+        final response = await fetchData.post();
+        log('resetPasswordSendOtp Response: $response');
+        if (response['success'] == true) {
+          Navigator.pushNamed(context, '/setNewPassword',
+              arguments: {'email': widget.email});
+        } else {
+          _showSnackbar(
+              context, getMessageByCode(context, response['msgCode']));
+        }
+      } else {
+        log('OTP: $otp');
+        final fetchData = FetchData(
+          url: UrlProvider.sendOTP + widget.email,
+          headers: {'Content-Type': 'application/json'},
+          body: {"otp": otp.toString()},
+        );
+        final response = await fetchData.post();
+        log('OTP Verification Response: $response');
+        if (response['success'] == true) {
           Navigator.pop(context);
           Navigator.pushReplacementNamed(context, '/login');
-      }else{
-      _showSnackbar(context, response['msg']);
-
-      }
+        } else {
+          _showSnackbar(
+              context, getMessageByCode(context, response['msgCode']));
+        }
       }
     } catch (e) {
       log("Error: $e");
@@ -216,27 +216,70 @@ class _EnterOtpScreenState extends State<EnterOtpScreen> {
                       textColor: AppColors.textHint,
                       fontSize: 14.0,
                     ),
-                    TextButton(
+                    !resendingotp? TextButton(
                       onPressed: _secondsRemaining > 0
                           ? null
                           : () async {
-                              final fetchData = FetchData(
-                                url: UrlProvider.sendOTP + widget.email,
-                                headers: {'Content-Type': 'application/json'},
-                              );
-                              final response = await fetchData.get();
-                              log('OTP Send Response: $response');
-                              _startTimer();
-                              _showSnackbar(
-                                  context,
-                                  AppLocalizations.of(context)!
-                                      .otpResentSuccessfully);
+                            try{
+                              setState(() {
+                                resendingotp = true;
+                              });
+
+                              if (widget.destinationScreen ==
+                                  '/setNewPassword') {
+                                final fetchData = FetchData(
+                                    url: UrlProvider.forgotPasswordUrl,
+                                    headers: {'Content-Type': 'application/json'},
+                                    body: {'email': widget.email},
+                                  );
+                                  final response = await fetchData.post();
+                                  log('Response for password reseting: $response');
+                                  if (response['success'] == true) {
+                                    _startTimer();
+                                    _showSnackbar(
+                                        context,
+                                        AppLocalizations.of(context)!.otpResentSuccessfully);
+                                  } else {
+                                    _showSnackbar(context, getMessageByCode(context, response['msg']));
+                                  }
+                                  }else{
+
+                                    final fetchData = FetchData(
+                                      url: UrlProvider.sendOTP + widget.email,
+                                      headers: {'Content-Type': 'application/json'},
+                                    );
+                                    final response = await fetchData.get();
+                                    log('OTP ReSend Response: $response');
+                                    if (response['success'] == true) {
+                                      _startTimer();
+                                      _showSnackbar(
+                                          context,
+                                          AppLocalizations.of(context)!.otpResentSuccessfully);
+                                    } else {
+                                      _showSnackbar(context, getMessageByCode(context, response['msgCode']));
+                                    }
+                                  }
+                            }catch(e){
+                              log("Error: $e");
+                            }
+                            setState(() {
+                              resendingotp = false;
+                            });
+
                             },
                       child: CustomTextWidget(
                         text: AppLocalizations.of(context)!.resendOtp,
                         textColor: _secondsRemaining > 0
                             ? AppColors.textHint
                             : AppColors.primary,
+                        fontSize: 14.0,
+                        isBold: true,
+                      ),
+                    ):TextButton(
+                      onPressed: null,
+                      child: CustomTextWidget(
+                        text: AppLocalizations.of(context)!.resendOtp,
+                        textColor: AppColors.textHint,
                         fontSize: 14.0,
                         isBold: true,
                       ),
@@ -247,7 +290,6 @@ class _EnterOtpScreenState extends State<EnterOtpScreen> {
             ),
             const SizedBox(height: 24.0),
 
-            
             Container(
               height: 60,
               child: isLoading

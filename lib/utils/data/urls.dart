@@ -10,6 +10,7 @@ class UrlProvider {
   static const String sendOTP = "${registerUrl}/verifyotp/";
   static const String forgotPasswordUrl = "${loginUrl}/forgetpass";
   static const String resetPasswordSendOtp = "${forgotPasswordUrl}/verification";
+  static const String setNewPasswordUrl = "${forgotPasswordUrl}/setpassword";
 
   static const String userProfileUrl = "$dataBaseUrl/user-profile";
   static const String updateUserUrl = "$dataBaseUrl/update-user";

@@ -1,3 +1,7 @@
+import 'dart:developer';
+
+import 'package:agromitra/utils/data/fetchInternetData.dart';
+import 'package:agromitra/utils/data/urls.dart';
 import 'package:agromitra/utils/ui/custom-text.dart';
 import 'package:flutter/material.dart';
 import 'package:agromitra/utils/ui/custom-input-field.dart';
@@ -6,6 +10,10 @@ import 'package:agromitra/utils/ui/custom-button.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
+  final String email;
+
+  ResetPasswordScreen({required this.email});
+
   @override
   _ResetPasswordScreenState createState() => _ResetPasswordScreenState();
 }
@@ -17,7 +25,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   bool isLoading = false;
 
   // Password reset function
-  void _resetPassword() {
+  void _resetPassword() async {
     if (_formKey.currentState?.validate() ?? false) {
       final newPassword = _newPasswordController.text;
       final confirmPassword = _confirmPasswordController.text;
@@ -26,11 +34,28 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
         isLoading = true;
       });
 
+      final fetchData = FetchData(
+            url: UrlProvider.setNewPasswordUrl,
+            headers: {'Content-Type': 'application/json'},
+            body: {"email":widget.email, "password": newPassword},
+          );
 
-      _showSnackbar(context, AppLocalizations.of(context)!.passwordUpdatedSuccessfully);
-      Navigator.pop(context);
-      Navigator.pop(context);
-      Navigator.pop(context);
+          final response = await fetchData.post();
+          log('resetPasswordSendOtp Response: $response');
+          if (response['success'] == true) {
+            _showSnackbar(context, AppLocalizations.of(context)!.passwordUpdatedSuccessfully);
+            Navigator.pop(context);
+            Navigator.pop(context);
+            Navigator.pop(context);
+
+          }else{
+            _showSnackbar(context, response['msg']);
+
+          }
+
+
+
+
       setState(() {
         isLoading = false;
       });
