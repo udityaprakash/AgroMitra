@@ -19,11 +19,13 @@ Future main() async {
             MultiProvider(
               providers: [
                 ChangeNotifierProvider(create: (context) => ConnectivityProvider()),
-                ChangeNotifierProvider(create: (context) => LanguageProvider()),
+                ChangeNotifierProvider(
+                  create: (context) => LanguageProvider()..initializeLocale(),
+                  ),
               ],
               child: const MyApp(),
             ),
-          ));
+          ));    
 }
 
 class MyApp extends StatelessWidget {

@@ -1,7 +1,7 @@
+import 'package:agromitra/utils/data/deviceStorage.dart';
 import 'package:flutter/material.dart';
 
 class LanguageProvider extends ChangeNotifier {
-
   final List<Map<String, dynamic>> languages = [
     {'name': 'English', 'code': 'en'},
     {'name': 'हिन्दी', 'code': 'hi'},
@@ -28,15 +28,23 @@ class LanguageProvider extends ChangeNotifier {
     {'name': 'नेपाली', 'code': 'ne'},
   ];
 
-  Locale selectedLocale = Locale('en'); 
+  Locale _selectedLocale = const Locale('en');
+
+  Locale get selectedLocale => _selectedLocale;
+
+  Future<void> initializeLocale() async {
+    String? savedLanguageCode = await StorageManager.readData('Lang');
+    _selectedLocale = Locale(savedLanguageCode ?? 'en');
+    notifyListeners();
+  }
 
   void setLocale(Locale locale) {
-    selectedLocale = locale;
+    _selectedLocale = locale;
     notifyListeners();
   }
 
   void clearLocale() {
-    selectedLocale = const Locale('en');
+    _selectedLocale = const Locale('en');
     notifyListeners();
   }
 }
