@@ -1,101 +1,110 @@
 {
-    "hello":"Welcome",
-    "@hello":{
-        "description":"it is hello in english"
-    },
-    "nointernet": "No Internet Connection",
-    "@nointernet": {
-        "description": "it shows no internet connection message in english"
-    },
-    "choosepreferedlang": "Choose your preferred Language",
-    "@nchoosepreferedlang": {
-        "description": "it shows  message in english"
-    },
-    "contin": "Continue in English",
-    "@contin": {
-        "description": "it shows  message in english"
-    },
-    "agromitra": "AgroMitra",
-    "enterEmail": "Enter your email",
-    "emailRequired": "Email is required",
-    "invalidEmail": "Enter a valid email",
-    "enterPassword": "Enter your password",
-    "passwordRequired": "Password is required",
-    "passwordTooShort": "Password must be at least 6 characters",
-    "forgotPassword": "Forgot Password?",
-    "signIn": "Sign In",
-    "or": "OR",
-    "continueWithGoogle": "Continue with Google",
-    "dontHaveAccount": "Don't have an account?",
-    "register": "Register",
-    "enterFullName": "Enter your full name",
-    "@enterFullName": {
-        "description": "Placeholder text for full name input field"
-    },
-    "fullNameRequired": "Full name is required",
-    "@fullNameRequired": {
-        "description": "Validation message for missing full name"
-    },
-    "reEnterPassword": "Re-enter your password",
-    "@reEnterPassword": {
-        "description": "Placeholder text for re-enter password input field"
-    },
-    "reEnterPasswordRequired": "Please re-enter your password",
-    "@reEnterPasswordRequired": {
-        "description": "Validation message for missing re-enter password"
-    },
-    "passwordMismatch": "Passwords do not match",
-    "@passwordMismatch": {
-        "description": "Validation message for mismatched passwords"
-    },
-    "alreadyHaveAccount": "Already have an account?",
-    "@alreadyHaveAccount": {
-        "description": "Prompt for users to login if they already have an account"
-    },
-    "login": "Login",
-    "@login": {
-        "description": "Text for the login button"
-    },
-    "anerroroccurredduringsignin":"An error occurred during sign in",
-    "anerroroccurredduringregister":"An error occurred during registration",
-    
-    "msgCode_100": "Missing required fields: email, password, or language. Please fill them out. 😉",
-    "msgCode_101": "User not found. Please check your credentials or register. 😨",
-    "msgCode_102": "Password incorrect. Please try again. 😢",
-    "msgCode_103": "User not verified yet. Please verify your account. 😤",
-    "msgCode_104": "User exists and logged in successfully! 😍",
-    "msgCode_105": "Ready to login! 🤞",
-    "msgCode_200": "Missing required fields: fullname, password, email, or language. 😉",
-    "msgCode_201": "Invalid login type. 🤨",
-    "msgCode_202": "Invalid email format. 🙄",
-    "msgCode_203": "User already registered. Please log in to continue. 😑",
-    "msgCode_204": "User registered successfully! 😍",
-    "msgCode_205": "Ready to sign up! 🤞",
-    "msgCode_206": "Failed to send OTP. Please try again later. 😗",
-    "msgCode_207": "OTP sent to email successfully! 😊",
-    "msgCode_208": "User does not exist. 😒",
-    "msgCode_209": "Invalid OTP. 😑",
-    "msgCode_210": "User verified successfully! 🥰",
-    "msgCode_211": "Internal server error during OTP verification. 🤔",
-    "msgCode_212": "All fields (id, password, language) are required. 😞",
-    "msgCode_213": "User is not verified. Please complete OTP verification first. 🙂",
-    "msgCode_214": "Password reset successfully! 🎉",
-    "msgCode_215": "Internal server error during password reset. 🤔",
-    "msgCode_216": "Send a POST request with an email to initiate password reset.",
-    "msgCode_217": "Unable to update OTP. User not found in the database. 🤔",
-    "msgCode_500": "Internal server error. Please try again later. 😥",
-    "msgCode_default": "Unknown message code. Please check your implementation.",
-
-    "enterOtp": "Enter OTP",
-    "otpSentTo": "OTP sent to",
-    "resendOtpIn": "Resend OTP in",
-    "resendOtpAvailable": "Resend OTP available",
-    "resendOtp": "Resend OTP",
-    "otpResentSuccessfully": "OTP resent successfully!",
-    "verifyOtp": "Verify OTP",
-    "invalidOtp": "Invalid OTP. Please check and try again.",
-    "otpVerifiedSuccessfully": "OTP verified successfully!",
-    "anerroroccurredduringotpverification": "An error occurred during OTP verification. Please try again."
-
-
+  "hello": "Welcome",
+  "@hello": {
+    "description": "It is hello in English"
+  },
+  "nointernet": "No Internet Connection",
+  "@nointernet": {
+    "description": "It shows no internet connection message in English"
+  },
+  "choosepreferedlang": "Choose your preferred Language",
+  "@choosepreferedlang": {
+    "description": "It shows message in English"
+  },
+  "contin": "Continue in English",
+  "@contin": {
+    "description": "It shows message in English"
+  },
+  "agromitra": "AgroMitra",
+  
+  "enterEmail": "Enter your email",
+  "emailRequired": "Email is required",
+  "invalidEmail": "Enter a valid email",
+  
+  "enterPassword": "Enter your password",
+  "passwordRequired": "Password is required",
+  "passwordTooShort": "Password must be at least 6 characters",
+  "forgotPassword": "Forgot Password?",
+  "signIn": "Sign In",
+  "or": "OR",
+  "continueWithGoogle": "Continue with Google",
+  "dontHaveAccount": "Don't have an account?",
+  "register": "Register",
+  "enterFullName": "Enter your full name",
+  "@enterFullName": {
+    "description": "Placeholder text for full name input field"
+  },
+  "fullNameRequired": "Full name is required",
+  "@fullNameRequired": {
+    "description": "Validation message for missing full name"
+  },
+  "reEnterPassword": "Re-enter your password",
+  "@reEnterPassword": {
+    "description": "Placeholder text for re-enter password input field"
+  },
+  "reEnterPasswordRequired": "Please re-enter your password",
+  "@reEnterPasswordRequired": {
+    "description": "Validation message for missing re-enter password"
+  },
+  "passwordMismatch": "Passwords do not match",
+  "@passwordMismatch": {
+    "description": "Validation message for mismatched passwords"
+  },
+  "alreadyHaveAccount": "Already have an account?",
+  "@alreadyHaveAccount": {
+    "description": "Prompt for users to login if they already have an account"
+  },
+  "login": "Login",
+  "@login": {
+    "description": "Text for the login button"
+  },
+  
+  "anerroroccurredduringsignin": "An error occurred during sign in",
+  "anerroroccurredduringregister": "An error occurred during registration",
+  
+  "msgCode_100": "Missing required fields: email, password, or language. Please fill them out. 😉",
+  "msgCode_101": "User not found. Please check your credentials or register. 😨",
+  "msgCode_102": "Password incorrect. Please try again. 😢",
+  "msgCode_103": "User not verified yet. Please verify your account. 😤",
+  "msgCode_104": "User exists and logged in successfully! 😍",
+  "msgCode_105": "Ready to login! 🤞",
+  "msgCode_200": "Missing required fields: fullname, password, email, or language. 😉",
+  "msgCode_201": "Invalid login type. 🤨",
+  "msgCode_202": "Invalid email format. 🙄",
+  "msgCode_203": "User already registered. Please log in to continue. 😑",
+  "msgCode_204": "User registered successfully! 😍",
+  "msgCode_205": "Ready to sign up! 🤞",
+  "msgCode_206": "Failed to send OTP. Please try again later. 😗",
+  "msgCode_207": "OTP sent to email successfully! 😊",
+  "msgCode_208": "User does not exist. 😒",
+  "msgCode_209": "Invalid OTP. 😑",
+  "msgCode_210": "User verified successfully! 🥰",
+  "msgCode_211": "Internal server error during OTP verification. 🤔",
+  "msgCode_212": "All fields (id, password, language) are required. 😞",
+  "msgCode_213": "User is not verified. Please complete OTP verification first. 🙂",
+  "msgCode_214": "Password reset successfully! 🎉",
+  "msgCode_215": "Internal server error during password reset. 🤔",
+  "msgCode_216": "Send a POST request with an email to initiate password reset.",
+  "msgCode_217": "Unable to update OTP. User not found in the database. 🤔",
+  "msgCode_500": "Internal server error. Please try again later. 😥",
+  "msgCode_default": "Unknown message code. Please check your implementation.",
+  
+  "enterOtp": "Enter OTP",
+  "otpSentTo": "OTP sent to",
+  "resendOtpIn": "Resend OTP in",
+  "resendOtpAvailable": "Resend OTP available",
+  "resendOtp": "Resend OTP",
+  "otpResentSuccessfully": "OTP resent successfully!",
+  "verifyOtp": "Verify OTP",
+  "invalidOtp": "Invalid OTP. Please check and try again.",
+  "otpVerifiedSuccessfully": "OTP verified successfully!",
+  "anerroroccurredduringotpverification": "An error occurred during OTP verification. Please try again.",
+  
+  "passwordMismatch": "Password and confirm password do not match.",
+  "pleaseFillAllFields": "Please fill in all fields.",
+  "passwordUpdatedSuccessfully": "Password updated successfully.",
+  "resetPassword": "Reset Password",
+  "newPassword": "New Password",
+  "confirmPassword": "Confirm Password",
+  "sendotp":"Send Otp"
 }

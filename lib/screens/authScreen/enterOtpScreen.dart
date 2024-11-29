@@ -12,15 +12,17 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class EnterOtpScreen extends StatefulWidget {
   final String email;
+  final String destinationScreen;
 
-  EnterOtpScreen({required this.email});
+  EnterOtpScreen({required this.email, required this.destinationScreen});
 
   @override
   _EnterOtpScreenState createState() => _EnterOtpScreenState();
 }
 
 class _EnterOtpScreenState extends State<EnterOtpScreen> {
-  final List<TextEditingController> _otpControllers = List.generate(6, (_) => TextEditingController());
+  final List<TextEditingController> _otpControllers =
+      List.generate(6, (_) => TextEditingController());
   final List<FocusNode> _focusNodes = List.generate(6, (_) => FocusNode());
   bool isLoading = false;
   int _secondsRemaining = 15;
@@ -86,22 +88,47 @@ class _EnterOtpScreenState extends State<EnterOtpScreen> {
     });
 
     try {
+      log(widget.destinationScreen);
+
+
+      if (widget.destinationScreen == '/setNewPassword') {
+          final fetchData = FetchData(
+            url: UrlProvider.resetPasswordSendOtp,
+            headers: {'Content-Type': 'application/json'},
+            body: {"email":widget.email, "otp": otp.toString()},
+          );
+
+          final response = await fetchData.post();
+          log('resetPasswordSendOtp Response: $response');
+          if (response['success'] == true) {
+            Navigator.pushNamed(context, '/setNewPassword');
+
+          }else{
+            _showSnackbar(context, response['msg']);
+
+          }
+      }else{
+
       log('OTP: $otp');
       final fetchData = FetchData(
-        url: UrlProvider.sendOTP+ widget.email,
+        url: UrlProvider.sendOTP + widget.email,
         headers: {'Content-Type': 'application/json'},
         body: {"otp": otp.toString()},
       );
       final response = await fetchData.post();
       log('OTP Verification Response: $response');
-      _showSnackbar(context, response['msg']);
       if (response['success'] == true) {
-        Navigator.pop(context);
-        Navigator.pushReplacementNamed(context, '/login');
+          Navigator.pop(context);
+          Navigator.pushReplacementNamed(context, '/login');
+      }else{
+      _showSnackbar(context, response['msg']);
+
+      }
       }
     } catch (e) {
       log("Error: $e");
-      _showSnackbar(context, AppLocalizations.of(context)!.anerroroccurredduringotpverification);
+      _showSnackbar(context,
+          AppLocalizations.of(context)!.anerroroccurredduringotpverification);
     } finally {
       setState(() {
         isLoading = false;
@@ -121,128 +148,106 @@ class _EnterOtpScreenState extends State<EnterOtpScreen> {
             // Heading
             Column(
               children: [
-
-            Center(
-              child: CustomTextWidget(
-                text: AppLocalizations.of(context)!.enterOtp,
-                textColor: AppColors.primary,
-                fontSize: 24.0,
-                isBold: true,
-              ),
-            ),
-            const SizedBox(height: 16.0),
-
-            // Email Info
-            Center(
-              child: CustomTextWidget(
-                text: "${AppLocalizations.of(context)!.otpSentTo} ${widget.email}",
-                textColor: AppColors.textHint,
-                fontSize: 14.0,
-              ),
-            ),
-            const SizedBox(height: 40.0),
-
-            // OTP Input Fields
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: List.generate(6, (index) {
-                return SizedBox(
-                  width: 50,
-                  child: Focus(
-                    onKey: (node, event) {
-                      if (event is RawKeyDownEvent && event.logicalKey.keyLabel == 'Backspace') {
-                        if (_otpControllers[index].text.isEmpty && index > 0) {
-                          _focusNodes[index - 1].requestFocus();
-                        }
-                      }
-                      return KeyEventResult.ignored;
-                    },
-                    child: CustomTextField(
-                      hintText: "",
-                      controller: _otpControllers[index],
-                      focusNode: _focusNodes[index],
-                      contentPadding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 20.0),
-                      maxLength: 1,
-                      keyboardType: TextInputType.number,
-                      onChanged: (value) {
-                        if (value.isNotEmpty && index < 5) {
-                          _focusNodes[index + 1].requestFocus();
-                        }
-                      },
-                    ),
-                  ),
-                );
-              }),
-            ),
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            //   children: List.generate(6, (index) {
-            //     return SizedBox(
-            //       width: 50,
-            //       child: CustomTextField(
-            //         hintText: "",
-            //         controller: _otpControllers[index],
-            //         focusNode: _focusNodes[index],
-            //         contentPadding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 20.0),
-            //         maxLength: 1,
-            //         keyboardType: TextInputType.number,
-            //         onChanged: (value) {
-            //           if (value.isNotEmpty) {
-            //             if (index < 5) {
-            //               _focusNodes[index + 1].requestFocus(); // Move to the next field
-            //             }
-            //           } else {
-            //             if (index > 0) {
-            //               _focusNodes[index - 1].requestFocus(); // Move back to the previous field
-            //             }
-            //           }
-            //         },
-            //       ),
-            //     );
-            //   }),
-            // ),
-
-
-            const SizedBox(height: 16.0),
-
-            // Timer and Resend OTP
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                CustomTextWidget(
-                  text: _secondsRemaining > 0
-                      ? "${AppLocalizations.of(context)!.resendOtpIn} $_secondsRemaining s"
-                      : AppLocalizations.of(context)!.resendOtpAvailable,
-                  textColor: AppColors.textHint,
-                  fontSize: 14.0,
-                ),
-                TextButton(
-                  onPressed: _secondsRemaining > 0
-                      ? null
-                      : () async {
-                          final fetchData = FetchData(
-                            url: UrlProvider.sendOTP + widget.email,
-                            headers: {'Content-Type': 'application/json'},
-                          );
-                          final response = await fetchData.get();
-                          log('OTP Send Response: $response');
-                          _startTimer();
-                          _showSnackbar(context, AppLocalizations.of(context)!.otpResentSuccessfully);
-                        },
+                Center(
                   child: CustomTextWidget(
-                    text: AppLocalizations.of(context)!.resendOtp,
-                    textColor: _secondsRemaining > 0 ? AppColors.textHint : AppColors.primary,
-                    fontSize: 14.0,
+                    text: AppLocalizations.of(context)!.enterOtp,
+                    textColor: AppColors.primary,
+                    fontSize: 24.0,
                     isBold: true,
                   ),
                 ),
-              ],
-            ),
+                const SizedBox(height: 16.0),
+
+                // Email Info
+                Center(
+                  child: CustomTextWidget(
+                    text:
+                        "${AppLocalizations.of(context)!.otpSentTo} ${widget.email}",
+                    textColor: AppColors.textHint,
+                    fontSize: 14.0,
+                  ),
+                ),
+                const SizedBox(height: 40.0),
+
+                // OTP Input Fields
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: List.generate(6, (index) {
+                    return SizedBox(
+                      width: 50,
+                      child: Focus(
+                        onKey: (node, event) {
+                          if (event is RawKeyDownEvent &&
+                              event.logicalKey.keyLabel == 'Backspace') {
+                            if (_otpControllers[index].text.isEmpty &&
+                                index > 0) {
+                              _focusNodes[index - 1].requestFocus();
+                            }
+                          }
+                          return KeyEventResult.ignored;
+                        },
+                        child: CustomTextField(
+                          hintText: "",
+                          controller: _otpControllers[index],
+                          focusNode: _focusNodes[index],
+                          contentPadding: EdgeInsets.symmetric(
+                              horizontal: 15.0, vertical: 20.0),
+                          maxLength: 1,
+                          keyboardType: TextInputType.number,
+                          onChanged: (value) {
+                            if (value.isNotEmpty && index < 5) {
+                              _focusNodes[index + 1].requestFocus();
+                            }
+                          },
+                        ),
+                      ),
+                    );
+                  }),
+                ),
+
+                const SizedBox(height: 16.0),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    CustomTextWidget(
+                      text: _secondsRemaining > 0
+                          ? "${AppLocalizations.of(context)!.resendOtpIn} $_secondsRemaining s"
+                          : AppLocalizations.of(context)!.resendOtpAvailable,
+                      textColor: AppColors.textHint,
+                      fontSize: 14.0,
+                    ),
+                    TextButton(
+                      onPressed: _secondsRemaining > 0
+                          ? null
+                          : () async {
+                              final fetchData = FetchData(
+                                url: UrlProvider.sendOTP + widget.email,
+                                headers: {'Content-Type': 'application/json'},
+                              );
+                              final response = await fetchData.get();
+                              log('OTP Send Response: $response');
+                              _startTimer();
+                              _showSnackbar(
+                                  context,
+                                  AppLocalizations.of(context)!
+                                      .otpResentSuccessfully);
+                            },
+                      child: CustomTextWidget(
+                        text: AppLocalizations.of(context)!.resendOtp,
+                        textColor: _secondsRemaining > 0
+                            ? AppColors.textHint
+                            : AppColors.primary,
+                        fontSize: 14.0,
+                        isBold: true,
+                      ),
+                    ),
+                  ],
+                ),
               ],
             ),
             const SizedBox(height: 24.0),
 
-            // Verify OTP Button
+            
             Container(
               height: 60,
               child: isLoading
@@ -264,4 +269,3 @@ class _EnterOtpScreenState extends State<EnterOtpScreen> {
     );
   }
 }
-

@@ -1,101 +1,110 @@
 {
-    "hello":"स्वागत है",
-    "@hello":{
-        "description":"it is hello in hindi"
-    },
-    "nointernet": "कोई इंटरनेट कनेक्शन नहीं है",
-    "@nointernet": {
-        "description": "it shows no internet connection message in hindi"
-    },
-    "choosepreferedlang": "अपनी पसंदीदा भाषा चुनें",
-    "@choosepreferedlang": {
-    "description": "it shows message in hindi"
-    },
-    "contin": "हिंदी में जारी रखें",
-    "@contin": {
-    "description": "it shows message in hindi"
-    },
-    "agromitra": "एग्रोमित्र",
-    "enterEmail": "अपना ईमेल दर्ज करें",
-    "emailRequired": "ईमेल अनिवार्य है",
-    "invalidEmail": "एक मान्य ईमेल दर्ज करें",
-    "enterPassword": "अपना पासवर्ड दर्ज करें",
-    "passwordRequired": "पासवर्ड अनिवार्य है",
-    "passwordTooShort": "पासवर्ड कम से कम 6 अक्षरों का होना चाहिए",
-    "forgotPassword": "पासवर्ड भूल गए?",
-    "signIn": "साइन इन करें",
-    "or": "या",
-    "continueWithGoogle": "गूगल के साथ जारी रखें",
-    "dontHaveAccount": "खाता नहीं है?",
-    "register": "पंजीकरण करें",
-    "enterFullName": "अपना पूरा नाम दर्ज करें",
-    "@enterFullName": {
-        "description": "Placeholder text for full name input field in Hindi"
-    },
-    "fullNameRequired": "पूरा नाम अनिवार्य है",
-    "@fullNameRequired": {
-        "description": "Validation message for missing full name in Hindi"
-    },
-    "reEnterPassword": "अपना पासवर्ड फिर से दर्ज करें",
-    "@reEnterPassword": {
-        "description": "Placeholder text for re-enter password input field in Hindi"
-    },
-    "reEnterPasswordRequired": "कृपया अपना पासवर्ड फिर से दर्ज करें",
-    "@reEnterPasswordRequired": {
-        "description": "Validation message for missing re-enter password in Hindi"
-    },
-    "passwordMismatch": "पासवर्ड मेल नहीं खाते",
-    "@passwordMismatch": {
-        "description": "Validation message for mismatched passwords in Hindi"
-    },
-    "alreadyHaveAccount": "पहले से खाता है?",
-    "@alreadyHaveAccount": {
-        "description": "Prompt for users to login if they already have an account in Hindi"
-    },
-    "login": "लॉगिन करें",
-    "@login": {
-        "description": "Text for the login button in Hindi"
-    },
-    "anerroroccurredduringsignin":"साइन इन करते समय एक त्रुटि हुई",
-    "anerroroccurredduringregister":"पंजीकरण के दौरान एक त्रुटि हुई",
-
-    "msgCode_100": "आवश्यक फ़ील्ड्स गायब हैं: ईमेल, पासवर्ड, या भाषा। कृपया इन्हें भरें। 😉",
-    "msgCode_101": "उपयोगकर्ता नहीं मिला। कृपया अपनी जानकारी जांचें या पंजीकरण करें। 😨",
-    "msgCode_102": "पासवर्ड गलत है। कृपया पुनः प्रयास करें। 😢",
-    "msgCode_103": "उपयोगकर्ता अभी तक सत्यापित नहीं है। कृपया अपना खाता सत्यापित करें। 😤",
-    "msgCode_104": "उपयोगकर्ता मौजूद है और सफलतापूर्वक लॉग इन हो गया! 😍",
-    "msgCode_105": "लॉगिन के लिए तैयार! 🤞",
-    "msgCode_200": "आवश्यक फ़ील्ड्स गायब हैं: पूरा नाम, पासवर्ड, ईमेल, या भाषा। 😉",
-    "msgCode_201": "अमान्य लॉगिन प्रकार। 🤨",
-    "msgCode_202": "अमान्य ईमेल प्रारूप। 🙄",
-    "msgCode_203": "उपयोगकर्ता पहले से ही पंजीकृत है। कृपया लॉग इन करें। 😑",
-    "msgCode_204": "उपयोगकर्ता सफलतापूर्वक पंजीकृत हुआ! 😍",
-    "msgCode_205": "साइन अप के लिए तैयार! 🤞",
-    "msgCode_206": "ओटीपी भेजने में विफल। कृपया बाद में पुनः प्रयास करें। 😗",
-    "msgCode_207": "ईमेल पर ओटीपी सफलतापूर्वक भेजा गया! 😊",
-    "msgCode_208": "उपयोगकर्ता मौजूद नहीं है। 😒",
-    "msgCode_209": "अमान्य ओटीपी। 😑",
-    "msgCode_210": "उपयोगकर्ता सफलतापूर्वक सत्यापित हुआ! 🥰",
-    "msgCode_211": "ओटीपी सत्यापन के दौरान आंतरिक सर्वर त्रुटि। 🤔",
-    "msgCode_212": "सभी फ़ील्ड्स (आईडी, पासवर्ड, भाषा) आवश्यक हैं। 😞",
-    "msgCode_213": "उपयोगकर्ता सत्यापित नहीं है। कृपया पहले ओटीपी सत्यापन पूरा करें। 🙂",
-    "msgCode_214": "पासवर्ड सफलतापूर्वक रीसेट हुआ! 🎉",
-    "msgCode_215": "पासवर्ड रीसेट के दौरान आंतरिक सर्वर त्रुटि। 🤔",
-    "msgCode_216": "पासवर्ड रीसेट शुरू करने के लिए ईमेल के साथ एक POST अनुरोध भेजें।",
-    "msgCode_217": "ओटीपी अपडेट करने में असमर्थ। उपयोगकर्ता डेटाबेस में नहीं मिला। 🤔",
-    "msgCode_500": "आंतरिक सर्वर त्रुटि। कृपया बाद में पुनः प्रयास करें। 😥",
-    "msgCode_default": "अज्ञात संदेश कोड। कृपया अपने कार्यान्वयन की जांच करें।",
-
-    "enterOtp": "ओटीपी दर्ज करें",
-    "otpSentTo": "ओटीपी भेजा गया:",
-    "resendOtpIn": "ओटीपी पुनः भेजें: ",
-    "resendOtpAvailable": "ओटीपी पुनः भेजा जा सकता है",
-    "resendOtp": "ओटीपी पुनः भेजें",
-    "otpResentSuccessfully": "ओटीपी सफलतापूर्वक पुनः भेजा गया!",
-    "verifyOtp": "ओटीपी सत्यापित करें",
-    "invalidOtp": "अमान्य ओटीपी। कृपया जांचें और पुनः प्रयास करें।",
-    "otpVerifiedSuccessfully": "ओटीपी सफलतापूर्वक सत्यापित हुआ!",
-    "anerroroccurredduringotpverification": "ओटीपी सत्यापन के दौरान त्रुटि हुई। कृपया पुनः प्रयास करें।"
-
-
+  "hello": "स्वागत है",
+  "@hello": {
+    "description": "यह इंग्लिश में 'Hello' का अनुवाद है"
+  },
+  "nointernet": "इंटरनेट कनेक्शन नहीं है",
+  "@nointernet": {
+    "description": "यह इंग्लिश में 'No Internet Connection' का संदेश है"
+  },
+  "choosepreferedlang": "अपनी पसंदीदा भाषा चुनें",
+  "@choosepreferedlang": {
+    "description": "यह इंग्लिश में 'Choose your preferred Language' का संदेश है"
+  },
+  "contin": "अंग्रेजी में जारी रखें",
+  "@contin": {
+    "description": "यह इंग्लिश में 'Continue in English' का संदेश है"
+  },
+  "agromitra": "एग्रोमित्र",
+  
+  "enterEmail": "अपना ईमेल दर्ज करें",
+  "emailRequired": "ईमेल आवश्यक है",
+  "invalidEmail": "मान्य ईमेल दर्ज करें",
+  
+  "enterPassword": "अपना पासवर्ड दर्ज करें",
+  "passwordRequired": "पासवर्ड आवश्यक है",
+  "passwordTooShort": "पासवर्ड कम से कम 6 अंकों का होना चाहिए",
+  "forgotPassword": "पासवर्ड भूल गए?",
+  "signIn": "साइन इन करें",
+  "or": "या",
+  "continueWithGoogle": "गूगल से जारी रखें",
+  "dontHaveAccount": "क्या आपका खाता नहीं है?",
+  "register": "रजिस्टर करें",
+  "enterFullName": "अपना पूरा नाम दर्ज करें",
+  "@enterFullName": {
+    "description": "पूरा नाम दर्ज करने के लिए प्लेसहोल्डर टेक्स्ट"
+  },
+  "fullNameRequired": "पूरा नाम आवश्यक है",
+  "@fullNameRequired": {
+    "description": "पूरा नाम न होने पर वैलिडेशन संदेश"
+  },
+  "reEnterPassword": "अपना पासवर्ड पुनः दर्ज करें",
+  "@reEnterPassword": {
+    "description": "पासवर्ड को फिर से दर्ज करने के लिए प्लेसहोल्डर टेक्स्ट"
+  },
+  "reEnterPasswordRequired": "कृपया अपना पासवर्ड पुनः दर्ज करें",
+  "@reEnterPasswordRequired": {
+    "description": "पासवर्ड पुनः दर्ज न करने पर वैलिडेशन संदेश"
+  },
+  "passwordMismatch": "पासवर्ड मेल नहीं खाते",
+  "@passwordMismatch": {
+    "description": "पासवर्ड मेल न खाने पर वैलिडेशन संदेश"
+  },
+  "alreadyHaveAccount": "क्या आपका खाता है?",
+  "@alreadyHaveAccount": {
+    "description": "अगर उपयोगकर्ता का खाता पहले से है तो लॉगिन करने के लिए प्रॉम्प्ट"
+  },
+  "login": "लॉगिन करें",
+  "@login": {
+    "description": "लॉगिन बटन का टेक्स्ट"
+  },
+  
+  "anerroroccurredduringsignin": "साइन इन के दौरान एक त्रुटि हुई",
+  "anerroroccurredduringregister": "रजिस्ट्रेशन के दौरान एक त्रुटि हुई",
+  
+  "msgCode_100": "आवश्यक फ़ील्ड्स गायब हैं: ईमेल, पासवर्ड, या भाषा। कृपया इन्हें भरें। 😉",
+  "msgCode_101": "उपयोगकर्ता नहीं मिला। कृपया अपने क्रेडेंशियल्स जांचें या रजिस्टर करें। 😨",
+  "msgCode_102": "पासवर्ड गलत है। कृपया फिर से प्रयास करें। 😢",
+  "msgCode_103": "उपयोगकर्ता अभी तक सत्यापित नहीं है। कृपया अपना खाता सत्यापित करें। 😤",
+  "msgCode_104": "उपयोगकर्ता सफलतापूर्वक लॉगिन कर चुका है! 😍",
+  "msgCode_105": "लॉगिन के लिए तैयार! 🤞",
+  "msgCode_200": "आवश्यक फ़ील्ड्स गायब हैं: पूरा नाम, पासवर्ड, ईमेल, या भाषा। 😉",
+  "msgCode_201": "अवैध लॉगिन प्रकार। 🤨",
+  "msgCode_202": "अवैध ईमेल प्रारूप। 🙄",
+  "msgCode_203": "उपयोगकर्ता पहले से रजिस्टर्ड है। कृपया लॉगिन करें। 😑",
+  "msgCode_204": "उपयोगकर्ता सफलतापूर्वक रजिस्टर्ड हुआ! 😍",
+  "msgCode_205": "साइन अप के लिए तैयार! 🤞",
+  "msgCode_206": "OTP भेजने में विफल। कृपया कुछ समय बाद फिर से प्रयास करें। 😗",
+  "msgCode_207": "OTP सफलतापूर्वक ईमेल पर भेजा गया! 😊",
+  "msgCode_208": "उपयोगकर्ता मौजूद नहीं है। 😒",
+  "msgCode_209": "अवैध OTP। 😑",
+  "msgCode_210": "उपयोगकर्ता सफलतापूर्वक सत्यापित हुआ! 🥰",
+  "msgCode_211": "OTP सत्यापन के दौरान आंतरिक सर्वर त्रुटि। 🤔",
+  "msgCode_212": "सभी फ़ील्ड्स (id, पासवर्ड, भाषा) आवश्यक हैं। 😞",
+  "msgCode_213": "उपयोगकर्ता सत्यापित नहीं है। कृपया OTP सत्यापन पूरा करें। 🙂",
+  "msgCode_214": "पासवर्ड सफलतापूर्वक रीसेट हुआ! 🎉",
+  "msgCode_215": "पासवर्ड रीसेट के दौरान आंतरिक सर्वर त्रुटि। 🤔",
+  "msgCode_216": "पासवर्ड रीसेट शुरू करने के लिए ईमेल के साथ POST अनुरोध भेजें।",
+  "msgCode_217": "OTP अपडेट करने में असमर्थ। उपयोगकर्ता डेटाबेस में नहीं मिला। 🤔",
+  "msgCode_500": "आंतरिक सर्वर त्रुटि। कृपया कुछ समय बाद फिर से प्रयास करें। 😥",
+  "msgCode_default": "अज्ञात संदेश कोड। कृपया अपनी कार्यान्वयन की जांच करें।",
+  
+  "enterOtp": "OTP दर्ज करें",
+  "otpSentTo": "OTP भेजा गया है",
+  "resendOtpIn": "OTP फिर से भेजें",
+  "resendOtpAvailable": "OTP फिर से भेजने के लिए उपलब्ध",
+  "resendOtp": "OTP फिर से भेजें",
+  "otpResentSuccessfully": "OTP सफलतापूर्वक फिर से भेजा गया!",
+  "verifyOtp": "OTP सत्यापित करें",
+  "invalidOtp": "अवैध OTP। कृपया जांचें और फिर से प्रयास करें।",
+  "otpVerifiedSuccessfully": "OTP सफलतापूर्वक सत्यापित हुआ!",
+  "anerroroccurredduringotpverification": "OTP सत्यापन के दौरान एक त्रुटि हुई। कृपया फिर से प्रयास करें।",
+  
+  "passwordMismatch": "पासवर्ड और पुष्टि पासवर्ड मेल नहीं खाते।",
+  "pleaseFillAllFields": "कृपया सभी फ़ील्ड्स भरें।",
+  "passwordUpdatedSuccessfully": "पासवर्ड सफलतापूर्वक अपडेट हुआ।",
+  "resetPassword": "पासवर्ड रीसेट करें",
+  "newPassword": "नया पासवर्ड",
+  "confirmPassword": "पासवर्ड की पुष्टि करें",
+  "sendotp":"OTP भेजें"
 }

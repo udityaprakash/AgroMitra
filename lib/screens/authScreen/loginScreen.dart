@@ -32,7 +32,7 @@ class _LoginScreenState extends State<LoginScreen> {
           text: message,
           textColor: AppColors.textSecondary,
         ),
-        duration: Duration(seconds: 3), // Automatically dismiss after 3 seconds
+        duration: Duration(seconds: 3),
       ),
     );
   }
@@ -110,7 +110,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       alignment: Alignment.centerRight,
                       child: TextButton(
                         onPressed: () {
-                          // Handle forgot password action
+                          Navigator.pushNamed(context, '/forgotPassword');
                         },
                         child: CustomTextWidget(
                           text: AppLocalizations.of(context)!.forgotPassword,

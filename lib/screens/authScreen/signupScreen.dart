@@ -187,7 +187,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                       Navigator.pushNamed(
                                         context,
                                         "/enterOtp",
-                                        arguments: {'email': emailController.text},
+                                        arguments: {'email': emailController.text, 'destinationScreen': '/login'},
                                       );  
                                     }else{
                                     _showSnackbar(context, getMessageByCode(

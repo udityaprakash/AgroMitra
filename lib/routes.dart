@@ -2,9 +2,11 @@ import 'dart:developer';
 
 import 'package:agromitra/constant/color.dart';
 import 'package:agromitra/functions/internet-connectivity.dart';
+import 'package:agromitra/screens/authScreen/emailScreenforgetPassword.dart';
 import 'package:agromitra/screens/authScreen/enterOtpScreen.dart';
 import 'package:agromitra/screens/authScreen/loginScreen.dart';
 import 'package:agromitra/screens/authScreen/selectLangScreen.dart';
+import 'package:agromitra/screens/authScreen/setNewPassword.dart';
 import 'package:agromitra/screens/authScreen/signupScreen.dart';
 import 'package:agromitra/screens/authScreen/somethingWentWrong.dart';
 import 'package:agromitra/screens/homescreen.dart';
@@ -53,9 +55,13 @@ class CustomRoute {
           return SignupScreen();
         case "/enterOtp":
           final args = settings.arguments as Map<String, dynamic>; // Receive arguments
-          return EnterOtpScreen(email: args['email']);  
+          return EnterOtpScreen(email: args['email'], destinationScreen: args['destinationScreen']);  
         case "/homescreen":
           return HomeScreen();
+        case "/forgotPassword":
+          return EmailScreen();
+        case "/setNewPassword":
+          return ResetPasswordScreen();  
       }
       log("Settings name: " + (settings.name).toString());
       return SomethingWentWrong();

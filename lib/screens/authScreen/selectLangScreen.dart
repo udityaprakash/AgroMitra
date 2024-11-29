@@ -52,7 +52,7 @@ class _LanguageSelectionState extends State<LanguageSelection> {
             Image.asset('assets/images/app_logo/appLogoImage.png', height: 50),
             SizedBox(width: 8), // Space between logo and text
             CustomTextWidget(
-              text: 'AgroMitra',
+              text: AppLocalizations.of(context)!.agromitra,
               fontSize: 30,
               fontWeight: FontWeight.bold,
               textColor: AppColors.primary,
