@@ -39,6 +39,7 @@ dependencies:
   http: ^1.2.2
   intl: ^0.19.0
   flutter_svg: ^2.0.7
+  floating_bottom_bar: ^0.0.3
   flutter_localizations:
     sdk: flutter
 
@@ -74,6 +75,7 @@ flutter:
     - assets/images/app_logo/appLogoPng.png
     - assets/images/app_logo/appLogoImage.png
     - assets/images/app_images/googleLogo.png
+    - assets/images/icons/menu.png
     - assets/svgs/appLogo.svg
     - assets/svgs/appLogo1.svg
 

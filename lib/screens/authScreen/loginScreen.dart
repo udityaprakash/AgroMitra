@@ -188,6 +188,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                         response['token'],
                                       );
 
+                                      await StorageManager.saveData(
+                                        'email',
+                                        emailController.text,
+                                      );
+
                                       Navigator.pushReplacementNamed(
                                           context, '/homescreen');
                                     }

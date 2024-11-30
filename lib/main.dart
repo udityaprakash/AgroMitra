@@ -47,13 +47,15 @@ class MyApp extends StatelessWidget {
             GlobalCupertinoLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,
           ],
-          locale: context.watch<LanguageProvider>().selectedLocale, // Locale is now dynamically set using LanguageProvider
+          locale: context.watch<LanguageProvider>().selectedLocale,
           initialRoute: '/',
           onGenerateRoute: CustomRoute.allRoutes,
           theme: ThemeData(
             fontFamily: 'Parkinsans',
             scaffoldBackgroundColor: AppColors.background,
             textTheme: ThemeData.dark().textTheme,
+            bottomAppBarTheme: BottomAppBarTheme(color: AppColors.primary),
+            // iconTheme: const IconThemeData(color: AppColors.primary)
           ),
         );
       },
