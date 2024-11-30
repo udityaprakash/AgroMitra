@@ -31,3 +31,4 @@ class AppColors {
   // Warning Color
   static const Color warning = Color(0xFFFFA000);
 }
+

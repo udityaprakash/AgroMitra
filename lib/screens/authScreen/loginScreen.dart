@@ -165,19 +165,29 @@ class _LoginScreenState extends State<LoginScreen> {
                                         context,
                                         getMessageByCode(
                                             context, response['msgCode']));
-                                    if (response['verified'] == false ) {
-                                      Navigator.pushReplacementNamed(
-                                          context, '/enterOtp');
-                                      return;
-                                    }
                                     if (response['success'] == true) {
-                                      // Save the token in the device storage
+                                      if (response['verified'] == false ) {
+                                        final fetchData = FetchData(
+                                      url: UrlProvider.sendOTP + emailController.text,
+                                      headers: {
+                                        'Content-Type': 'application/json'
+                                      }
+                                    );
+                                    final response = await fetchData.get();
+                                    log('OTP send Response: $response');
+
+                                      Navigator.pushNamed(
+                                        context,
+                                        "/enterOtp",
+                                        arguments: {'email': emailController.text, 'destinationScreen': '/login'},
+                                      ); 
+                                        return;
+                                      }
                                       await StorageManager.saveData(
                                         'token',
                                         response['token'],
                                       );
 
-                                      // Navigate to the home screen
                                       Navigator.pushReplacementNamed(
                                           context, '/homescreen');
                                     }

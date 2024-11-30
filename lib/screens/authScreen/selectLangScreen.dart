@@ -40,7 +40,7 @@ class _LanguageSelectionState extends State<LanguageSelection> {
     {'name': 'नेपाली', 'code': 'ne', 'color': Colors.orange[100]},
   ];
 
-  int? selectedLanguageIndex;
+  int? selectedLanguageIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -146,7 +146,7 @@ class _LanguageSelectionState extends State<LanguageSelection> {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                         content: CustomTextWidget(
-                            text: 'Please select a language',
+                            text: AppLocalizations.of(context)!.choosepreferedlang,
                             textColor: AppColors.textSecondary)),
                   );
                 }
