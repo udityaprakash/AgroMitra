@@ -166,21 +166,24 @@ class _LoginScreenState extends State<LoginScreen> {
                                         getMessageByCode(
                                             context, response['msgCode']));
                                     if (response['success'] == true) {
-                                      if (response['verified'] == false ) {
+                                      if (response['verified'] == false) {
                                         final fetchData = FetchData(
-                                      url: UrlProvider.sendOTP + emailController.text,
-                                      headers: {
-                                        'Content-Type': 'application/json'
-                                      }
-                                    );
-                                    final response = await fetchData.get();
-                                    log('OTP send Response: $response');
+                                            url: UrlProvider.sendOTP +
+                                                emailController.text,
+                                            headers: {
+                                              'Content-Type': 'application/json'
+                                            });
+                                        final response = await fetchData.get();
+                                        log('OTP send Response: $response');
 
-                                      Navigator.pushNamed(
-                                        context,
-                                        "/enterOtp",
-                                        arguments: {'email': emailController.text, 'destinationScreen': '/login'},
-                                      ); 
+                                        Navigator.pushNamed(
+                                          context,
+                                          "/enterOtp",
+                                          arguments: {
+                                            'email': emailController.text,
+                                            'destinationScreen': '/login'
+                                          },
+                                        );
                                         return;
                                       }
                                       await StorageManager.saveData(
@@ -192,7 +195,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                         'email',
                                         emailController.text,
                                       );
-
+                                      Navigator.pop(context);
                                       Navigator.pushReplacementNamed(
                                           context, '/homescreen');
                                     }

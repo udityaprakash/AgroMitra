@@ -16,6 +16,12 @@
     "description": "It shows message in English"
   },
   "agromitra": "AgroMitra",
+
+  "featurescr01": "Customized AI agricultural assistant for farmers",
+  "featurescr02": "Precision Fertilizing, Maximum Yields and Higher Profits",
+  "featurescr03": "Get Soil Testing Services at your doorstep",
+  "next": "Next",
+  "skip": "Skip",
   
   "enterEmail": "Enter your email",
   "emailRequired": "Email is required",

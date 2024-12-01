@@ -133,7 +133,8 @@ class _LanguageSelectionState extends State<LanguageSelection> {
                   String selectedLanguage =
                       languages[selectedLanguageIndex!]['code'];
                   await StorageManager.saveData('Lang', selectedLanguage).then(
-                    (value) => Navigator.pushNamed(context, '/login'),
+                    (value) => Navigator.pushNamed(context, '/introScreen'),
+                    // Navigator.pushNamed(context, '/login'),
                   );
 
                   // log('Selected Language: $selectedLanguage');
@@ -146,7 +147,8 @@ class _LanguageSelectionState extends State<LanguageSelection> {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                         content: CustomTextWidget(
-                            text: AppLocalizations.of(context)!.choosepreferedlang,
+                            text: AppLocalizations.of(context)!
+                                .choosepreferedlang,
                             textColor: AppColors.textSecondary)),
                   );
                 }

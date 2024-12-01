@@ -76,8 +76,12 @@ flutter:
     - assets/images/app_logo/appLogoImage.png
     - assets/images/app_images/googleLogo.png
     - assets/images/icons/menu.png
+    - assets/images/icons/Arrow-Left.png
     - assets/svgs/appLogo.svg
     - assets/svgs/appLogo1.svg
+    - assets/svgs/features/0.svg
+    - assets/svgs/features/1.svg
+    - assets/svgs/features/2.svg
 
     - assets/fonts/Parkinsans-VariableFont_wght.ttf
 

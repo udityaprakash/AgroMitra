@@ -9,6 +9,7 @@ import 'package:agromitra/screens/authScreen/selectLangScreen.dart';
 import 'package:agromitra/screens/authScreen/setNewPassword.dart';
 import 'package:agromitra/screens/authScreen/signupScreen.dart';
 import 'package:agromitra/screens/authScreen/somethingWentWrong.dart';
+import 'package:agromitra/screens/featureScreens/appfeatures.dart';
 import 'package:agromitra/screens/homescreen.dart';
 import 'package:agromitra/screens/splashScreen.dart';
 import 'package:agromitra/utils/ui/custom-text.dart';
@@ -49,6 +50,8 @@ class CustomRoute {
           return SplashScreen();
         case "/selectLanguage":
           return LanguageSelection(); 
+        case "/introScreen":
+          return IntroScreen();   
         case "/login":
           return LoginScreen();
         case "/signup":
