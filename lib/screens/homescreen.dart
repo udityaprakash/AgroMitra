@@ -129,9 +129,10 @@ class _HomeScreenState extends State<HomeScreen> {
         controller: floa.FloatingBottomBarController(initialIndex: 0),
         bottomBar: [
           floa.BottomBarItem(
-            icon: (_selectedIndex == 0) ?Icon(Icons.home, size: 24, color: AppColors.textHint ): Icon(Icons.home, size: 24, color: const Color.fromARGB(0, 158, 158, 158) ,),
+            icon:Icon(Icons.home, size: 24, color: AppColors.textSecondary ),
             iconSelected: const Icon(Icons.home, color: AppColors.primary),
             title: 'Home',
+            titleStyle: TextStyle(color: AppColors.textSecondary),
             dotColor: AppColors.primary,
             onTap: (value) {
               setState(() {
@@ -141,9 +142,10 @@ class _HomeScreenState extends State<HomeScreen> {
             },
           ),
           floa.BottomBarItem(
-            icon: (_selectedIndex == 1) ? Icon(Icons.photo, size: 24, color: const Color.fromARGB(0, 158, 158, 158)):  Icon(Icons.photo, size: 24, color: AppColors.textHint),
+            icon:Icon(Icons.photo, size: 24, color: AppColors.textSecondary),
             iconSelected: const Icon(Icons.photo, color: AppColors.primary),
             title: 'Search',
+            titleStyle: TextStyle(color: AppColors.textSecondary),
             dotColor: AppColors.primary,
             onTap: (value) {
               setState(() {
@@ -153,9 +155,10 @@ class _HomeScreenState extends State<HomeScreen> {
             },
           ),
           floa.BottomBarItem(
-            icon: const Icon(Icons.person, size: 24, color: AppColors.textHint),
+            icon: const Icon(Icons.person, size: 24, color: AppColors.textSecondary),
             iconSelected: const Icon(Icons.person, color: AppColors.primary),
             title: 'Profile',
+            titleStyle: TextStyle(color: AppColors.textSecondary),
             dotColor: AppColors.primary,
             onTap: (value) {
               setState(() {
@@ -165,9 +168,10 @@ class _HomeScreenState extends State<HomeScreen> {
             },
           ),
           floa.BottomBarItem(
-            icon: const Icon(Icons.settings, size: 24, color: AppColors.textHint),
+            icon: const Icon(Icons.settings, size: 24, color: AppColors.textSecondary),
             iconSelected: const Icon(Icons.settings, color: AppColors.primary),
             title: 'Settings',
+            titleStyle: TextStyle(color: AppColors.textSecondary),
             dotColor: AppColors.primary,
             onTap: (value) {
               setState(() {
