@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:agromitra/functions/autotranslator.dart';
 import 'package:agromitra/utils/data/deviceStorage.dart';
 import 'package:floating_bottom_bar/animated_bottom_navigation_bar.dart'
     as floa;
@@ -58,11 +59,11 @@ class _HomeScreenState extends State<HomeScreen> {
       key: _scaffoldKey,
       backgroundColor: AppColors.white,
       appBar: AppBar(
-        leading: IconButton(
-          icon: Image.asset('assets/images/icons/menu.png',
-              width: 30, height: 30),
-          onPressed: () => _scaffoldKey.currentState?.openDrawer(),
-        ),
+        // leading: IconButton(
+        //   icon: Image.asset('assets/images/icons/menu.png',
+        //       width: 30, height: 30),
+        //   onPressed: () => _scaffoldKey.currentState?.openDrawer(),
+        // ),
         shadowColor: AppColors.cardShadow,
         elevation: 10,
         title: CustomTextWidget(
@@ -77,53 +78,72 @@ class _HomeScreenState extends State<HomeScreen> {
       body: SingleChildScrollView(
         child: Container(
           padding: EdgeInsets.all(20.0),
-          child: CustomTextWidget(
-            text: "Welcome to the Home Screen! $lang and $token",
-            textColor: AppColors.textPrimary,
-            fontSize: 18.0,
-            overflow: TextOverflow.clip,
+          child: Column(
+            children: [
+              CustomTextWidget(
+                text: "Welcome to the Home Screen! $lang and $token",
+                textColor: AppColors.textPrimary,
+                fontSize: 18.0,
+                overflow: TextOverflow.clip,
+              ),
+              Container(
+                child: AutoTranslator().buildTranslatedText(context, "Hello, how are you?"),
+          //       child: FutureBuilder<String>(future:  _autoTranslator.translateToAppLanguage("Hello, how are you?"),
+          //        builder: (context, snapshot) {
+          //   if (snapshot.connectionState == ConnectionState.waiting) {
+          //     return CircularProgressIndicator();
+          //   }
+
+          //   if (snapshot.hasError) {
+          //     return Text('Error: ${snapshot.error}');
+          //   }
+
+          //   return Text('${snapshot.data}');
+          // },),
+              ),
+            ],
           ),
         ),
       ),
-      drawer: Drawer(
-        backgroundColor: AppColors.background,
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            UserAccountsDrawerHeader(
-              decoration: BoxDecoration(color: AppColors.primary),
-              accountName: Text('Username'),
-              accountEmail: Text('$email'),
-              currentAccountPicture: CircleAvatar(
-                backgroundColor: AppColors.background,
-                child: Icon(Icons.person, color: AppColors.primary),
-              ),
-            ),
-            ListTile(
-              leading: Icon(Icons.home),
-              title: Text('home'),
-              onTap: () {
-                Navigator.pushReplacementNamed(context, '/home');
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.settings),
-              title: Text('settings'),
-              onTap: () {
-                Navigator.pushReplacementNamed(context, '/settings');
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.logout),
-              title: Text('logout'),
-              onTap: () async {
-                await StorageManager.deleteAllData();
-                Navigator.pushReplacementNamed(context, '/');
-              },
-            ),
-          ],
-        ),
-      ),
+      // drawer: Drawer(
+      //   backgroundColor: AppColors.background,
+      //   child: ListView(
+      //     padding: EdgeInsets.zero,
+      //     children: <Widget>[
+      //       UserAccountsDrawerHeader(
+      //         decoration: BoxDecoration(color: AppColors.primary),
+      //         accountName: Text('Username'),
+      //         accountEmail: Text('$email'),
+      //         currentAccountPicture: CircleAvatar(
+      //           backgroundColor: AppColors.background,
+      //           child: Icon(Icons.person, color: AppColors.primary),
+      //         ),
+      //       ),
+      //       ListTile(
+      //         leading: Icon(Icons.home),
+      //         title: Text('home'),
+      //         onTap: () {
+      //           Navigator.pushReplacementNamed(context, '/home');
+      //         },
+      //       ),
+      //       ListTile(
+      //         leading: Icon(Icons.settings),
+      //         title: Text('settings'),
+      //         onTap: () {
+      //           Navigator.pushReplacementNamed(context, '/settings');
+      //         },
+      //       ),
+      //       ListTile(
+      //         leading: Icon(Icons.logout),
+      //         title: Text('logout'),
+      //         onTap: () async {
+      //           await StorageManager.deleteAllData();
+      //           Navigator.pushReplacementNamed(context, '/');
+      //         },
+      //       ),
+      //     ],
+      //   ),
+      // ),
       bottomNavigationBar: floa.AnimatedBottomNavigationBar(
         barColor: AppColors.white,
         controller: floa.FloatingBottomBarController(initialIndex: 0),
@@ -191,10 +211,10 @@ class _HomeScreenState extends State<HomeScreen> {
               child: const Icon(Icons.camera, color: AppColors.white),
               onTap: () => developer.log('Item1'),
             ),
-            floa.FloatingCenterButtonChild(
-              child: Icon(Icons.notifications, color: AppColors.white),
-              onTap: () => developer.log('Item2'),
-            ),
+            // floa.FloatingCenterButtonChild(
+            //   child: Icon(Icons.notifications, color: AppColors.white),
+            //   onTap: () => developer.log('Item2'),
+            // ),
             // FloatingCenterButtonChild(
             //   child: const Icon(Icons.ac_unit_outlined, color: AppColors.white),
             //   onTap: () => developer.log('Item3'),
