@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:agromitra/functions/autotranslator.dart';
+import 'package:agromitra/functions/loading.dart';
 import 'package:agromitra/functions/locations.dart';
 import 'package:agromitra/utils/data/deviceStorage.dart';
 import 'package:agromitra/utils/data/fetchInternetData.dart';
@@ -16,7 +17,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'dart:developer' as developer;
 
 import 'package:geolocator/geolocator.dart';
-import 'package:provider/provider.dart'; // Add this for log functionality
+import 'package:provider/provider.dart';
+import 'package:weather_icons/weather_icons.dart'; // Add this for log functionality
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -30,12 +32,11 @@ class _HomeScreenState extends State<HomeScreen> {
   String token = "Loading...";
   String email = "Loading...";
   late Future<WeatherResponse> futureWeather;
-  Position? location; // Make location nullable
+  Position? location;
+  bool isRefreshing = false;
 
-  // GlobalKey for Scaffold to open the drawer
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  // Track the selected index for the bottom navbar
   int _selectedIndex = 0;
 
   @override
@@ -48,7 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
     String fetchedLang = await StorageManager.readData('Lang') ?? 'Unknown';
     String fetchedToken = await StorageManager.readData('token') ?? 'Unknown';
     String fetchedemail = await StorageManager.readData('email') ?? 'Unknown';
-    
+
     try {
       location = await determinePosition();
       log('Location: $location');
@@ -70,9 +71,11 @@ class _HomeScreenState extends State<HomeScreen> {
     }
 
     final requestresponse = await FetchData(
-      url: UrlProvider.fetchweatherUrl + location!.latitude.toString() + "/" + location!.longitude.toString(),
-      headers: {'Content-Type': 'application/json'}
-    );
+        url: UrlProvider.fetchweatherUrl +
+            location!.latitude.toString() +
+            "/" +
+            location!.longitude.toString(),
+        headers: {'Content-Type': 'application/json'});
 
     final response = await requestresponse.get();
     log('Weather response: ${response}');
@@ -84,10 +87,22 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  // Function to handle bottom navbar item tap
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
+    });
+  }
+
+  Future<void> _performRefresh() async {
+    setState(() {
+      isRefreshing = true;
+    });
+
+    await Future.delayed(Duration(seconds: 2));
+    futureWeather = fetchWeather();
+
+    setState(() {
+      isRefreshing = false;
     });
   }
 
@@ -102,81 +117,114 @@ class _HomeScreenState extends State<HomeScreen> {
         title: CustomTextWidget(
           text: AppLocalizations.of(context)!.agromitra,
           textColor: Colors.white,
-          fontSize: 20.0,
+          fontSize: 30.0,
           isBold: true,
         ),
         backgroundColor: AppColors.primary,
-        centerTitle: true,
+        actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/settings');
+              },
+              icon: Icon(
+                Icons.notifications,
+                color: AppColors.white,
+              )),
+          SizedBox(width: 10.0),
+        ],
       ),
-      body: SingleChildScrollView(
-        child: Container(
-          padding: EdgeInsets.all(20.0),
-          child: Column(
-            children: [
-              SizedBox(
-                child: (location == null) ? SizedBox(height:100) : FutureBuilder<WeatherResponse>(
-                  future: futureWeather,
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(child: SizedBox(height: 100, child: CircularProgressIndicator()));
-                    } else if (snapshot.hasError) {
-                      log('error: ${snapshot.error}');
-                      return Center(child: Text('Error: ${snapshot.error}'));
-                    } else if (snapshot.hasData) {
-                      var data = snapshot.data!.data;
-                      log('Data: ${data.coord.lat}');
-                      // return CustomTextWidget(
-                      //   text: 'Weather: ${data.weather[0].main}',
+      body: GestureDetector(
+        onVerticalDragEnd: (details) {
+          if (details.velocity.pixelsPerSecond.dy > 200 && !isRefreshing) {
+            _performRefresh();
+          }
+        },
+        child: isRefreshing
+            ? Center(
+                child: loading(),
+              )
+            : SingleChildScrollView(
+                child: Container(
+                  padding: EdgeInsets.all(20.0),
+                  margin: EdgeInsets.only(top: 15.0),
+                  child: Column(
+                    children: [
+                      Container(
+                        height: 100,
+                        child: (location == null)
+                            ? loading()
+                            : FutureBuilder<WeatherResponse>(
+                                future: futureWeather,
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return loading();
+                                  } else if (snapshot.hasError) {
+                                    log('error: ${snapshot.error}');
+                                    return Center(
+                                        child:
+                                            Text('Error: ${snapshot.error}'));
+                                  } else if (snapshot.hasData) {
+                                    var data = snapshot.data!.data;
+                                    log('Data: ${data.coord.lat}');
+
+                                    return weatherTile(
+                                        child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            CustomTextWidget(
+                                              text: '${data.name}',
+                                              textColor: AppColors.textPrimary,
+                                              fontSize: 18.0,
+                                              overflow: TextOverflow.clip,
+                                            ),
+                                            AutoTranslator().buildTranslatedText(
+                                                context,
+                                                '${data.weather[0].description}'),
+                                          ],
+                                        ),
+                                        BoxedIcon(
+                                          WeatherIconMapper.getIcon(
+                                              data.weather[0].icon),
+                                          color: WeatherIconMapper.getIconColor(
+                                              data.weather[0].icon),
+                                          size: 50,
+                                        ),
+                                        CustomTextWidget(
+                                          text: '${data.main.temp} °C',
+                                          textColor: AppColors.textPrimary,
+                                          fontSize: 18.0,
+                                          overflow: TextOverflow.clip,
+                                        ),
+                                      ],
+                                    ));
+                                  } else {
+                                    return Center(
+                                        child: Text('No data available'));
+                                  }
+                                },
+                              ),
+                      ),
+                      // CustomTextWidget(
+                      //   text:
+                      //       "Welcome to the Home Screen! $lang and $token location is $location",
                       //   textColor: AppColors.textPrimary,
                       //   fontSize: 18.0,
                       //   overflow: TextOverflow.clip,
-                      // );
-
-                      return weatherTile(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                CustomTextWidget(
-                                text: '${data.name}',
-                                textColor: AppColors.textPrimary,
-                                fontSize: 18.0,
-                                overflow: TextOverflow.clip,
-                                ),
-                                AutoTranslator()
-                    .buildTranslatedText(context, '${data.weather[0].description}'),
-                                
-                              ],
-                            ),
-                           CustomTextWidget(
-                            text: '${data.main.temp} °C',
-                            textColor: AppColors.textPrimary,
-                            fontSize: 18.0,
-                            overflow: TextOverflow.clip,
-                           ),
-                          ],
-                        ));
-                    } else {
-                      return Center(child: Text('No data available'));
-                    }
-                  },
+                      // ),
+                      Container(
+                        child: AutoTranslator().buildTranslatedText(
+                            context, "Hello, how are you?"),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-              CustomTextWidget(
-                text: "Welcome to the Home Screen! $lang and $token location is $location",
-                textColor: AppColors.textPrimary,
-                fontSize: 18.0,
-                overflow: TextOverflow.clip,
-              ),
-              Container(
-                child: AutoTranslator()
-                    .buildTranslatedText(context, "Hello, how are you?"),
-              ),
-            ],
-          ),
-        ),
       ),
       bottomNavigationBar: floa.AnimatedBottomNavigationBar(
         barColor: AppColors.white,
