@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'package:agromitra/functions/googleoauth.dart';
+import 'package:agromitra/functions/oauth.dart';
 import 'package:agromitra/utils/data/InternetMsgCodeDecoder.dart';
 import 'package:agromitra/utils/data/deviceStorage.dart';
 import 'package:http/http.dart' as http;
@@ -23,6 +24,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController passwordController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool isLoading = false;
+  bool isGoogleLoading = false;
 
   void _showSnackbar(BuildContext context, String message) {
     // Clear any existing Snackbar before showing a new one
@@ -42,6 +44,7 @@ class _LoginScreenState extends State<LoginScreen> {
     try {
       final lang = await StorageManager.readData('Lang');
       log(lang);
+      
       final fetchData = FetchData(
         url: UrlProvider.loginUrl,
         headers: {'Content-Type': 'application/json'},
@@ -54,7 +57,6 @@ class _LoginScreenState extends State<LoginScreen> {
       final response = await fetchData.post();
       log('POST Response: ${response}');
 
-      // Show the response message
       _showSnackbar(context, getMessageByCode(context, response['msgCode']));
       if (response['success'] == true) {
         if (response['verified'] == false) {
@@ -102,13 +104,6 @@ class _LoginScreenState extends State<LoginScreen> {
   Future<dynamic> _handleSignIn(BuildContext context) async {
     try {
       await googleapi.signIn();
-      // log(googleapi.userinfo().toString());
-      // Navigator.push(
-      //   context,
-      //   MaterialPageRoute(
-      //     builder: (context) => UserDetailsScreen(user: googleapi.userinfo()),
-      //   ),
-      // );
       return googleapi.userinfo();
     } catch (error) {
       log("we encountered error as " + error.toString());
@@ -255,16 +250,27 @@ class _LoginScreenState extends State<LoginScreen> {
                     const SizedBox(height: 16.0),
 
                     // Continue with Google Button
-                    CustomButton(
+                    !isGoogleLoading? CustomButton(
                       backgroundColor: AppColors.white,
                       textColor: AppColors.primary,
                       text: AppLocalizations.of(context)!.continueWithGoogle,
                       onPressed: () async {
+                        setState(() {
+                          isGoogleLoading = true;
+                        });
                         var user = await _handleSignIn(context);
                         if (user != null) {
-                          log("here" + user.email.toString());
-                          _handlelogin(
-                              user.email.toString(), user.id.toString());
+                          log("here" + user.toString());
+                          var res = await continuewithgoogle(
+                            user.id.toString(),
+                            user.email.toString(), 
+                            user.displayName.toString(), context);
+                            log("res is " + res.toString());
+                          // _handlelogin(
+                          //     user.email.toString(), user.id.toString(), 'google');
+                          setState(() {
+                            isGoogleLoading = false;
+                          });
                         } else {
                           _showSnackbar(
                             context,
@@ -277,7 +283,11 @@ class _LoginScreenState extends State<LoginScreen> {
                         'assets/images/app_images/googleLogo.png',
                         height: 26,
                       ),
-                    ),
+                    ): Center(
+                              child: CircularProgressIndicator(
+                                color: AppColors.white,
+                              ),
+                            ) ,
                     const SizedBox(height: 24.0),
 
                     // Don't have an account? Register
@@ -312,3 +322,5 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 }
+
+

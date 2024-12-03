@@ -1,5 +1,7 @@
 import 'dart:developer';
 
+import 'package:agromitra/functions/googleoauth.dart';
+import 'package:agromitra/functions/oauth.dart';
 import 'package:agromitra/utils/data/InternetMsgCodeDecoder.dart';
 import 'package:agromitra/utils/data/deviceStorage.dart';
 import 'package:agromitra/utils/data/fetchInternetData.dart';
@@ -22,7 +24,8 @@ class _SignupScreenState extends State<SignupScreen> {
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController rePasswordController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  bool isLoading = false; // For handling button state
+  bool isLoading = false;
+  bool isGoogleLoading = false;
 
   void _showSnackbar(BuildContext context, String message) {
     // Clear existing Snackbars
@@ -36,6 +39,16 @@ class _SignupScreenState extends State<SignupScreen> {
         duration: Duration(seconds: 3), // Auto-dismiss after 3 seconds
       ),
     );
+  }
+
+  Future<dynamic> _handleSignIn(BuildContext context) async {
+    try {
+      await googleapi.signIn();
+      return googleapi.userinfo();
+    } catch (error) {
+      log("we encountered error as " + error.toString());
+      return null;
+    }
   }
 
   @override
@@ -238,17 +251,34 @@ class _SignupScreenState extends State<SignupScreen> {
                     ),
                     const SizedBox(height: 16.0),
 
-                    // Continue with Google Button
-                    CustomButton(
+                    !isGoogleLoading? CustomButton(
                       backgroundColor: AppColors.white,
                       textColor: AppColors.primary,
                       text: AppLocalizations.of(context)!.continueWithGoogle,
-                      onPressed: () {
-                        // Handle Google Sign-In
+                      onPressed: () async {
+                        setState(() {
+                          isGoogleLoading = true;
+                        });
+                        var user = await _handleSignIn(context);
+                        if (user != null) {
+                          log("here" + user.toString());
+                          var res = await continuewithgoogle(
+                            user.id.toString(),
+                            user.email.toString(), 
+                            user.displayName.toString(), context);
+                            log("res is " + res.toString());
+                        }
+                        setState(() {
+                          isGoogleLoading = false;
+                        });
                       },
                       prefixIcon: Image.asset('assets/images/app_images/googleLogo.png',
                           height: 26),
-                    ),
+                    ) : Center(
+                              child: CircularProgressIndicator(
+                                color: AppColors.white,
+                              ),
+                            ),
                     const SizedBox(height: 24.0),
 
                     // Already have an account? Login

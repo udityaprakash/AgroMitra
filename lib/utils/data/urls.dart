@@ -3,13 +3,14 @@ class UrlProvider {
 
   static const String authBaseUrl = "${baseUrl}/farmer";
   static const String dataBaseUrl = "$baseUrl/data";
-
+  static const String googleoauthUrl = "${authBaseUrl}/googleoauth";
 
   static const String loginUrl = "${authBaseUrl}/login";
   static const String registerUrl = "${authBaseUrl}/signup";
   static const String sendOTP = "${registerUrl}/verifyotp/";
   static const String forgotPasswordUrl = "${loginUrl}/forgetpass";
-  static const String resetPasswordSendOtp = "${forgotPasswordUrl}/verification";
+  static const String resetPasswordSendOtp =
+      "${forgotPasswordUrl}/verification";
   static const String setNewPasswordUrl = "${forgotPasswordUrl}/setpassword";
 
   static const String fetchweatherUrl = "${authBaseUrl}/weather/";
