@@ -17,22 +17,26 @@ jobs:
       - uses: subosito/flutter-action@v1
         with:
           channel: 'stable'
+
       - run: flutter clean
       - run: flutter pub get
       - run: flutter gen-l10n
+
       - name: Decode keystore
         run: echo "${{ secrets.KEYSTORE_FILE }}" | base64 --decode > /tmp/signup.jks
 
-      - name: Set up keystore
+      - name: Set up keystore environment variables
         run: |
-          echo "storeFile /tmp/signup.jks" >> android/app/build.gradle
-          echo "storePassword qwerty" >> android/app/build.gradle
-          echo "keyAlias signupkeystore" >> android/app/build.gradle
-          echo "keyPassword qwerty" >> android/app/build.gradle
-          
+          echo "KEYSTORE_PATH=/tmp/signup.jks" >> $GITHUB_ENV
+          echo "KEYSTORE_PASSWORD=${{ secrets.KEYSTORE_PASSWORD }}" >> $GITHUB_ENV
+          echo "KEY_ALIAS=${{ secrets.KEY_ALIAS }}" >> $GITHUB_ENV
+          echo "KEY_PASSWORD=${{ secrets.KEY_PASSWORD }}" >> $GITHUB_ENV
+
       - run: flutter build apk --release --split-per-abi
+
       - name: Generate dynamic tag
         run: echo "TAG=v$(date +'%Y%m%d%H%M%S')" >> $GITHUB_ENV
+
       - uses: ncipollo/release-action@v1
         with:
           tag: ${{ env.TAG }}
