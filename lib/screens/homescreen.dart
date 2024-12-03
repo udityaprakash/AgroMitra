@@ -34,6 +34,8 @@ class _HomeScreenState extends State<HomeScreen> {
   late Future<WeatherResponse> futureWeather;
   Position? location;
   bool isRefreshing = false;
+  var weatherResponse;
+  List<dynamic> crops = [];
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -93,11 +95,31 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  Future<void> _getRecommendedCrops() async {
+    final fetchresponse = FetchData(
+      url: UrlProvider.recommendcropURL,
+      headers: {'Content-Type': 'application/json'},
+      body: {
+        "latitude": location!.latitude,
+        "longitude": location!.longitude,
+        "soil_type": "Alluvial",
+        "temperature": weatherResponse.main.temp,
+        "humidity": weatherResponse.main.humidity,
+        "month": getCurrentMonth().toString()
+      },
+    );
+    var response = await fetchresponse.post();
+    crops = response['recommended_crops'];
+    log("recomend crop response: $crops");
+    // setState(() {
+
+    // });
+  }
+
   Future<void> _performRefresh() async {
     setState(() {
       isRefreshing = true;
     });
-
     await Future.delayed(Duration(seconds: 2));
     futureWeather = fetchWeather();
 
@@ -133,98 +155,179 @@ class _HomeScreenState extends State<HomeScreen> {
           SizedBox(width: 10.0),
         ],
       ),
-      body: GestureDetector(
-        onVerticalDragEnd: (details) {
-          if (details.velocity.pixelsPerSecond.dy > 200 && !isRefreshing) {
-            _performRefresh();
-          }
-        },
-        child: isRefreshing
-            ? Center(
-                child: loading(),
-              )
-            : SingleChildScrollView(
-                child: Container(
-                  padding: EdgeInsets.all(20.0),
-                  margin: EdgeInsets.only(top: 15.0),
-                  child: Column(
-                    children: [
-                      Container(
-                        height: 100,
-                        child: (location == null)
-                            ? loading()
-                            : FutureBuilder<WeatherResponse>(
-                                future: futureWeather,
-                                builder: (context, snapshot) {
-                                  if (snapshot.connectionState ==
-                                      ConnectionState.waiting) {
-                                    return loading();
-                                  } else if (snapshot.hasError) {
-                                    log('error: ${snapshot.error}');
-                                    return Center(
-                                        child:
-                                            Text('Error: ${snapshot.error}'));
-                                  } else if (snapshot.hasData) {
-                                    var data = snapshot.data!.data;
-                                    log('Data: ${data.coord.lat}');
+      body: RefreshIndicator(
+        onRefresh: _performRefresh,
+        // GestureDetector(
+        //   onVerticalDragDown: (details) {
+        //     // if (details.velocity.pixelsPerSecond.dy > 200 && !isRefreshing) {
+        //       _performRefresh();
+        //     // }
+        //   },
+        child: SingleChildScrollView(
+          physics: AlwaysScrollableScrollPhysics(),
+          child: 
+          // isRefreshing
+          //     ? Center(
+          //         child: loading(),
+          //       )
+          //     : 
+              Container(
+                padding: EdgeInsets.all(20.0),
+                margin: EdgeInsets.only(top: 15.0),
+                child: Column(
+                  children: [
+                    Container(
+                      height: 100,
+                      margin: EdgeInsets.only(bottom: 20.0),
+                      child: (location == null)
+                          ? loading()
+                          : FutureBuilder<WeatherResponse>(
+                              future: futureWeather,
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return loading();
+                                } else if (snapshot.hasError) {
+                                  log('error: ${snapshot.error}');
+                                  return Center(
+                                      child: AutoTranslator().buildTranslatedText(
+                                          context,
+                                          'Error while fetching weather data'));
+                                } else if (snapshot.hasData) {
+                                  var data = snapshot.data!.data;
+                                  weatherResponse = data;
+                                  _getRecommendedCrops();
+                                  return weatherTile(
+                                      child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          CustomTextWidget(
+                                            text: '${data.name}',
+                                            textColor: AppColors.textPrimary,
+                                            fontSize: 18.0,
+                                            overflow: TextOverflow.clip,
+                                          ),
+                                          AutoTranslator().buildTranslatedText(
+                                              context,
+                                              '${data.weather[0].description}'),
+                                        ],
+                                      ),
+                                      BoxedIcon(
+                                        WeatherIconMapper.getIcon(
+                                            data.weather[0].icon),
+                                        color: WeatherIconMapper.getIconColor(
+                                            data.weather[0].icon),
+                                        size: 50,
+                                      ),
+                                      CustomTextWidget(
+                                        text: '${data.main.temp} °C',
+                                        textColor: AppColors.textPrimary,
+                                        fontSize: 18.0,
+                                        overflow: TextOverflow.clip,
+                                      ),
+                                    ],
+                                  ));
+                                } else {
+                                  return Center(
+                                      child: Text('No data available'));
+                                }
+                              },
+                            ),
+                    ),
+                    // CustomTextWidget(
+                    //   text:
+                    //       "Welcome to the Home Screen! $lang and $token location is $location",
+                    //   textColor: AppColors.textPrimary,
+                    //   fontSize: 18.0,
+                    //   overflow: TextOverflow.clip,
+                    // ),
+              
+                    Container(
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              AutoTranslator().buildTranslatedText(
+                                  context, "Recommended Crops"),
+                              AutoTranslator().buildTranslatedText(
+                                  context, "See All",
+                                  textColor: AppColors.textHint),
+                            ],
+                          ),
+                          Container(
+                            height: 200,
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: crops.length,
+                              itemBuilder: (context, index) {
+                                final crop = crops[index];
+                                return Container(
+                                  margin: EdgeInsets.all(10.0),
+                                  width: 150,
+                                  decoration: BoxDecoration(
+                                    color: Colors
+                                        .white, // Replace with AppColors.white if defined
+                                    borderRadius: BorderRadius.circular(20),
+                                    border: Border.all(
+                                      color: AppColors.background
+                                          , // Replace with AppColors.cardShadow
+                                      width: 1,
+                                    ),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.grey
+                                            .shade300, // Replace with AppColors.cardShadow
+                                        blurRadius: 10,
+                                        offset: Offset(0, 5),
+                                      ),
+                                    ],
+                                  ),
+                                  child: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Expanded(
+                                        flex: 3,
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.vertical(
+                                              top: Radius.circular(20)),
+                                          child: Image.network(
+                                            crop['image_url'] ?? '',
+                                            fit: BoxFit.cover,
+                                            width: double.infinity,
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(height: 10),
 
-                                    return weatherTile(
-                                        child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      children: [
-                                        Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            CustomTextWidget(
-                                              text: '${data.name}',
-                                              textColor: AppColors.textPrimary,
-                                              fontSize: 18.0,
-                                              overflow: TextOverflow.clip,
-                                            ),
-                                            AutoTranslator().buildTranslatedText(
+                                      Expanded(
+                                        flex: 1,
+                                        child: AutoTranslator()
+                                            .buildTranslatedText(
                                                 context,
-                                                '${data.weather[0].description}'),
-                                          ],
-                                        ),
-                                        BoxedIcon(
-                                          WeatherIconMapper.getIcon(
-                                              data.weather[0].icon),
-                                          color: WeatherIconMapper.getIconColor(
-                                              data.weather[0].icon),
-                                          size: 50,
-                                        ),
-                                        CustomTextWidget(
-                                          text: '${data.main.temp} °C',
-                                          textColor: AppColors.textPrimary,
-                                          fontSize: 18.0,
-                                          overflow: TextOverflow.clip,
-                                        ),
-                                      ],
-                                    ));
-                                  } else {
-                                    return Center(
-                                        child: Text('No data available'));
-                                  }
-                                },
-                              ),
+                                                crop['crop_name'] ??
+                                                    'Unknown Crop',
+                                                isBold: false),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        ],
                       ),
-                      // CustomTextWidget(
-                      //   text:
-                      //       "Welcome to the Home Screen! $lang and $token location is $location",
-                      //   textColor: AppColors.textPrimary,
-                      //   fontSize: 18.0,
-                      //   overflow: TextOverflow.clip,
-                      // ),
-                      Container(
-                        child: AutoTranslator().buildTranslatedText(
-                            context, "Hello, how are you?"),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
+        ),
       ),
       bottomNavigationBar: floa.AnimatedBottomNavigationBar(
         barColor: AppColors.white,
@@ -301,4 +404,23 @@ class _HomeScreenState extends State<HomeScreen> {
       resizeToAvoidBottomInset: false,
     );
   }
+}
+
+String getCurrentMonth() {
+  final now = DateTime.now();
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December"
+  ];
+  return months[now.month - 1];
 }
