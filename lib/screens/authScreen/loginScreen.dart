@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'package:agromitra/functions/googleoauth.dart';
 import 'package:agromitra/utils/data/InternetMsgCodeDecoder.dart';
 import 'package:agromitra/utils/data/deviceStorage.dart';
 import 'package:http/http.dart' as http;
@@ -35,6 +36,84 @@ class _LoginScreenState extends State<LoginScreen> {
         duration: Duration(seconds: 3),
       ),
     );
+  }
+
+  _handlelogin(email, pass) async {
+    try {
+      final lang = await StorageManager.readData('Lang');
+      log(lang);
+      final fetchData = FetchData(
+        url: UrlProvider.loginUrl,
+        headers: {'Content-Type': 'application/json'},
+        body: {
+          "email": email,
+          "password": pass,
+          "language": lang.toString(),
+        },
+      );
+      final response = await fetchData.post();
+      log('POST Response: ${response}');
+
+      // Show the response message
+      _showSnackbar(context, getMessageByCode(context, response['msgCode']));
+      if (response['success'] == true) {
+        if (response['verified'] == false) {
+          final fetchData = FetchData(
+              url: UrlProvider.sendOTP + emailController.text,
+              headers: {'Content-Type': 'application/json'});
+          final response = await fetchData.get();
+          log('OTP send Response: $response');
+
+          Navigator.pushNamed(
+            context,
+            "/enterOtp",
+            arguments: {
+              'email': emailController.text,
+              'destinationScreen': '/login'
+            },
+          );
+          return;
+        }
+        await StorageManager.saveData(
+          'token',
+          response['token'],
+        );
+
+        await StorageManager.saveData(
+          'email',
+          emailController.text,
+        );
+        Navigator.pop(context);
+        Navigator.pushReplacementNamed(context, '/homescreen');
+      }
+    } catch (e) {
+      log("Error: $e");
+      _showSnackbar(
+        context,
+        AppLocalizations.of(context)!.anerroroccurredduringsignin,
+      );
+    } finally {
+      setState(() {
+        isLoading = false; // Hide loader
+      });
+    }
+  }
+
+  Future<dynamic> _handleSignIn(BuildContext context) async {
+    try {
+      await googleapi.signIn();
+      // log(googleapi.userinfo().toString());
+      // Navigator.push(
+      //   context,
+      //   MaterialPageRoute(
+      //     builder: (context) => UserDetailsScreen(user: googleapi.userinfo()),
+      //   ),
+      // );
+      return googleapi.userinfo();
+    } catch (error) {
+      log("we encountered error as " + error.toString());
+      return null;
+    }
   }
 
   @override
@@ -141,76 +220,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                   setState(() {
                                     isLoading = true; // Show loader
                                   });
-
-                                  try {
-                                    final lang =
-                                        await StorageManager.readData('Lang');
-                                    log(lang);
-                                    final fetchData = FetchData(
-                                      url: UrlProvider.loginUrl,
-                                      headers: {
-                                        'Content-Type': 'application/json'
-                                      },
-                                      body: {
-                                        "email": emailController.text,
-                                        "password": passwordController.text,
-                                        "language": lang.toString(),
-                                      },
-                                    );
-                                    final response = await fetchData.post();
-                                    log('POST Response: ${response}');
-
-                                    // Show the response message
-                                    _showSnackbar(
-                                        context,
-                                        getMessageByCode(
-                                            context, response['msgCode']));
-                                    if (response['success'] == true) {
-                                      if (response['verified'] == false) {
-                                        final fetchData = FetchData(
-                                            url: UrlProvider.sendOTP +
-                                                emailController.text,
-                                            headers: {
-                                              'Content-Type': 'application/json'
-                                            });
-                                        final response = await fetchData.get();
-                                        log('OTP send Response: $response');
-
-                                        Navigator.pushNamed(
-                                          context,
-                                          "/enterOtp",
-                                          arguments: {
-                                            'email': emailController.text,
-                                            'destinationScreen': '/login'
-                                          },
-                                        );
-                                        return;
-                                      }
-                                      await StorageManager.saveData(
-                                        'token',
-                                        response['token'],
-                                      );
-
-                                      await StorageManager.saveData(
-                                        'email',
-                                        emailController.text,
-                                      );
-                                      Navigator.pop(context);
-                                      Navigator.pushReplacementNamed(
-                                          context, '/homescreen');
-                                    }
-                                  } catch (e) {
-                                    log("Error: $e");
-                                    _showSnackbar(
-                                      context,
-                                      AppLocalizations.of(context)!
-                                          .anerroroccurredduringsignin,
-                                    );
-                                  } finally {
-                                    setState(() {
-                                      isLoading = false; // Hide loader
-                                    });
-                                  }
+                                  _handlelogin(emailController.text,
+                                      passwordController.text);
                                 } else {
                                   log("Form is invalid");
                                 }
@@ -248,8 +259,19 @@ class _LoginScreenState extends State<LoginScreen> {
                       backgroundColor: AppColors.white,
                       textColor: AppColors.primary,
                       text: AppLocalizations.of(context)!.continueWithGoogle,
-                      onPressed: () {
-                        // Handle Google Sign-In
+                      onPressed: () async {
+                        var user = await _handleSignIn(context);
+                        if (user != null) {
+                          log("here" + user.email.toString());
+                          _handlelogin(
+                              user.email.toString(), user.id.toString());
+                        } else {
+                          _showSnackbar(
+                            context,
+                            AppLocalizations.of(context)!
+                                .anerroroccurredduringsignin,
+                          );
+                        }
                       },
                       prefixIcon: Image.asset(
                         'assets/images/app_images/googleLogo.png',
