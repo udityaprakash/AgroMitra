@@ -9,6 +9,7 @@ import 'package:agromitra/screens/authScreen/selectLangScreen.dart';
 import 'package:agromitra/screens/authScreen/setNewPassword.dart';
 import 'package:agromitra/screens/authScreen/signupScreen.dart';
 import 'package:agromitra/screens/authScreen/somethingWentWrong.dart';
+import 'package:agromitra/screens/chatAi.dart';
 import 'package:agromitra/screens/featureScreens/appfeatures.dart';
 import 'package:agromitra/screens/homescreen.dart';
 import 'package:agromitra/screens/splashScreen.dart';
@@ -65,7 +66,11 @@ class CustomRoute {
           return EmailScreen();
         case "/setNewPassword":
           final args = settings.arguments as Map<String, dynamic>;
-          return ResetPasswordScreen(email:args['email']);  
+          return ResetPasswordScreen(email:args['email']);
+
+
+        case "/chat":
+          return ChatScreen();    
       }
       log("Settings name: " + (settings.name).toString());
       return SomethingWentWrong();

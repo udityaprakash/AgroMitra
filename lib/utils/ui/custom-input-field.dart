@@ -10,7 +10,8 @@ class CustomTextField extends StatefulWidget {
   final int? maxLength;
   final TextInputType keyboardType;
   final FocusNode? focusNode;
-  final EdgeInsetsGeometry? contentPadding; // New: Custom content padding
+  final EdgeInsetsGeometry? contentPadding;
+  final Color? fillcolor;
 
   const CustomTextField({
     Key? key,
@@ -22,6 +23,7 @@ class CustomTextField extends StatefulWidget {
     this.maxLength,
     this.keyboardType = TextInputType.text,
     this.focusNode,
+    this.fillcolor,
     this.contentPadding, // New: Accept content padding
   }) : super(key: key);
 
@@ -94,7 +96,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
               horizontal: 20.0, // Default padding if not provided
             ),
         filled: true,
-        fillColor: AppColors.background,
+        fillColor: widget.fillcolor ?? AppColors.background,
       ),
       validator: widget.validator,
       onChanged: widget.onChanged,

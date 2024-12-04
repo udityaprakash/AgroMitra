@@ -1,7 +1,7 @@
 class UrlProvider {
   static const String baseUrl = "https://sih-2024-orcin.vercel.app";
   static const String baseUrlOfMl = "https://crop-django.onrender.com";  
-
+  static const String baseUrlbytushar = "https://sih-agromitra-new-server-psi.vercel.app";
 
   //auth here
   static const String authBaseUrl = "${baseUrl}/farmer";
@@ -14,6 +14,9 @@ class UrlProvider {
   static const String forgotPasswordUrl = "${loginUrl}/forgetpass";
   static const String resetPasswordSendOtp = "${forgotPasswordUrl}/verification";
   static const String setNewPasswordUrl = "${forgotPasswordUrl}/setpassword";
+
+  //chatbot
+  static const String chatbotUrl = "${baseUrlbytushar}/ask";
 
 
   //home screen

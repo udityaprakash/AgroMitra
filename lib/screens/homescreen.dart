@@ -329,6 +329,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
         ),
       ),
+      floatingActionButton: CustomFloatingActionButton(),
       bottomNavigationBar: floa.AnimatedBottomNavigationBar(
         barColor: AppColors.white,
         controller: floa.FloatingBottomBarController(initialIndex: 0),
@@ -423,4 +424,22 @@ String getCurrentMonth() {
     "December"
   ];
   return months[now.month - 1];
+}
+
+
+class CustomFloatingActionButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return FloatingActionButton.extended(
+      onPressed: () {
+        // Add your onPressed action here
+        Navigator.pushNamed(context, '/chat');
+        print('FAB pressed');
+      },
+      icon: const Icon(Icons.chat),
+      label: AutoTranslator().buildTranslatedText(context, 'Ask Ai', textColor: AppColors.background),
+      backgroundColor: AppColors.primary,
+      foregroundColor: Colors.white,
+    );
+  }
 }
