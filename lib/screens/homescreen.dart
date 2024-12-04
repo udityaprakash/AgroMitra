@@ -36,8 +36,16 @@ class _HomeScreenState extends State<HomeScreen> {
   bool isRefreshing = false;
   var weatherResponse;
   List<dynamic> crops = [];
+  var i = 0;
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  final List<Widget> _pages = [
+    Center(child: Page1()),
+    Center(child: Text('Community Page')),
+    Center(child: Text('Profile Page')),
+    Center(child: Text('Settings Page')),
+  ];
 
   int _selectedIndex = 0;
 
@@ -56,6 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
       location = await determinePosition();
       log('Location: $location');
       futureWeather = fetchWeather();
+      await _getRecommendedCrops();
     } catch (e) {
       log('Error getting location: $e');
     }
@@ -80,7 +89,7 @@ class _HomeScreenState extends State<HomeScreen> {
         headers: {'Content-Type': 'application/json'});
 
     final response = await requestresponse.get();
-    log('Weather response: ${response}');
+    // log('Weather response: ${response}');
     if (response['success'] == true) {
       return WeatherResponse.fromJson(response);
       // return weatherResponse.FromJson(response);
@@ -111,6 +120,11 @@ class _HomeScreenState extends State<HomeScreen> {
     var response = await fetchresponse.post();
     crops = response['recommended_crops'];
     log("recomend crop response: $crops");
+
+    if (i == 0) {
+      i++;
+      setState(() {});
+    }
     // setState(() {
 
     // });
@@ -120,19 +134,23 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       isRefreshing = true;
     });
-    await Future.delayed(Duration(seconds: 2));
     futureWeather = fetchWeather();
+    // await _getRecommendedCrops();
 
     setState(() {
       isRefreshing = false;
     });
   }
 
+  void dispose() {
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      backgroundColor: AppColors.white,
+      backgroundColor: AppColors.newbackground,
       appBar: AppBar(
         shadowColor: AppColors.cardShadow,
         elevation: 10,
@@ -165,244 +183,348 @@ class _HomeScreenState extends State<HomeScreen> {
         //   },
         child: SingleChildScrollView(
           physics: AlwaysScrollableScrollPhysics(),
-          child: 
-          // isRefreshing
-          //     ? Center(
-          //         child: loading(),
-          //       )
-          //     : 
+          child:
+              // isRefreshing
+              //     ? Center(
+              //         child: loading(),
+              //       )
+              //     :
               Container(
-                padding: EdgeInsets.all(20.0),
-                margin: EdgeInsets.only(top: 15.0),
-                child: Column(
-                  children: [
-                    Container(
-                      height: 100,
-                      margin: EdgeInsets.only(bottom: 20.0),
-                      child: (location == null)
-                          ? loading()
-                          : FutureBuilder<WeatherResponse>(
-                              future: futureWeather,
-                              builder: (context, snapshot) {
-                                if (snapshot.connectionState ==
-                                    ConnectionState.waiting) {
-                                  return loading();
-                                } else if (snapshot.hasError) {
-                                  log('error: ${snapshot.error}');
-                                  return Center(
-                                      child: AutoTranslator().buildTranslatedText(
-                                          context,
-                                          'Error while fetching weather data'));
-                                } else if (snapshot.hasData) {
-                                  var data = snapshot.data!.data;
-                                  weatherResponse = data;
-                                  _getRecommendedCrops();
-                                  return weatherTile(
-                                      child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
+            padding: EdgeInsets.all(20.0),
+            margin: EdgeInsets.only(top: 15.0),
+            child: Column(
+              children: [
+                Container(
+                  height: 100,
+                  margin: EdgeInsets.only(bottom: 20.0),
+                  child: (location == null)
+                      ? loading()
+                      : FutureBuilder<WeatherResponse>(
+                          future: futureWeather,
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return loading();
+                            } else if (snapshot.hasError) {
+                              log('error: ${snapshot.error}');
+                              return Center(
+                                  child: AutoTranslator().buildTranslatedText(
+                                      context,
+                                      'Error while fetching weather data'));
+                            } else if (snapshot.hasData) {
+                              var data = snapshot.data!.data;
+                              weatherResponse = data;
+                              _getRecommendedCrops();
+                              return weatherTile(
+                                  child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          CustomTextWidget(
-                                            text: '${data.name}',
-                                            textColor: AppColors.textPrimary,
-                                            fontSize: 18.0,
-                                            overflow: TextOverflow.clip,
-                                          ),
-                                          AutoTranslator().buildTranslatedText(
-                                              context,
-                                              '${data.weather[0].description}'),
-                                        ],
-                                      ),
-                                      BoxedIcon(
-                                        WeatherIconMapper.getIcon(
-                                            data.weather[0].icon),
-                                        color: WeatherIconMapper.getIconColor(
-                                            data.weather[0].icon),
-                                        size: 50,
-                                      ),
                                       CustomTextWidget(
-                                        text: '${data.main.temp} °C',
+                                        text: '${data.name}',
                                         textColor: AppColors.textPrimary,
                                         fontSize: 18.0,
                                         overflow: TextOverflow.clip,
                                       ),
-                                    ],
-                                  ));
-                                } else {
-                                  return Center(
-                                      child: Text('No data available'));
-                                }
-                              },
-                            ),
-                    ),
-                    // CustomTextWidget(
-                    //   text:
-                    //       "Welcome to the Home Screen! $lang and $token location is $location",
-                    //   textColor: AppColors.textPrimary,
-                    //   fontSize: 18.0,
-                    //   overflow: TextOverflow.clip,
-                    // ),
-              
-                    Container(
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              AutoTranslator().buildTranslatedText(
-                                  context, "Recommended Crops"),
-                              AutoTranslator().buildTranslatedText(
-                                  context, "See All",
-                                  textColor: AppColors.textHint),
-                            ],
-                          ),
-                          Container(
-                            height: 200,
-                            child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              itemCount: crops.length,
-                              itemBuilder: (context, index) {
-                                final crop = crops[index];
-                                return Container(
-                                  margin: EdgeInsets.all(10.0),
-                                  width: 150,
-                                  decoration: BoxDecoration(
-                                    color: Colors
-                                        .white, // Replace with AppColors.white if defined
-                                    borderRadius: BorderRadius.circular(20),
-                                    border: Border.all(
-                                      color: AppColors.background
-                                          , // Replace with AppColors.cardShadow
-                                      width: 1,
-                                    ),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.grey
-                                            .shade300, // Replace with AppColors.cardShadow
-                                        blurRadius: 10,
-                                        offset: Offset(0, 5),
-                                      ),
+                                      AutoTranslator().buildTranslatedText(
+                                          context,
+                                          '${data.weather[0].description}'),
                                     ],
                                   ),
-                                  child: Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Expanded(
-                                        flex: 3,
-                                        child: ClipRRect(
-                                          borderRadius: BorderRadius.vertical(
-                                              top: Radius.circular(20)),
-                                          child: Image.network(
-                                            crop['image_url'] ?? '',
-                                            fit: BoxFit.cover,
-                                            width: double.infinity,
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(height: 10),
+                                  BoxedIcon(
+                                    WeatherIconMapper.getIcon(
+                                        data.weather[0].icon),
+                                    color: WeatherIconMapper.getIconColor(
+                                        data.weather[0].icon),
+                                    size: 50,
+                                  ),
+                                  CustomTextWidget(
+                                    text: '${data.main.temp} °C',
+                                    textColor: AppColors.textPrimary,
+                                    fontSize: 18.0,
+                                    overflow: TextOverflow.clip,
+                                  ),
+                                ],
+                              ));
+                            } else {
+                              return Center(child: Text('No data available'));
+                            }
+                          },
+                        ),
+                ),
+                // CustomTextWidget(
+                //   text:
+                //       "Welcome to the Home Screen! $lang and $token location is $location",
+                //   textColor: AppColors.textPrimary,
+                //   fontSize: 18.0,
+                //   overflow: TextOverflow.clip,
+                // ),
 
-                                      Expanded(
-                                        flex: 1,
-                                        child: AutoTranslator()
-                                            .buildTranslatedText(
-                                                context,
-                                                crop['crop_name'] ??
-                                                    'Unknown Crop',
-                                                isBold: false),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
+                Container(
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          AutoTranslator().buildTranslatedText(
+                              context, "Recommended Crops"),
+                          AutoTranslator().buildTranslatedText(
+                              context, "See All",
+                              textColor: AppColors.textHint),
                         ],
                       ),
-                    ),
-                  ],
+                      Container(
+                        height: 200,
+                        margin: EdgeInsets.only(bottom: 10.0),
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: crops.length,
+                          itemBuilder: (context, index) {
+                            final crop = crops[index];
+                            return Container(
+                              margin: EdgeInsets.all(10.0),
+                              width: 150,
+                              decoration: BoxDecoration(
+                                color: Colors
+                                    .white,
+                                borderRadius: BorderRadius.circular(20),
+                                // border: Border.all(
+                                //   color: AppColors
+                                //       .background, // Replace with AppColors.cardShadow
+                                //   width: 1,
+                                // ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey
+                                        .shade300, // Replace with AppColors.cardShadow
+                                    blurRadius: 10,
+                                    offset: Offset(0, 5),
+                                  ),
+                                ],
+                              ),
+                              child: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    flex: 3,
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.vertical(
+                                          top: Radius.circular(20)),
+                                      child: Image.network(
+                                        crop['image_url'] ?? '',
+                                        fit: BoxFit.cover,
+                                        width: double.infinity,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(height: 10),
+                                  Expanded(
+                                    flex: 1,
+                                    child: AutoTranslator().buildTranslatedText(
+                                        context,
+                                        crop['crop_name'] ?? 'Unknown Crop',
+                                        isBold: false),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                      GridView.count(
+                        crossAxisCount: 2,
+                        mainAxisSpacing: 16,
+                        crossAxisSpacing: 16,
+                        childAspectRatio: 1.2, // Adjust as needed
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        children: [
+                          _buildCard(
+                            icon: Icons.camera_alt,
+                            title: "Soil Analysis",
+                            subtitle: "Scan soil with camera",
+                            badgeText: "85%",
+                            badgeColor: Colors.grey.shade300,
+                          ),
+                          _buildCard(
+                            icon: Icons.eco,
+                            title: "Organic Solutions",
+                            subtitle: "Natural alternatives around you",
+                            badgeText: "New",
+                            badgeTextColor: Colors.green,
+                            badgeColor: Colors.green.shade100,
+                            iconColor: Colors.green,
+                          ),
+                          _buildCard(
+                            icon: Icons.grid_on,
+                            title: "Soil Grid",
+                            subtitle: "Digital soil mapping data",
+                          ),
+                          _buildCard(
+                            icon: Icons.store,
+                            title: "Agri Clinics",
+                            subtitle: "Find nearby soil testing clinics",
+                            iconColor: Colors.purple,
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
                 ),
-              ),
-        ),
-      ),
-      floatingActionButton: CustomFloatingActionButton(),
-      bottomNavigationBar: floa.AnimatedBottomNavigationBar(
-        barColor: AppColors.white,
-        controller: floa.FloatingBottomBarController(initialIndex: 0),
-        bottomBar: [
-          floa.BottomBarItem(
-            icon: Icon(Icons.home, size: 24, color: AppColors.textSecondary),
-            iconSelected: const Icon(Icons.home, color: AppColors.primary),
-            title: 'Home',
-            titleStyle: TextStyle(color: AppColors.textSecondary),
-            dotColor: AppColors.primary,
-            onTap: (value) {
-              setState(() {
-                _selectedIndex = value;
-              });
-              developer.log('Home $_selectedIndex');
-            },
-          ),
-          floa.BottomBarItem(
-            icon: Icon(Icons.photo, size: 24, color: AppColors.textSecondary),
-            iconSelected: const Icon(Icons.photo, color: AppColors.primary),
-            title: 'Search',
-            titleStyle: TextStyle(color: AppColors.textSecondary),
-            dotColor: AppColors.primary,
-            onTap: (value) {
-              setState(() {
-                _selectedIndex = value;
-              });
-              developer.log('Search $_selectedIndex');
-            },
-          ),
-          floa.BottomBarItem(
-            icon: const Icon(Icons.person,
-                size: 24, color: AppColors.textSecondary),
-            iconSelected: const Icon(Icons.person, color: AppColors.primary),
-            title: 'Profile',
-            titleStyle: TextStyle(color: AppColors.textSecondary),
-            dotColor: AppColors.primary,
-            onTap: (value) {
-              setState(() {
-                _selectedIndex = value;
-              });
-              developer.log('Profile $_selectedIndex');
-            },
-          ),
-          floa.BottomBarItem(
-            icon: const Icon(Icons.settings,
-                size: 24, color: AppColors.textSecondary),
-            iconSelected: const Icon(Icons.settings, color: AppColors.primary),
-            title: 'Settings',
-            titleStyle: TextStyle(color: AppColors.textSecondary),
-            dotColor: AppColors.primary,
-            onTap: (value) {
-              setState(() {
-                _selectedIndex = value;
-              });
-              developer.log('Settings $value');
-            },
-          ),
-        ],
-        bottomBarCenterModel: floa.BottomBarCenterModel(
-          centerBackgroundColor: AppColors.primary,
-          centerIcon: const floa.FloatingCenterButton(
-            child: Icon(Icons.add, color: AppColors.white),
-          ),
-          centerIconChild: [
-            floa.FloatingCenterButtonChild(
-              child: const Icon(Icons.camera, color: AppColors.white),
-              onTap: () => developer.log('Item1'),
+              ],
             ),
-          ],
+          ),
         ),
       ),
-      resizeToAvoidBottomInset: false,
+      floatingActionButton: (_selectedIndex == 0) ? CustomFloatingActionButton() : null,
+      bottomNavigationBar: BottomNavigationBar(
+  currentIndex: _selectedIndex, // Update this with the current index
+  onTap: (int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+    developer.log('Selected Index: $_selectedIndex');
+  },
+  items: const [
+    BottomNavigationBarItem(
+      icon: Icon(Icons.home, size: 24),
+      label: 'Home',
+    ),
+    BottomNavigationBarItem(
+      icon: Icon(Icons.groups, size: 24),
+      label: 'Community',
+    ),
+    BottomNavigationBarItem(
+      icon: Icon(Icons.person, size: 24),
+      label: 'Profile',
+    ),
+    BottomNavigationBarItem(
+      icon: Icon(Icons.settings, size: 24),
+      label: 'Settings',
+    ),
+    // BottomNavigationBarItem(
+    //         icon: Icon(Icons.home, size: 24),
+    //         label: '', // Remove label
+    //         activeIcon: Column(
+    //           children: [
+    //             Icon(Icons.home, color: Colors.blue, size: 24),
+    //             Text('Home', style: TextStyle(color: Colors.blue, fontSize: 12))
+    //           ],
+    //         ),
+    //       ),
+    //       BottomNavigationBarItem(
+    //         icon: Icon(Icons.groups, size: 24),
+    //         label: '', // Remove label
+    //         activeIcon: Column(
+    //           children: [
+    //             Icon(Icons.groups, color: Colors.green, size: 24),
+    //             Text('Community', style: TextStyle(color: Colors.green, fontSize: 12))
+    //           ],
+    //         ),
+    //       ),
+    //       BottomNavigationBarItem(
+    //         icon: Icon(Icons.person, size: 24),
+    //         label: '', // Remove label
+    //         activeIcon: Column(
+    //           children: [
+    //             Icon(Icons.person, color: Colors.orange, size: 24),
+    //             Text('Profile', style: TextStyle(color: Colors.orange, fontSize: 12))
+    //           ],
+    //         ),
+    //       ),
+    //       BottomNavigationBarItem(
+    //         icon: Icon(Icons.settings, size: 24),
+    //         label: '', // Remove label
+    //         activeIcon: Column(
+    //           children: [
+    //             Icon(Icons.settings, color: Colors.purple, size: 24),
+    //             Text('Settings', style: TextStyle(color: Colors.purple, fontSize: 12))
+    //           ],
+    //         ),
+    //       ),
+  ],
+  backgroundColor: const Color.fromARGB(190, 243, 195, 50),
+  selectedItemColor: AppColors.primary,
+  unselectedItemColor: AppColors.textSecondary,
+),
+
+      // bottomNavigationBar: floa.AnimatedBottomNavigationBar(
+      //   barColor: AppColors.white,
+      //   controller: floa.FloatingBottomBarController(initialIndex: 0),
+      //   bottomBar: [
+      //     floa.BottomBarItem(
+      //       icon: Icon(Icons.home, size: 24, color: AppColors.textSecondary),
+      //       iconSelected: const Icon(Icons.home, color: AppColors.primary),
+      //       title: 'Home',
+      //       titleStyle: TextStyle(color: AppColors.textSecondary),
+      //       dotColor: AppColors.primary,
+      //       onTap: (value) {
+      //         setState(() {
+      //           _selectedIndex = value;
+      //         });
+      //         developer.log('Home $_selectedIndex');
+      //       },
+      //     ),
+      //     floa.BottomBarItem(
+      //       icon: Icon(Icons.photo, size: 24, color: AppColors.textSecondary),
+      //       iconSelected: const Icon(Icons.photo, color: AppColors.primary),
+      //       title: 'Community',
+      //       titleStyle: TextStyle(color: AppColors.textSecondary),
+      //       dotColor: AppColors.primary,
+      //       onTap: (value) {
+      //         setState(() {
+      //           _selectedIndex = value;
+      //         });
+      //         developer.log('Community $_selectedIndex');
+      //       },
+      //     ),
+      //     floa.BottomBarItem(
+      //       icon: const Icon(Icons.person,
+      //           size: 24, color: AppColors.textSecondary),
+      //       iconSelected: const Icon(Icons.person, color: AppColors.primary),
+      //       title: 'Profile',
+      //       titleStyle: TextStyle(color: AppColors.textSecondary),
+      //       dotColor: AppColors.primary,
+      //       onTap: (value) {
+      //         setState(() {
+      //           _selectedIndex = value;
+      //         });
+      //         developer.log('Profile $_selectedIndex');
+      //       },
+      //     ),
+      //     floa.BottomBarItem(
+      //       icon: const Icon(Icons.settings,
+      //           size: 24, color: AppColors.textSecondary),
+      //       iconSelected: const Icon(Icons.settings, color: AppColors.primary),
+      //       title: 'Settings',
+      //       titleStyle: TextStyle(color: AppColors.textSecondary),
+      //       dotColor: AppColors.primary,
+      //       onTap: (value) {
+      //         setState(() {
+      //           _selectedIndex = value;
+      //         });
+      //         developer.log('Settings $value');
+      //       },
+      //     ),
+      //   ],
+      //   // bottomBarCenterModel: floa.BottomBarCenterModel(
+      //   //   centerBackgroundColor: AppColors.primary,
+      //   //   centerIcon: const floa.FloatingCenterButton(
+      //   //     child: Icon(Icons.add, color: AppColors.white),
+      //   //   ),
+      //   //   centerIconChild: [
+      //   //     floa.FloatingCenterButtonChild(
+      //   //       child: const Icon(Icons.camera, color: AppColors.white),
+      //   //       onTap: () => developer.log('Item1'),
+      //   //     ),
+      //   //   ],
+      //   // ),
+      // ),
+      // resizeToAvoidBottomInset: false,
     );
   }
 }
@@ -426,7 +548,6 @@ String getCurrentMonth() {
   return months[now.month - 1];
 }
 
-
 class CustomFloatingActionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -437,9 +558,99 @@ class CustomFloatingActionButton extends StatelessWidget {
         print('FAB pressed');
       },
       icon: const Icon(Icons.chat),
-      label: AutoTranslator().buildTranslatedText(context, 'Ask Ai', textColor: AppColors.background),
+      label: AutoTranslator().buildTranslatedText(context, 'Ask Ai',
+          textColor: AppColors.background),
       backgroundColor: AppColors.primary,
       foregroundColor: Colors.white,
     );
   }
+}
+
+Widget _buildCard({
+    required IconData icon,
+    required String title,
+    required String subtitle,
+    String? badgeText,
+    Color? badgeColor,
+    Color badgeTextColor = Colors.black,
+    Color iconColor = Colors.black,
+  }) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.shade200,
+            blurRadius: 6,
+            offset: Offset(0, 3),
+          ),
+        ],
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Stack(
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    Icon(icon, color: iconColor),
+                    if (badgeText != null)
+                      Spacer(),
+                    if (badgeText != null)
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: badgeColor,
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: Text(
+                          badgeText,
+                          style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: badgeTextColor),
+                        ),
+                      ),
+                  ],
+                ),
+                Spacer(),
+                Text(
+                  title,
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
+                ),
+                SizedBox(height: 4),
+                Text(
+                  subtitle,
+                  style: TextStyle(fontSize: 14, color: AppColors.textHint),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+
+Widget Page1() {
+  return Text('Home Page');
+}
+
+Widget Page2() {
+  return Center(
+    child: Text('Community Page'),
+  );
+}
+
+Widget Page3() {
+  return Center(
+    child: Text('Profile Page'),
+  );
+}
+
+Widget Page4() {
+  return Center(
+    child: Text('Settings Page'),
+  );
 }
