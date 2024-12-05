@@ -12,6 +12,7 @@ import 'package:agromitra/screens/authScreen/somethingWentWrong.dart';
 import 'package:agromitra/screens/chatAi.dart';
 import 'package:agromitra/screens/featureScreens/appfeatures.dart';
 import 'package:agromitra/screens/homescreen.dart';
+import 'package:agromitra/screens/homescreenScreens/sevendayforecast.dart';
 import 'package:agromitra/screens/homescreenScreens/soilgridmaps.dart';
 import 'package:agromitra/screens/mainScreen.dart';
 import 'package:agromitra/screens/splashScreen.dart';
@@ -77,7 +78,10 @@ class CustomRoute {
 
 
         case "/chat":
-          return ChatScreen();    
+          return ChatScreen();
+        case "/weatherForecast":
+        final args = settings.arguments as Map<String, dynamic>;
+          return WeatherForecastScreen( latitude: args['lat'], longitude: args['lon']);
       }
       log("Settings name: " + (settings.name).toString());
       return SomethingWentWrong();

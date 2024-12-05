@@ -144,5 +144,6 @@
   "nitrogen_levels": "Nitrogen Levels (g/kg):",
   "ph_levels": "pH Levels:",
   "soc_levels": "Soil Organic Carbon Levels:",
-  "mean": "Mean"
+  "mean": "Mean",
+  "weather_forecast":"Weather Forecast"
 }

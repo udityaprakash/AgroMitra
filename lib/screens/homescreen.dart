@@ -189,66 +189,75 @@ class _HomeScreenState extends State<HomeScreen> {
             margin: EdgeInsets.only(top: 15.0),
             child: Column(
               children: [
-                Container(
-                  height: 100,
-                  margin: EdgeInsets.only(bottom: 20.0),
-                  child: (location == null)
-                      ? loading()
-                      : FutureBuilder<WeatherResponse>(
-                          future: futureWeather,
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return loading();
-                            } else if (snapshot.hasError) {
-                              log('error: ${snapshot.error}');
-                              return Center(
-                                  child: AutoTranslator().buildTranslatedText(
-                                      context,
-                                      'Error while fetching weather data'));
-                            } else if (snapshot.hasData) {
-                              var data = snapshot.data!.data;
-                              weatherResponse = data;
-                              _getRecommendedCrops();
-                              return weatherTile(
-                                  child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      CustomTextWidget(
-                                        text: '${data.name}',
-                                        textColor: AppColors.textPrimary,
-                                        fontSize: 18.0,
-                                        overflow: TextOverflow.clip,
-                                      ),
-                                      AutoTranslator().buildTranslatedText(
-                                          context,
-                                          '${data.weather[0].description}'),
-                                    ],
-                                  ),
-                                  BoxedIcon(
-                                    WeatherIconMapper.getIcon(
-                                        data.weather[0].icon),
-                                    color: WeatherIconMapper.getIconColor(
-                                        data.weather[0].icon),
-                                    size: 50,
-                                  ),
-                                  CustomTextWidget(
-                                    text: '${data.main.temp} °C',
-                                    textColor: AppColors.textPrimary,
-                                    fontSize: 18.0,
-                                    overflow: TextOverflow.clip,
-                                  ),
-                                ],
-                              ));
-                            } else {
-                              return Center(child: Text('No data available'));
-                            }
-                          },
-                        ),
+                InkWell(
+                  onTap: (){
+                    Navigator.pushNamed(context, '/weatherForecast',
+                      arguments: {
+                        'lat': location!.latitude,
+                        'lon': location!.longitude,
+                      });
+                  },
+                  child: Container(
+                    height: 100,
+                    margin: EdgeInsets.only(bottom: 20.0),
+                    child: (location == null)
+                        ? loading()
+                        : FutureBuilder<WeatherResponse>(
+                            future: futureWeather,
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return loading();
+                              } else if (snapshot.hasError) {
+                                log('error: ${snapshot.error}');
+                                return Center(
+                                    child: AutoTranslator().buildTranslatedText(
+                                        context,
+                                        'Error while fetching weather data'));
+                              } else if (snapshot.hasData) {
+                                var data = snapshot.data!.data;
+                                weatherResponse = data;
+                                _getRecommendedCrops();
+                                return weatherTile(
+                                    child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        CustomTextWidget(
+                                          text: '${data.name}',
+                                          textColor: AppColors.textPrimary,
+                                          fontSize: 18.0,
+                                          overflow: TextOverflow.clip,
+                                        ),
+                                        AutoTranslator().buildTranslatedText(
+                                            context,
+                                            '${data.weather[0].description}'),
+                                      ],
+                                    ),
+                                    BoxedIcon(
+                                      WeatherIconMapper.getIcon(
+                                          data.weather[0].icon),
+                                      color: WeatherIconMapper.getIconColor(
+                                          data.weather[0].icon),
+                                      size: 50,
+                                    ),
+                                    CustomTextWidget(
+                                      text: '${data.main.temp} °C',
+                                      textColor: AppColors.textPrimary,
+                                      fontSize: 18.0,
+                                      overflow: TextOverflow.clip,
+                                    ),
+                                  ],
+                                ));
+                              } else {
+                                return Center(child: Text('No data available'));
+                              }
+                            },
+                          ),
+                  ),
                 ),
                 // CustomTextWidget(
                 //   text:

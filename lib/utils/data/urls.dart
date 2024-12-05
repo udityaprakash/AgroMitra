@@ -17,6 +17,7 @@ class UrlProvider {
 
   //chatbot
   static const String chatbotUrl = "${baseUrlbytushar}/ask";
+  static const String sevenDayWeatherUrl = "${baseUrlbytushar}/getnextsevendaysweather";
 
 
   //home screen
