@@ -3,6 +3,7 @@
   "@hello": {
     "description": "It is hello in English"
   },
+  "namaste":"Namaste,",
   "nointernet": "No Internet Connection",
   "@nointernet": {
     "description": "It shows no internet connection message in English"
@@ -112,5 +113,24 @@
   "resetPassword": "Reset Password",
   "newPassword": "New Password",
   "confirmPassword": "Confirm Password",
-  "sendotp":"Send Otp"
+  "sendotp":"Send Otp",
+
+  "home":"Home",
+  "community":"Community",
+  "profile":"Profile",
+  "settings":"Settings",
+  "ask_ai":"Ask Ai",
+  "recommended_crops":"Recommended Crops",
+  "see_all":"See All",
+  "krishak_ai":"Krishak Ai",
+  "ask_any_thing_related_to_agriculture":"Ask any thing related to agriculture...",
+  "soil_analysis":"Soil Analysis",
+  "scan_soil_with_camera":"Scan soil with camera",
+  "organic_solutions":"Organic Solutions",
+  "natural_alternatives_around_you":"Natural alternatives around you",
+  "soil_grid":"Soil Grid",
+  "digital_soil_mapping_data":"Digital soil mapping data",
+  "agri_clinics":"Agri Clinics",
+  "find_nearby_testing_clinics":"Find nearby soil testing clinics",
+  "newk":"New"
 }

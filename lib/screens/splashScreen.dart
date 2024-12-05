@@ -22,7 +22,7 @@ class _SplashScreenState extends State<SplashScreen> {
       // Navigator.pushReplacementNamed(context, '/homepageredirector');
       var token = await StorageManager.readData('token');
       if(token != null){
-        Navigator.pushReplacementNamed(context, '/homescreen');
+        Navigator.pushReplacementNamed(context, '/mainScreen');
       }else{
         Navigator.pushReplacementNamed(context, '/selectLanguage');
       }

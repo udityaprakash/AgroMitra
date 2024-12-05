@@ -25,8 +25,12 @@ dynamic continuewithgoogle(id, email, fullname, context) async {
     if(response['success'] == true){
       await StorageManager.saveData('token', response['token']);
       await StorageManager.saveData('email', email);
+      await StorageManager.saveData(
+          'farmer_name',
+          fullname,
+        );
       Navigator.pop(context);
-      Navigator.pushReplacementNamed(context, '/homescreen');
+      Navigator.pushReplacementNamed(context, '/mainScreen');
     }else{
       showSnackbarAutoTranslated(context, response['msg']);
 

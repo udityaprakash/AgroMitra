@@ -26,7 +26,7 @@ class AutoTranslator {
       future: translateToAppLanguage(inputText),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return CustomTextWidget(text: '---------', textColor: textColor,
+          return CustomTextWidget(text: '--', textColor: textColor,
             fontSize: fontSize,
             fontWeight: fontWeight,
             textAlign: textAlign,
@@ -37,7 +37,7 @@ class AutoTranslator {
 
         if (snapshot.hasError) {
           log('Error: ${snapshot.error}');
-          return CustomTextWidget(text: '---------', textColor: textColor,
+          return CustomTextWidget(text: '--', textColor: textColor,
             fontSize: fontSize,
             fontWeight: fontWeight,
             textAlign: textAlign,
@@ -57,7 +57,7 @@ class AutoTranslator {
             );
           // Text('${snapshot.data}');
         }
-        return CustomTextWidget(text: '---------', textColor: textColor,
+        return CustomTextWidget(text: '--', textColor: textColor,
             fontSize: fontSize,
             fontWeight: fontWeight,
             textAlign: textAlign,

@@ -1,5 +1,6 @@
 {
   "hello": "स्वागत है",
+  "namaste":"नमस्ते,",
   "@hello": {
     "description": "यह इंग्लिश में 'Hello' का अनुवाद है"
   },
@@ -112,5 +113,24 @@
   "resetPassword": "पासवर्ड रीसेट करें",
   "newPassword": "नया पासवर्ड",
   "confirmPassword": "पासवर्ड की पुष्टि करें",
-  "sendotp":"OTP भेजें"
+  "sendotp":"OTP भेजें",
+
+  "home": "मुखपृष्ठ",
+  "community": "समुदाय",
+  "profile": "प्रोफ़ाइल",
+  "settings": "सेटिंग्स",
+  "ask_ai": "एआई से पूछें",
+  "recommended_crops": "अनुशंसित फसलें",
+  "see_all": "सभी देखें",
+  "krishak_ai": "कृषक एआई",
+  "ask_any_thing_related_to_agriculture": "कृषि से संबंधित कोई भी प्रश्न पूछें...",
+  "soil_analysis": "मिट्टी विश्लेषण",
+  "scan_soil_with_camera": "कैमरे से मिट्टी को स्कैन करें",
+  "organic_solutions": "जैविक समाधान",
+  "natural_alternatives_around_you": "आपके आस-पास के प्राकृतिक विकल्प",
+  "soil_grid": "मिट्टी ग्रिड",
+  "digital_soil_mapping_data": "डिजिटल मिट्टी मानचित्रण डेटा",
+  "agri_clinics": "कृषि क्लीनिक",
+  "find_nearby_testing_clinics": "निकटतम मिट्टी परीक्षण क्लीनिक खोजें",
+  "newk": "नया"
 }

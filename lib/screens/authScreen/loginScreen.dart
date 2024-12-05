@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'package:agromitra/functions/googleoauth.dart';
+import 'package:agromitra/functions/loading.dart';
 import 'package:agromitra/functions/oauth.dart';
 import 'package:agromitra/utils/data/InternetMsgCodeDecoder.dart';
 import 'package:agromitra/utils/data/deviceStorage.dart';
@@ -85,8 +86,13 @@ class _LoginScreenState extends State<LoginScreen> {
           'email',
           emailController.text,
         );
+
+        await StorageManager.saveData(
+          'farmer_name',
+          response['data']['fullname'],
+        );
         Navigator.pop(context);
-        Navigator.pushReplacementNamed(context, '/homescreen');
+        Navigator.pushReplacementNamed(context, '/mainScreen');
       }
     } catch (e) {
       log("Error: $e");
@@ -196,35 +202,35 @@ class _LoginScreenState extends State<LoginScreen> {
                     const SizedBox(height: 24.0),
 
                     // Sign In Button
-                    Container(
-                      height: 60,
-                      margin: const EdgeInsets.symmetric(vertical: 16.0),
-                      child: isLoading
-                          ? Center(
-                              child: CircularProgressIndicator(
-                                color: AppColors.primary,
-                              ),
-                            )
-                          : CustomButton(
-                              backgroundColor: AppColors.primary,
-                              textColor: AppColors.background,
-                              text: AppLocalizations.of(context)!.signIn,
-                              onPressed: () async {
-                                if (_formKey.currentState?.validate() ??
-                                    false) {
-                                  setState(() {
-                                    isLoading = true; // Show loader
-                                  });
-                                  _handlelogin(emailController.text,
-                                      passwordController.text);
-                                } else {
-                                  log("Form is invalid");
-                                }
-                              },
-                            ),
-                    ),
-
-                    // Or Divider
+                    !isLoading? Column(
+                      children: [
+                        Container(
+                          height: 60,
+                          margin: const EdgeInsets.symmetric(vertical: 16.0),
+                          child: isLoading
+                              ? Center(
+                                  child: CircularProgressIndicator(
+                                    color: AppColors.primary,
+                                  ),
+                                )
+                              : CustomButton(
+                                  backgroundColor: AppColors.primary,
+                                  textColor: AppColors.background,
+                                  text: AppLocalizations.of(context)!.signIn,
+                                  onPressed: () async {
+                                    if (_formKey.currentState?.validate() ??
+                                        false) {
+                                      setState(() {
+                                        isLoading = true; // Show loader
+                                      });
+                                      _handlelogin(emailController.text,
+                                          passwordController.text);
+                                    } else {
+                                      log("Form is invalid");
+                                    }
+                                  },
+                                ),
+                        ),
                     Row(
                       children: [
                         Expanded(
@@ -250,13 +256,13 @@ class _LoginScreenState extends State<LoginScreen> {
                     const SizedBox(height: 16.0),
 
                     // Continue with Google Button
-                    !isGoogleLoading? CustomButton(
+                    CustomButton(
                       backgroundColor: AppColors.white,
                       textColor: AppColors.primary,
                       text: AppLocalizations.of(context)!.continueWithGoogle,
                       onPressed: () async {
                         setState(() {
-                          isGoogleLoading = true;
+                          isLoading = true;
                         });
                         var user = await _handleSignIn(context);
                         if (user != null) {
@@ -269,7 +275,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           // _handlelogin(
                           //     user.email.toString(), user.id.toString(), 'google');
                           setState(() {
-                            isGoogleLoading = false;
+                            isLoading = false;
                           });
                         } else {
                           _showSnackbar(
@@ -278,16 +284,15 @@ class _LoginScreenState extends State<LoginScreen> {
                                 .anerroroccurredduringsignin,
                           );
                         }
+                          setState(() {
+                            isLoading = false;
+                          });
                       },
                       prefixIcon: Image.asset(
                         'assets/images/app_images/googleLogo.png',
                         height: 26,
                       ),
-                    ): Center(
-                              child: CircularProgressIndicator(
-                                color: AppColors.white,
-                              ),
-                            ) ,
+                    ),
                     const SizedBox(height: 24.0),
 
                     // Don't have an account? Register
@@ -312,6 +317,10 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ],
                     ),
+                      ],
+                    ): loading(),
+
+                    // Or Divider
                   ],
                 ),
               ),

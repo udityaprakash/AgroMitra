@@ -29,8 +29,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   String lang = "Loading...";
-  String token = "Loading...";
-  String email = "Loading...";
+  // String token = "Loading...";
+  String name = "##";
   late Future<WeatherResponse> futureWeather;
   Position? location;
   bool isRefreshing = false;
@@ -57,12 +57,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _initializeData() async {
     String fetchedLang = await StorageManager.readData('Lang') ?? 'Unknown';
-    String fetchedToken = await StorageManager.readData('token') ?? 'Unknown';
-    String fetchedemail = await StorageManager.readData('email') ?? 'Unknown';
+    // String fetchedToken = await StorageManager.readData('token') ?? 'Unknown';
+    String fetchedname = await StorageManager.readData('farmer_name') ?? '##';
+    // log('Lang: $fetchedname');
 
     try {
       location = await determinePosition();
-      log('Location: $location');
+      // log('Location: $location');
       futureWeather = fetchWeather();
       await _getRecommendedCrops();
     } catch (e) {
@@ -71,8 +72,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
     setState(() {
       lang = fetchedLang;
-      token = fetchedToken;
-      email = fetchedemail;
+      // token = fetchedToken;
+      name = fetchedname;
     });
   }
 
@@ -119,7 +120,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
     var response = await fetchresponse.post();
     crops = response['recommended_crops'];
-    log("recomend crop response: $crops");
+    // log("recomend crop response: $crops");
 
     if (i == 0) {
       i++;
@@ -134,6 +135,7 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       isRefreshing = true;
     });
+    location = await determinePosition();
     futureWeather = fetchWeather();
     // await _getRecommendedCrops();
 
@@ -155,9 +157,9 @@ class _HomeScreenState extends State<HomeScreen> {
         shadowColor: AppColors.cardShadow,
         elevation: 10,
         title: CustomTextWidget(
-          text: AppLocalizations.of(context)!.agromitra,
+          text: AppLocalizations.of(context)!.namaste +" " + name,
           textColor: Colors.white,
-          fontSize: 30.0,
+          fontSize: 20.0,
           isBold: true,
         ),
         backgroundColor: AppColors.primary,
@@ -264,16 +266,35 @@ class _HomeScreenState extends State<HomeScreen> {
                 // ),
 
                 Container(
+                  width: double.infinity,
                   child: Column(
                     children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          AutoTranslator().buildTranslatedText(
-                              context, "Recommended Crops"),
-                          AutoTranslator().buildTranslatedText(
-                              context, "See All",
-                              textColor: AppColors.textHint),
+                          Expanded(
+                            flex: 4,
+                            child: CustomTextWidget(
+                              text: AppLocalizations.of(context)!.recommended_crops,
+                              textColor: AppColors.textPrimary,
+                              fontSize: 18.0,
+                              isBold: true,
+                            ),
+                          ),  
+                          // AutoTranslator().buildTranslatedText(
+                          //     context, "Recommended Crops"),
+                          // AutoTranslator().buildTranslatedText(
+                          //     context, "See All",
+                          //     textColor: AppColors.textHint),
+                          Expanded(
+                            // flex: 2,
+                            child: CustomTextWidget(
+                              text: AppLocalizations.of(context)!.see_all,
+                              textColor: AppColors.textHint,
+                              fontSize: 18.0,
+                              isBold: true,
+                            ),
+                          ),
                         ],
                       ),
                       Container(
@@ -326,7 +347,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     flex: 1,
                                     child: AutoTranslator().buildTranslatedText(
                                         context,
-                                        crop['crop_name'] ?? 'Unknown Crop',
+                                        crop['crop_name'] ?? '--',
                                         isBold: false),
                                   ),
                                 ],
@@ -345,29 +366,29 @@ class _HomeScreenState extends State<HomeScreen> {
                         children: [
                           _buildCard(
                             icon: Icons.camera_alt,
-                            title: "Soil Analysis",
-                            subtitle: "Scan soil with camera",
+                            title: AppLocalizations.of(context)!.soil_analysis,
+                            subtitle: AppLocalizations.of(context)!.scan_soil_with_camera,
                             badgeText: "85%",
                             badgeColor: Colors.grey.shade300,
                           ),
                           _buildCard(
                             icon: Icons.eco,
-                            title: "Organic Solutions",
-                            subtitle: "Natural alternatives around you",
-                            badgeText: "New",
+                            title: AppLocalizations.of(context)!.organic_solutions,
+                            subtitle: AppLocalizations.of(context)!.natural_alternatives_around_you,
+                            badgeText: AppLocalizations.of(context)!.newk,
                             badgeTextColor: Colors.green,
                             badgeColor: Colors.green.shade100,
                             iconColor: Colors.green,
                           ),
                           _buildCard(
                             icon: Icons.grid_on,
-                            title: "Soil Grid",
-                            subtitle: "Digital soil mapping data",
+                            title: AppLocalizations.of(context)!.soil_grid,
+                            subtitle: AppLocalizations.of(context)!.digital_soil_mapping_data,
                           ),
                           _buildCard(
                             icon: Icons.store,
-                            title: "Agri Clinics",
-                            subtitle: "Find nearby soil testing clinics",
+                            title: AppLocalizations.of(context)!.agri_clinics,
+                            subtitle: AppLocalizations.of(context)!.find_nearby_testing_clinics,
                             iconColor: Colors.purple,
                           ),
                         ],
@@ -380,77 +401,8 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
-      floatingActionButton: (_selectedIndex == 0) ? CustomFloatingActionButton() : null,
-      bottomNavigationBar: BottomNavigationBar(
-  currentIndex: _selectedIndex, // Update this with the current index
-  onTap: (int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-    developer.log('Selected Index: $_selectedIndex');
-  },
-  items: const [
-    BottomNavigationBarItem(
-      icon: Icon(Icons.home, size: 24),
-      label: 'Home',
-    ),
-    BottomNavigationBarItem(
-      icon: Icon(Icons.groups, size: 24),
-      label: 'Community',
-    ),
-    BottomNavigationBarItem(
-      icon: Icon(Icons.person, size: 24),
-      label: 'Profile',
-    ),
-    BottomNavigationBarItem(
-      icon: Icon(Icons.settings, size: 24),
-      label: 'Settings',
-    ),
-    // BottomNavigationBarItem(
-    //         icon: Icon(Icons.home, size: 24),
-    //         label: '', // Remove label
-    //         activeIcon: Column(
-    //           children: [
-    //             Icon(Icons.home, color: Colors.blue, size: 24),
-    //             Text('Home', style: TextStyle(color: Colors.blue, fontSize: 12))
-    //           ],
-    //         ),
-    //       ),
-    //       BottomNavigationBarItem(
-    //         icon: Icon(Icons.groups, size: 24),
-    //         label: '', // Remove label
-    //         activeIcon: Column(
-    //           children: [
-    //             Icon(Icons.groups, color: Colors.green, size: 24),
-    //             Text('Community', style: TextStyle(color: Colors.green, fontSize: 12))
-    //           ],
-    //         ),
-    //       ),
-    //       BottomNavigationBarItem(
-    //         icon: Icon(Icons.person, size: 24),
-    //         label: '', // Remove label
-    //         activeIcon: Column(
-    //           children: [
-    //             Icon(Icons.person, color: Colors.orange, size: 24),
-    //             Text('Profile', style: TextStyle(color: Colors.orange, fontSize: 12))
-    //           ],
-    //         ),
-    //       ),
-    //       BottomNavigationBarItem(
-    //         icon: Icon(Icons.settings, size: 24),
-    //         label: '', // Remove label
-    //         activeIcon: Column(
-    //           children: [
-    //             Icon(Icons.settings, color: Colors.purple, size: 24),
-    //             Text('Settings', style: TextStyle(color: Colors.purple, fontSize: 12))
-    //           ],
-    //         ),
-    //       ),
-  ],
-  backgroundColor: const Color.fromARGB(190, 243, 195, 50),
-  selectedItemColor: AppColors.primary,
-  unselectedItemColor: AppColors.textSecondary,
-),
+      // floatingActionButton: (_selectedIndex == 0) ? CustomFloatingActionButton() : null,
+      
 
       // bottomNavigationBar: floa.AnimatedBottomNavigationBar(
       //   barColor: AppColors.white,
