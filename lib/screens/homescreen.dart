@@ -40,13 +40,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  final List<Widget> _pages = [
-    Center(child: Page1()),
-    Center(child: Text('Community Page')),
-    Center(child: Text('Profile Page')),
-    Center(child: Text('Settings Page')),
-  ];
-
   int _selectedIndex = 0;
 
   @override
@@ -380,10 +373,20 @@ class _HomeScreenState extends State<HomeScreen> {
                             badgeColor: Colors.green.shade100,
                             iconColor: Colors.green,
                           ),
-                          _buildCard(
-                            icon: Icons.grid_on,
-                            title: AppLocalizations.of(context)!.soil_grid,
-                            subtitle: AppLocalizations.of(context)!.digital_soil_mapping_data,
+                          InkWell(
+                            onTap: () {
+                              Navigator.pushNamed(context, '/soilgridmap',
+                                  arguments: {
+                                    'lat': location!.latitude,
+                                    'lon': location!.longitude,
+                                    'lang': lang	
+                                  });
+                            },
+                            child: _buildCard(
+                              icon: Icons.grid_on,
+                              title: AppLocalizations.of(context)!.soil_grid,
+                              subtitle: AppLocalizations.of(context)!.digital_soil_mapping_data,
+                            ),
                           ),
                           _buildCard(
                             icon: Icons.store,

@@ -132,5 +132,17 @@
   "digital_soil_mapping_data":"Digital soil mapping data",
   "agri_clinics":"Agri Clinics",
   "find_nearby_testing_clinics":"Find nearby soil testing clinics",
-  "newk":"New"
+  "newk":"New",
+
+  "somethingWentWrong": "Something went wrong",
+  "no_data": "No Data Available",
+  "get_soil_details": "Get Soil details",
+  "close": "Close",
+  "soil_grid_details": "Soil Grid Details",
+  "latitude": "Latitude: ",
+  "longitude": "Longitude: ",
+  "nitrogen_levels": "Nitrogen Levels (g/kg):",
+  "ph_levels": "pH Levels:",
+  "soc_levels": "Soil Organic Carbon Levels:",
+  "mean": "Mean"
 }

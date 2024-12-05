@@ -12,6 +12,7 @@ import 'package:agromitra/screens/authScreen/somethingWentWrong.dart';
 import 'package:agromitra/screens/chatAi.dart';
 import 'package:agromitra/screens/featureScreens/appfeatures.dart';
 import 'package:agromitra/screens/homescreen.dart';
+import 'package:agromitra/screens/homescreenScreens/soilgridmaps.dart';
 import 'package:agromitra/screens/mainScreen.dart';
 import 'package:agromitra/screens/splashScreen.dart';
 import 'package:agromitra/utils/ui/custom-text.dart';
@@ -61,15 +62,18 @@ class CustomRoute {
         case "/enterOtp":
           final args = settings.arguments as Map<String, dynamic>;
           return EnterOtpScreen(email: args['email'], destinationScreen: args['destinationScreen']);  
-        case "/mainScreen":
-          return MainScreen();
-        case "/homescreen":
-          return HomeScreen();
         case "/forgotPassword":
           return EmailScreen();
         case "/setNewPassword":
           final args = settings.arguments as Map<String, dynamic>;
           return ResetPasswordScreen(email:args['email']);
+        case "/mainScreen":
+          return MainScreen();
+        case "/homescreen":
+          return HomeScreen();
+        case "/soilgridmap":
+          final args = settings.arguments as Map<String, dynamic>;
+          return SoilGridMap(lat: args['lat'], lon: args['lon'], lang: args['lang']);  
 
 
         case "/chat":

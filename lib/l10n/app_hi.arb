@@ -132,5 +132,17 @@
   "digital_soil_mapping_data": "डिजिटल मिट्टी मानचित्रण डेटा",
   "agri_clinics": "कृषि क्लीनिक",
   "find_nearby_testing_clinics": "निकटतम मिट्टी परीक्षण क्लीनिक खोजें",
-  "newk": "नया"
+  "newk": "नया",
+
+  "somethingWentWrong": "कुछ गलत हो गया।",
+  "no_data": "कोई डेटा उपलब्ध नहीं है",
+  "get_soil_details": "मिट्टी का विवरण प्राप्त करें",
+  "close": "बंद करें",
+  "soil_grid_details": "मिट्टी ग्रिड विवरण",
+  "latitude": "अक्षांश: ",
+  "longitude": "देशांतर: ",
+  "nitrogen_levels": "नाइट्रोजन स्तर (ग्राम/किलोग्राम):",
+  "ph_levels": "पीएच स्तर:",
+  "soc_levels": "मिट्टी कार्बनिक कार्बन स्तर:",
+  "mean": "औसत"
 }

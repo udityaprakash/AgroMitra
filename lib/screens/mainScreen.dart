@@ -1,6 +1,7 @@
 import 'package:agromitra/constant/color.dart';
 import 'package:agromitra/screens/homescreen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -87,22 +88,22 @@ class _MainScreenState extends State<MainScreen> {
           });
           // developer.log('Selected Index: $_selectedIndex');
         },
-        items: const [
+        items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.home, size: 24),
-            label: 'Home',
+            label: AppLocalizations.of(context)!.home,
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.groups, size: 24),
-            label: 'Community',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person, size: 24),
-            label: 'Profile',
+            label: AppLocalizations.of(context)!.community,
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.settings, size: 24),
-            label: 'Settings',
+            label: AppLocalizations.of(context)!.settings,
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person, size: 24),
+            label: AppLocalizations.of(context)!.profile,
           ),
           // BottomNavigationBarItem(
           //         icon: Icon(Icons.home, size: 24),
