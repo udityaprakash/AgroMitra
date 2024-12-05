@@ -49,7 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _initializeData() async {
-    String fetchedLang = await StorageManager.readData('Lang') ?? 'Unknown';
+    String fetchedLang = await StorageManager.readData('Lang') ?? 'Loading...';
     // String fetchedToken = await StorageManager.readData('token') ?? 'Unknown';
     String fetchedname = await StorageManager.readData('farmer_name') ?? '##';
     // log('Lang: $fetchedname');
@@ -375,6 +375,10 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           InkWell(
                             onTap: () {
+                              if(location == null || lang == "Loading...") {
+                                
+                                return;
+                              }
                               Navigator.pushNamed(context, '/soilgridmap',
                                   arguments: {
                                     'lat': location!.latitude,
