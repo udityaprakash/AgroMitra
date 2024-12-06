@@ -26,7 +26,7 @@ class _SoilGridMapState extends State<SoilGridMap> {
   // Function to fetch soil data from API
   Future<Map<String, dynamic>> fetchSoilData(double lat, double lon) async {
     final response = await http.get(
-      Uri.parse('https://dev-rest.isric.org/soilgrids/v2.0/properties/query?lon=${widget.lon}&lat=${widget.lat}&property=cec&property=nitrogen&property=phh2o&property=soc&value=mean&value=Q0.05&value=Q0.95#'),
+      Uri.parse('https://dev-rest.isric.org/soilgrids/v2.0/properties/query?lon=${lon}&lat=${lat}&property=cec&property=nitrogen&property=phh2o&property=soc&value=mean&value=Q0.05&value=Q0.95#'),
     );
 
     if (response.statusCode == 200) {
@@ -45,7 +45,7 @@ class _SoilGridMapState extends State<SoilGridMap> {
         borderRadius: BorderRadius.vertical(top: Radius.circular(15.0)),
       ),
       builder: (BuildContext context) {
-        return SoilGridDetailsSheet(latitude: latitude, longitude: longitude, soilData: _soilData);
+        return SoilGridDetailsSheet(latitude: latitude, longitude: longitude, soilData: fetchSoilData(latitude, longitude));
       },
     );
   }
@@ -53,7 +53,7 @@ class _SoilGridMapState extends State<SoilGridMap> {
   @override
   void initState() {
     super.initState();
-    _soilData = fetchSoilData(widget.lat, widget.lon); // Initialize data fetching
+    _soilData = fetchSoilData(widget.lat, widget.lon);
   }
 
   @override
@@ -221,7 +221,7 @@ class SoilGridDetailsSheet extends StatelessWidget {
                 ),
                 ...phData.map((depth) {
                   return CustomTextWidget(
-                    text: '${depth['label']}: '+AppLocalizations.of(context)!.mean+': ${depth['values']['mean']}',
+                    text: '${depth['label']}: '+AppLocalizations.of(context)!.mean+': ${depth['values']['mean'] / 10}',
                     textColor: Colors.black,
                     fontSize: 14.0,
                   );
