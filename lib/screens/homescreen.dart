@@ -366,12 +366,17 @@ class _HomeScreenState extends State<HomeScreen> {
                         shrinkWrap: true,
                         physics: NeverScrollableScrollPhysics(),
                         children: [
-                          _buildCard(
-                            icon: Icons.camera_alt,
-                            title: AppLocalizations.of(context)!.soil_analysis,
-                            subtitle: AppLocalizations.of(context)!.scan_soil_with_camera,
-                            badgeText: "85%",
-                            badgeColor: Colors.grey.shade300,
+                          InkWell(
+                            onTap: () {
+                              Navigator.pushNamed(context, '/captureSoilImage');
+                            },
+                            child: _buildCard(
+                              icon: Icons.camera_alt,
+                              title: AppLocalizations.of(context)!.soil_analysis,
+                              subtitle: AppLocalizations.of(context)!.scan_soil_with_camera,
+                              badgeText: "85%",
+                              badgeColor: Colors.grey.shade300,
+                            ),
                           ),
                           _buildCard(
                             icon: Icons.eco,
