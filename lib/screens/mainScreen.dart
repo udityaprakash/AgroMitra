@@ -1,5 +1,6 @@
 import 'package:agromitra/constant/color.dart';
 import 'package:agromitra/screens/homescreen.dart';
+import 'package:agromitra/utils/ui/custom-text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -81,6 +82,8 @@ class _MainScreenState extends State<MainScreen> {
       // appBar: AppBar(title: Text('Bottom Navigation Example')),
       body: _pages[_selectedIndex], // Display the page based on the selected index
       bottomNavigationBar: BottomNavigationBar(
+        selectedLabelStyle: customTextStyle(color: AppColors.primary, size: 12, weight: FontWeight.w900),
+        unselectedLabelStyle: customTextStyle(color: AppColors.textSecondary, size: 12, weight: FontWeight.w900),
         currentIndex: _selectedIndex, // Update this with the current index
         onTap: (int index) {
           setState(() {

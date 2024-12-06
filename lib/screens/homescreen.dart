@@ -364,6 +364,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         crossAxisSpacing: 16,
                         childAspectRatio: 1.2, // Adjust as needed
                         shrinkWrap: true,
+
                         physics: NeverScrollableScrollPhysics(),
                         children: [
                           InkWell(
@@ -540,90 +541,74 @@ class CustomFloatingActionButton extends StatelessWidget {
 }
 
 Widget _buildCard({
-    required IconData icon,
-    required String title,
-    required String subtitle,
-    String? badgeText,
-    Color? badgeColor,
-    Color badgeTextColor = Colors.black,
-    Color iconColor = Colors.black,
-  }) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.shade200,
-            blurRadius: 6,
-            offset: Offset(0, 3),
+  required IconData icon,
+  required String title,
+  required String subtitle,
+  String? badgeText,
+  Color? badgeColor,
+  Color badgeTextColor = Colors.black,
+  Color iconColor = Colors.black,
+}) {
+  return Container(
+    decoration: BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(12),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.grey.shade200,
+          blurRadius: 6,
+          offset: Offset(0, 3),
+        ),
+      ],
+    ),
+    child: Padding(
+      padding: const EdgeInsets.all(12.0),
+      child: Stack(
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  Icon(icon, color: iconColor),
+                  if (badgeText != null) Spacer(),
+                  if (badgeText != null)
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                      decoration: BoxDecoration(
+                        color: badgeColor,
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: CustomTextWidget(
+                        text: badgeText,
+                        textColor: badgeTextColor,
+                        fontSize: 12,
+                        isBold: true,
+                        maxLines: 1,
+                      ),
+                    ),
+                ],
+              ),
+              Spacer(),
+              CustomTextWidget(
+                text: title,
+                textColor: AppColors.textPrimary,
+                fontSize: 16,
+                isBold: true,
+                maxLines: 2,
+              ),
+              SizedBox(height: 4),
+              CustomTextWidget(
+                text: subtitle,
+                textColor: AppColors.textHint,
+                fontSize: 14,
+                maxLines: 2,
+              ),
+            ],
           ),
         ],
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: Stack(
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    Icon(icon, color: iconColor),
-                    if (badgeText != null)
-                      Spacer(),
-                    if (badgeText != null)
-                      Container(
-                        padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                        decoration: BoxDecoration(
-                          color: badgeColor,
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        child: Text(
-                          badgeText,
-                          style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: badgeTextColor),
-                        ),
-                      ),
-                  ],
-                ),
-                Spacer(),
-                Text(
-                  title,
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
-                ),
-                SizedBox(height: 4),
-                Text(
-                  subtitle,
-                  style: TextStyle(fontSize: 14, color: AppColors.textHint),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-
-Widget Page1() {
-  return Text('Home Page');
-}
-
-Widget Page2() {
-  return Center(
-    child: Text('Community Page'),
-  );
-}
-
-Widget Page3() {
-  return Center(
-    child: Text('Profile Page'),
-  );
-}
-
-Widget Page4() {
-  return Center(
-    child: Text('Settings Page'),
+    ),
   );
 }

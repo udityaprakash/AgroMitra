@@ -52,3 +52,18 @@ class CustomTextWidget extends StatelessWidget {
 //   maxLines: 2,
 //   textAlign: TextAlign.center,
 // );
+
+
+TextStyle customTextStyle({
+  required Color color,
+  required double size,
+  FontWeight? weight,
+  FontStyle? style,
+}) {
+  return TextStyle(
+    color: color,
+        fontFamily: 'Parkinsans',
+        fontWeight: weight,
+        fontSize: size,
+  );
+}

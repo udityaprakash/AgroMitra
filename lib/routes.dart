@@ -12,6 +12,7 @@ import 'package:agromitra/screens/authScreen/somethingWentWrong.dart';
 import 'package:agromitra/screens/chatAi.dart';
 import 'package:agromitra/screens/featureScreens/appfeatures.dart';
 import 'package:agromitra/screens/homescreen.dart';
+import 'package:agromitra/screens/homescreenScreens/analysingdata.dart';
 import 'package:agromitra/screens/homescreenScreens/captureSoilImage.dart';
 import 'package:agromitra/screens/homescreenScreens/sevendayforecast.dart';
 import 'package:agromitra/screens/homescreenScreens/soilgridmaps.dart';
@@ -78,6 +79,9 @@ class CustomRoute {
           return SoilGridMap(lat: args['lat'], lon: args['lon'], lang: args['lang']);  
         case "/captureSoilImage":
           return CaptureSoilImage();
+        case "/soilanalyis":
+        final args = settings.arguments as Map<String, dynamic>;
+          return SoilAnalysisScreen(images: args['images']);
 
         case "/chat":
           return ChatScreen();

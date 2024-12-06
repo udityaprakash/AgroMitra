@@ -59,6 +59,7 @@ class _SoilGridMapState extends State<SoilGridMap> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.newbackground,
       appBar: AppBar(
         shadowColor: AppColors.cardShadow,
         elevation: 10,

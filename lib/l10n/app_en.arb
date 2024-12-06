@@ -145,5 +145,26 @@
   "ph_levels": "pH Levels:",
   "soc_levels": "Soil Organic Carbon Levels:",
   "mean": "Mean",
-  "weather_forecast":"Weather Forecast"
+  "weather_forecast":"Weather Forecast",
+
+
+  "capture_soil_image": "Capture Soil Image",
+  "outdoor": "Outdoor",
+  "indoor": "Indoor",
+  "outdoor_scanning_tips": "Outdoor Scanning Tips:",
+  "outdoor_scanning_instructions": "Take 4 images of your soil from different spots in the field for an average analysis.",
+  "outdoor_scanning_info": "Keep 5-10 meters between samples Hold camera 30cm above ground Avoid shadows in frame",
+  "camera_icon_instruction": "Click on the Camera icon to capture image of your field",
+  "error_select_four_images": "Please select all four corner images for outdoor analysis.",
+  "error_images_not_uploaded": "All images were not uploaded. Please try again.",
+  "indoor_scanning_tips": "Indoor Scanning Tips:",
+  "indoor_scanning_instructions": "Take a single image or multiple images with proper lighting for precise analysis.",
+  "indoor_scanning_info": "Use consistent lighting, Place sample on white background and Keep camera steady. Image should not be blurred",
+  "add_indoor_images": "Add multiple indoor soil images for a comprehensive analysis. Tap the '+' icon to add more images.",
+  "error_no_indoor_images": "Please add at least one image for indoor analysis.",
+  "take_photo": "Take a Photo",
+  "upload_from_gallery": "Upload from Gallery",
+  "alert": "Alert",
+  "ok": "Ok",
+  "get_soil_analysed": "Get Soil Analysed"
 }
