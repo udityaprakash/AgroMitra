@@ -473,7 +473,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         children: [
                           InkWell(
                             onTap: () {
-                              Navigator.pushNamed(context, '/captureSoilImage');
+                              Navigator.pushNamed(context, '/fertiliserCalculator');
                             },
                             child: _buildCard(
                               // icon: Icons.camera_alt,
