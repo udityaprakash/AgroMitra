@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:agromitra/constant/color.dart';
+import 'package:agromitra/utils/ui/custom-button.dart';
 import 'package:agromitra/utils/ui/custom-text.dart';
 import 'package:flutter/material.dart';
 
@@ -36,32 +37,26 @@ class _SoilDataAnalyzedState extends State<SoilDataAnalyzed> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Current Analysis Card
             _buildCurrentAnalysisCard(),
 
             const SizedBox(height: 16),
 
-            // Soil Type Card
             _buildSoilTypeCard(),
 
             const SizedBox(height: 16),
 
-            // Best Crops to Grow
             _buildBestCropsToGrow(),
 
             const SizedBox(height: 16),
 
-            // Custom Crop Selection
             _buildCustomCropSelection(),
 
             const SizedBox(height: 16),
 
-            // Recent Samples
-            _buildRecentSamples(),
+            // _buildRecentSamples(),
 
-            const SizedBox(height: 16),
+            // const SizedBox(height: 16),
 
-            // Recommendations
             _buildRecommendations(),
           ],
         ),
@@ -269,10 +264,17 @@ class _SoilDataAnalyzedState extends State<SoilDataAnalyzed> {
               ],
             ),
             const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.black),
-              child: const Text('Analyze Compatibility'),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  flex: 5,
+                  child: CustomButton(backgroundColor: AppColors.primary, textColor: AppColors.white, text: 'Analyze Compatibility', onPressed: () {
+                  
+                  }),
+                ),
+                CustomTextWidget(text: '   56%', textColor: AppColors.error, isBold: true, fontSize: 16,),
+              ],
             ),
           ],
         ),
@@ -283,37 +285,38 @@ class _SoilDataAnalyzedState extends State<SoilDataAnalyzed> {
   Widget _buildChip(String label, {bool isAddCustom = false}) {
     return Chip(
       label: Text(label),
-      backgroundColor: isAddCustom ? Colors.grey[300] : Colors.grey[200],
+      backgroundColor: isAddCustom ? AppColors.white : Colors.grey[200],
     );
   }
 
-  Widget _buildRecentSamples() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text('Recent Samples',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-        const SizedBox(height: 8),
-        ListTile(
-          leading: Icon(Icons.science, color: Colors.black),
-          title: const Text('Sample #2847'),
-          subtitle: const Text('2 hours ago'),
-          trailing: const Icon(Icons.chevron_right),
-          onTap: () {},
-        ),
-        ListTile(
-          leading: Icon(Icons.science, color: Colors.black),
-          title: const Text('Sample #2846'),
-          subtitle: const Text('5 hours ago'),
-          trailing: const Icon(Icons.chevron_right),
-          onTap: () {},
-        ),
-      ],
-    );
-  }
+  // Widget _buildRecentSamples() {
+  //   return Column(
+  //     crossAxisAlignment: CrossAxisAlignment.start,
+  //     children: [
+  //       const Text('Recent Samples',
+  //           style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+  //       const SizedBox(height: 8),
+  //       ListTile(
+  //         leading: Icon(Icons.science, color: Colors.black),
+  //         title: const Text('Sample #2847'),
+  //         subtitle: const Text('2 hours ago'),
+  //         trailing: const Icon(Icons.chevron_right),
+  //         onTap: () {},
+  //       ),
+  //       ListTile(
+  //         leading: Icon(Icons.science, color: Colors.black),
+  //         title: const Text('Sample #2846'),
+  //         subtitle: const Text('5 hours ago'),
+  //         trailing: const Icon(Icons.chevron_right),
+  //         onTap: () {},
+  //       ),
+  //     ],
+  //   );
+  // }
 
   Widget _buildRecommendations() {
     return Card(
+      color: AppColors.white,
       elevation: 2,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       child: Padding(
@@ -321,8 +324,7 @@ class _SoilDataAnalyzedState extends State<SoilDataAnalyzed> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('Recommendations',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            CustomTextWidget(text: 'Recommendations', textColor: AppColors.textPrimary, isBold: true,),
             const SizedBox(height: 8),
             _buildRecommendationItem(
               'Increase Nitrogen',
@@ -350,8 +352,8 @@ class _SoilDataAnalyzedState extends State<SoilDataAnalyzed> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
-              Text(subtitle, style: const TextStyle(color: Colors.grey)),
+              CustomTextWidget(text: title, textColor: AppColors.textPrimary, isBold: true, overflow: TextOverflow.clip,),
+              CustomTextWidget(text: subtitle, textColor: AppColors.textHint),
             ],
           ),
         ),
