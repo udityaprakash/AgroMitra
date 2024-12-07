@@ -330,31 +330,40 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                 ],
                               ),
-                              child: Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Expanded(
-                                    flex: 3,
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.vertical(
-                                          top: Radius.circular(20)),
-                                      child: Image.network(
-                                        crop['image_url'] ?? '',
-                                        fit: BoxFit.cover,
-                                        width: double.infinity,
+                              child: InkWell(
+                                onTap: () {
+                                  Navigator.pushNamed(context, '/detailedCropPosts',
+                                      arguments: {
+                                        'crop_name': crop['crop_name'],
+                                      }
+                                      );
+                                },
+                                child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                      flex: 3,
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.vertical(
+                                            top: Radius.circular(20)),
+                                        child: Image.network(
+                                          crop['image_url'] ?? '',
+                                          fit: BoxFit.cover,
+                                          width: double.infinity,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  SizedBox(height: 10),
-                                  Expanded(
-                                    flex: 1,
-                                    child: AutoTranslator().buildTranslatedText(
-                                        context,
-                                        crop['crop_name'] ?? '--',
-                                        isBold: false),
-                                  ),
-                                ],
+                                    SizedBox(height: 10),
+                                    Expanded(
+                                      flex: 1,
+                                      child: AutoTranslator().buildTranslatedText(
+                                          context,
+                                          crop['crop_name'] ?? '--',
+                                          isBold: false),
+                                    ),
+                                  ],
+                                ),
                               ),
                             );
                           },
