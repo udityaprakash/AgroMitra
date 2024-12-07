@@ -16,6 +16,7 @@ import 'package:agromitra/screens/homescreenScreens/analysingdata.dart';
 import 'package:agromitra/screens/homescreenScreens/captureSoilImage.dart';
 import 'package:agromitra/screens/homescreenScreens/detailed_crop_posts.dart';
 import 'package:agromitra/screens/homescreenScreens/sevendayforecast.dart';
+import 'package:agromitra/screens/homescreenScreens/soil_analysed_report.dart';
 import 'package:agromitra/screens/homescreenScreens/soilgridmaps.dart';
 import 'package:agromitra/screens/mainScreen.dart';
 import 'package:agromitra/screens/splashScreen.dart';
@@ -88,7 +89,9 @@ class CustomRoute {
           return CropPostsScreen(
             cropName: args['crop_name']
             );
-
+        case "/soilAnalyzedReport":
+          final args = settings.arguments as Map<String, dynamic>;
+          return SoilDataAnalyzed(soilData: args['soilData']);
         case "/chat":
           return ChatScreen();
         case "/weatherForecast":

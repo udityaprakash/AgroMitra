@@ -20,6 +20,20 @@ class _SoilAnalysisScreenState extends State<SoilAnalysisScreen> {
     super.initState();
     simulateProgress();
     cycleImages();
+    gettoanalyzedScreen();
+  }
+
+  void gettoanalyzedScreen() {
+    Future.delayed(Duration(seconds: 15), () {
+      Navigator.pushReplacementNamed(context, '/soilAnalyzedReport', arguments: {
+        'soilData': {
+          'ph': 6.5,
+          'nitrogen': 0.5,
+          'phosphorus': 0.3,
+          'potassium': 0.2,
+        },
+      });
+    });
   }
 
   void simulateProgress() {

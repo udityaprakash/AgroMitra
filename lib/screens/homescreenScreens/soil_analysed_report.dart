@@ -1,21 +1,35 @@
 import 'dart:ui';
 
+import 'package:agromitra/constant/color.dart';
+import 'package:agromitra/utils/ui/custom-text.dart';
 import 'package:flutter/material.dart';
 
 class SoilDataAnalyzed extends StatefulWidget {
+  final Map<String, dynamic> soilData;
+
+  const SoilDataAnalyzed({Key? key, required this.soilData}) : super(key: key);
+
   @override
   _SoilDataAnalyzedState createState() => _SoilDataAnalyzedState();
 }
+
 
 class _SoilDataAnalyzedState extends State<SoilDataAnalyzed> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Soil Analysis', style: TextStyle(color: Colors.black)),
-        backgroundColor: Colors.white,
-        elevation: 1,
+      backgroundColor: AppColors.newbackground,
+      appBar: AppBar( 
+        title: CustomTextWidget(text: 'Soil Analysis', textColor: AppColors.white, fontSize: 20,),
+        backgroundColor: AppColors.primary,
+        elevation: 5,
         centerTitle: true,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: AppColors.white),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
@@ -57,6 +71,7 @@ class _SoilDataAnalyzedState extends State<SoilDataAnalyzed> {
 
   Widget _buildCurrentAnalysisCard() {
     return Card(
+      color: AppColors.white,
       elevation: 2,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       child: Padding(
@@ -71,11 +86,12 @@ class _SoilDataAnalyzedState extends State<SoilDataAnalyzed> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: const [
-                    Text(
-                      'Current Analysis',
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                    ),
-                    Text('Field Section A-23', style: TextStyle(color: Colors.grey)),
+                    CustomTextWidget(text: 'Current Analysis', textColor: AppColors.textPrimary, isBold: true,),
+                    // Text(
+                    //   'Current Analysis',
+                    //   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    // ),
+                    CustomTextWidget(text: 'Field Section A-23', textColor: AppColors.textHint)
                   ],
                 ),
               ],
@@ -84,43 +100,58 @@ class _SoilDataAnalyzedState extends State<SoilDataAnalyzed> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                _buildStatTile('pH Level', '6.8'),
-                _buildStatTile('Moisture', '42%'),
+                _buildStatTile('pH Level', '6.8', 0),
+                _buildStatTile('Moisture', '42%', 1),
               ],
             ),
             const SizedBox(height: 16),
-            _buildNutrientBar('Nitrogen (N)', 0.75),
-            _buildNutrientBar('Phosphorus (P)', 0.60),
-            _buildNutrientBar('Potassium (K)', 0.85),
+            _buildNutrientBar('Nitrogen (N)', 0.75, '0.75 kg/ha'),
+            _buildNutrientBar('Phosphorus (P)', 0.60, '0.60 kg/ha'),
+            _buildNutrientBar('Potassium (K)', 0.85, '0.85 kg/ha'),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildStatTile(String title, String value) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(title, style: const TextStyle(color: Colors.grey)),
-        const SizedBox(height: 8),
-        Text(value, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-      ],
+  Widget _buildStatTile(String title, String value, int index) {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.4,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        color: index == 0 ? Color.fromARGB(255, 232, 255, 237) :const Color.fromARGB(255, 213, 234, 255),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          CustomTextWidget(text: title,isBold: true, textColor: index == 0 ? const Color.fromARGB(255, 33, 99, 24) : const Color.fromARGB(255, 18, 86, 212)),
+          const SizedBox(height: 8),
+          CustomTextWidget(text: value, textColor: index == 0 ? const Color.fromARGB(255, 33, 99, 24) : const Color.fromARGB(255, 18, 86, 212), fontSize: 25, isBold: true),
+        ],
+      ),
     );
   }
 
-  Widget _buildNutrientBar(String title, double value) {
+  Widget _buildNutrientBar(String title, double value, String unit) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: 8),
-        Text(title, style: const TextStyle(color: Colors.grey)),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            CustomTextWidget(text: title, textColor: AppColors.textPrimary),
+            CustomTextWidget(text: unit, textColor: AppColors.textPrimary),
+          ],
+        ),
         const SizedBox(height: 4),
         LinearProgressIndicator(
           value: value,
           color: Colors.black,
           backgroundColor: Colors.grey[300],
-          minHeight: 8,
+          minHeight: 10,
+          borderRadius: BorderRadius.circular(8),
         ),
         const SizedBox(height: 8),
       ],
@@ -129,19 +160,28 @@ class _SoilDataAnalyzedState extends State<SoilDataAnalyzed> {
 
   Widget _buildSoilTypeCard() {
     return Card(
+      color: AppColors.white,
       elevation: 2,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Row(
           children: [
-            Icon(Icons.terrain, size: 32, color: Colors.black),
+            Container(
+                height: 48,
+                width: 48,
+                decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(24),
+                ),
+              child: Icon(Icons.terrain, size: 32, color: const Color.fromARGB(255, 130, 103, 27)),
+              ),
             const SizedBox(width: 8),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: const [
-                Text('Soil Type', style: TextStyle(color: Colors.grey)),
-                Text('Clay Loam', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                CustomTextWidget(text: 'Soil Type', textColor: AppColors.textPrimary, isBold: true,),
+                CustomTextWidget(text: 'Clay Loamy', textColor: AppColors.textHint),
               ],
             ),
           ],
@@ -154,10 +194,7 @@ class _SoilDataAnalyzedState extends State<SoilDataAnalyzed> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'Best Crops to Grow',
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-        ),
+        CustomTextWidget(text: 'Best Crops To Grow', textColor: AppColors.textPrimary, isBold: true,),
         const SizedBox(height: 8),
         GridView.count(
           crossAxisCount: 2,
@@ -166,18 +203,20 @@ class _SoilDataAnalyzedState extends State<SoilDataAnalyzed> {
           mainAxisSpacing: 8,
           physics: const NeverScrollableScrollPhysics(),
           children: [
-            _buildCropCard('Wheat', 'High success rate'),
-            _buildCropCard('Corn', 'Good compatibility'),
-            _buildCropCard('Soybean', 'Optimal conditions'),
-            _buildCropCard('Barley', 'Suitable pH level'),
+            _buildCropCard('https://imgs.search.brave.com/5wCarlbEu2qsKumvJ94-tV0jeoE0uYIvzv2kHMekLq8/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5pc3RvY2twaG90/by5jb20vaWQvNDgz/Njc3NjU5L3Bob3Rv/L3doZWF0LWdyYWlu/cy5qcGc_cz02MTJ4/NjEyJnc9MCZrPTIw/JmM9Zm16ZmhzMFdw/b0JjaEk3Z2hoNkx6/dkVfXy1YR2ZFVDFX/OGxEZ0F0aXNxST0','Wheat', 'High success rate'),
+
+            _buildCropCard('https://imgs.search.brave.com/m5FHIf_K8jpld4PXfDXdwCf0jIsI8PO-CWqYUZ6ssGQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5pc3RvY2twaG90/by5jb20vaWQvMTgw/MTk4MTA3L3Bob3Rv/L2Nvcm4tZmllbGQu/anBnP3M9NjEyeDYx/MiZ3PTAmaz0yMCZj/PTNmTG1TdU1ESVRl/eEd5MjhLOTF3S3VH/Rk84cTc3OElPZ05E/eUZvLTNhOEU9','Corn', 'Good compatibility'),
+            _buildCropCard('https://imgs.search.brave.com/yUtvh7YQufmJgmUXjmX28oBvxLJAqVlWKlP41Aa9Uzs/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTIw/NDQ3MTkyNi9waG90/by9zb3liZWFuLWNy/b3AtMjAyMC1pbi10/aGUtc3RhdGUtb2Yt/cGFyYW4lQzMlQTEt/aW4tYnJhemlsLmpw/Zz9zPTYxMng2MTIm/dz0wJms9MjAmYz1x/NkxtSjB5dnY5YVYx/MVBqZ0VaM3dxaENp/UXZHNGJLTy1sbG5h/c2tWdldrPQ','Soybean', 'Optimal conditions'),
+            _buildCropCard('https://imgs.search.brave.com/Ck55_SHaJeXHTq-G56YW0rz6Nd0DSjyd-IUZLxY7Ghc/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzAxLzAzLzI2LzQx/LzM2MF9GXzEwMzI2/NDEzMl9WRFFJZkp2/YUVNcEw1WmpVM1g5/a3JhRUppcmJSQ1pr/WS5qcGc','Barley', 'Suitable pH level'),
           ],
         ),
       ],
     );
   }
 
-  Widget _buildCropCard(String title, String subtitle) {
+  Widget _buildCropCard(String imageurl,String title, String subtitle) {
     return Card(
+      color: AppColors.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       child: Padding(
         padding: const EdgeInsets.all(8),
@@ -185,13 +224,14 @@ class _SoilDataAnalyzedState extends State<SoilDataAnalyzed> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              height: 48,
+              height: 100,
               width: double.infinity,
-              color: Colors.grey[300], // Placeholder for image
+              color: Colors.grey[300],
+              child: Image.network(imageurl, fit: BoxFit.cover),
             ),
             const SizedBox(height: 8),
-            Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
-            Text(subtitle, style: const TextStyle(color: Colors.grey)),
+            CustomTextWidget(text: title, textColor: AppColors.textPrimary, isBold: true,),
+            CustomTextWidget(text: subtitle, textColor: AppColors.textHint)
           ],
         ),
       ),
@@ -200,6 +240,7 @@ class _SoilDataAnalyzedState extends State<SoilDataAnalyzed> {
 
   Widget _buildCustomCropSelection() {
     return Card(
+      color: AppColors.white,
       elevation: 2,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       child: Padding(
@@ -207,10 +248,10 @@ class _SoilDataAnalyzedState extends State<SoilDataAnalyzed> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('Custom Crop Selection',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            CustomTextWidget(text: 'Custom Crop Selection', textColor: AppColors.textPrimary, isBold: true,fontSize: 18,),
             const SizedBox(height: 8),
             TextField(
+              style: customTextStyle(color: AppColors.textHint, size: 15),
               decoration: InputDecoration(
                 hintText: 'Search for crops...',
                 prefixIcon: Icon(Icons.search),
