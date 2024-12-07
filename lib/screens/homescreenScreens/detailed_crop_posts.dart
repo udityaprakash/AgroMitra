@@ -87,7 +87,7 @@ class _CropPostsScreenState extends State<CropPostsScreen> {
     return Scaffold(
       backgroundColor: AppColors.newbackground,
       appBar: AppBar(
-        title: CustomTextWidget(text: widget.cropName, textColor: App),
+        title: CustomTextWidget(text: widget.cropName, textColor: AppColors.white, fontSize: 20),
         backgroundColor: AppColors.primary,
       ),
       body: isloding? loading() : ListView.builder(
