@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:agromitra/functions/autotranslator.dart';
 import 'package:agromitra/functions/loading.dart';
 import 'package:agromitra/functions/locations.dart';
+import 'package:agromitra/functions/showsnackbar.dart';
 import 'package:agromitra/utils/data/deviceStorage.dart';
 import 'package:agromitra/utils/data/fetchInternetData.dart';
 import 'package:agromitra/utils/data/models/weathermodel.dart';
@@ -521,6 +522,13 @@ class _HomeScreenState extends State<HomeScreen> {
                             iconColor: Colors.purple,
                           ),
                         ],
+                      ),
+                      SizedBox(height: 20),
+                      Container(
+                        // width: MediaQuery.of(context).size.width * 0.6,
+                        child: CustomButton(backgroundColor: AppColors.textPrimary, textColor: AppColors.textHint, text: 'Upload Soil Health Card', onPressed: (){
+                          showSnackbarAutoTranslated(context, "Coming soon!");
+                        }),
                       )
                     ],
                   ),
@@ -530,82 +538,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
-      // floatingActionButton: (_selectedIndex == 0) ? CustomFloatingActionButton() : null,
-      
-
-      // bottomNavigationBar: floa.AnimatedBottomNavigationBar(
-      //   barColor: AppColors.white,
-      //   controller: floa.FloatingBottomBarController(initialIndex: 0),
-      //   bottomBar: [
-      //     floa.BottomBarItem(
-      //       icon: Icon(Icons.home, size: 24, color: AppColors.textSecondary),
-      //       iconSelected: const Icon(Icons.home, color: AppColors.primary),
-      //       title: 'Home',
-      //       titleStyle: TextStyle(color: AppColors.textSecondary),
-      //       dotColor: AppColors.primary,
-      //       onTap: (value) {
-      //         setState(() {
-      //           _selectedIndex = value;
-      //         });
-      //         developer.log('Home $_selectedIndex');
-      //       },
-      //     ),
-      //     floa.BottomBarItem(
-      //       icon: Icon(Icons.photo, size: 24, color: AppColors.textSecondary),
-      //       iconSelected: const Icon(Icons.photo, color: AppColors.primary),
-      //       title: 'Community',
-      //       titleStyle: TextStyle(color: AppColors.textSecondary),
-      //       dotColor: AppColors.primary,
-      //       onTap: (value) {
-      //         setState(() {
-      //           _selectedIndex = value;
-      //         });
-      //         developer.log('Community $_selectedIndex');
-      //       },
-      //     ),
-      //     floa.BottomBarItem(
-      //       icon: const Icon(Icons.person,
-      //           size: 24, color: AppColors.textSecondary),
-      //       iconSelected: const Icon(Icons.person, color: AppColors.primary),
-      //       title: 'Profile',
-      //       titleStyle: TextStyle(color: AppColors.textSecondary),
-      //       dotColor: AppColors.primary,
-      //       onTap: (value) {
-      //         setState(() {
-      //           _selectedIndex = value;
-      //         });
-      //         developer.log('Profile $_selectedIndex');
-      //       },
-      //     ),
-      //     floa.BottomBarItem(
-      //       icon: const Icon(Icons.settings,
-      //           size: 24, color: AppColors.textSecondary),
-      //       iconSelected: const Icon(Icons.settings, color: AppColors.primary),
-      //       title: 'Settings',
-      //       titleStyle: TextStyle(color: AppColors.textSecondary),
-      //       dotColor: AppColors.primary,
-      //       onTap: (value) {
-      //         setState(() {
-      //           _selectedIndex = value;
-      //         });
-      //         developer.log('Settings $value');
-      //       },
-      //     ),
-      //   ],
-      //   // bottomBarCenterModel: floa.BottomBarCenterModel(
-      //   //   centerBackgroundColor: AppColors.primary,
-      //   //   centerIcon: const floa.FloatingCenterButton(
-      //   //     child: Icon(Icons.add, color: AppColors.white),
-      //   //   ),
-      //   //   centerIconChild: [
-      //   //     floa.FloatingCenterButtonChild(
-      //   //       child: const Icon(Icons.camera, color: AppColors.white),
-      //   //       onTap: () => developer.log('Item1'),
-      //   //     ),
-      //   //   ],
-      //   // ),
-      // ),
-      // resizeToAvoidBottomInset: false,
     );
   }
 }
