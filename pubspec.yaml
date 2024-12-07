@@ -48,6 +48,7 @@ dependencies:
   flutter_compass: ^0.8.1
   image_picker: ^1.1.2
   http_parser: ^4.0.2
+  dotted_border: ^2.1.0
   flutter_localizations:
     sdk: flutter
 

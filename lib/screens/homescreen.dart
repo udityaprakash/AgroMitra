@@ -7,7 +7,9 @@ import 'package:agromitra/utils/data/deviceStorage.dart';
 import 'package:agromitra/utils/data/fetchInternetData.dart';
 import 'package:agromitra/utils/data/models/weathermodel.dart';
 import 'package:agromitra/utils/data/urls.dart';
+import 'package:agromitra/utils/ui/custom-button.dart';
 import 'package:agromitra/utils/ui/weatherwidget.dart';
+import 'package:dotted_border/dotted_border.dart';
 import 'package:floating_bottom_bar/animated_bottom_navigation_bar.dart'
     as floa;
 import 'package:flutter/material.dart';
@@ -288,15 +290,15 @@ class _HomeScreenState extends State<HomeScreen> {
                           // AutoTranslator().buildTranslatedText(
                           //     context, "See All",
                           //     textColor: AppColors.textHint),
-                          Expanded(
-                            // flex: 2,
-                            child: CustomTextWidget(
-                              text: AppLocalizations.of(context)!.see_all,
-                              textColor: AppColors.textHint,
-                              fontSize: 18.0,
-                              isBold: true,
-                            ),
-                          ),
+                          // Expanded(
+                          //   // flex: 2,
+                          //   // child: CustomTextWidget(
+                          //   //   text: AppLocalizations.of(context)!.see_all,
+                          //   //   textColor: AppColors.textHint,
+                          //   //   fontSize: 18.0,
+                          //   //   isBold: true,
+                          //   // ),
+                          // ),
                         ],
                       ),
                       Container(
@@ -358,6 +360,99 @@ class _HomeScreenState extends State<HomeScreen> {
                           },
                         ),
                       ),
+          //             Container(
+          //   width: 300,
+          //   padding: const EdgeInsets.all(16),
+          //   decoration: BoxDecoration(
+          //     border: Border.all(color: Colors.grey, style: BorderStyle.values[1]),
+          //     borderRadius: BorderRadius.circular(8),
+          //   ),
+          //   child: Column(
+          //     mainAxisSize: MainAxisSize.min,
+          //     children: [
+          //       Icon(Icons.camera_alt, size: 40, color: Colors.grey),
+          //       const SizedBox(height: 16),
+          //       const Text(
+          //         'Take a picture of your soil for instant analysis',
+          //         textAlign: TextAlign.center,
+          //         style: TextStyle(fontSize: 16, color: Colors.grey),
+          //       ),
+          //       const SizedBox(height: 16),
+          //       ElevatedButton(
+          //         onPressed: () {
+          //           // Action for taking photo
+          //         },
+          //         style: ElevatedButton.styleFrom(
+          //           backgroundColor: Colors.black,
+          //           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 32),
+          //         ),
+          //         child: const Text('Take Photo', style: TextStyle(color: Colors.white)),
+          //       ),
+          //     ],
+          //   ),
+          // ),
+                      Container(
+                        width: double.infinity,
+                        // height: 250,
+                        margin: EdgeInsets.only(bottom: 20.0),
+                        padding: EdgeInsets.all(20.0),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(12),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.shade300,
+                              blurRadius: 10,
+                              offset: Offset(0, 5),
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                CustomTextWidget(
+                                  text: 'Scan Soil',
+                                  textColor: AppColors.textPrimary,
+                                  fontSize: 18.0,
+                                  isBold: true,
+                                ),
+                                Icon(Icons.science_outlined, color: AppColors.primary),
+
+                              ],
+                            ),
+                            SizedBox(height: 10),
+                            DottedBorder(
+                              color: Colors.grey,
+                              strokeWidth: 2,
+                              dashPattern: [8, 8],
+                              padding: EdgeInsets.all(20.0),
+                              child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Icon(Icons.camera_alt, size: 40, color: Colors.grey),
+                                            const SizedBox(height: 16),
+                                            CustomTextWidget(text: 'Take a picture of your soil for instant analysis', textColor: AppColors.textHint, overflow: TextOverflow.clip, textAlign: TextAlign.center,),
+                                            const SizedBox(height: 16),
+                                            ElevatedButton(
+                                              onPressed: () {
+                                                Navigator.pushNamed(context, '/captureSoilImage');
+                                              },
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor: AppColors.primary,
+                                                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 32),
+                                              ),
+                                              child: CustomTextWidget(text: 'Take Photo', textColor: Colors.white),
+                                              // child: const Text('Take Photo', style: TextStyle(color: Colors.white)),
+                                            ),
+                                          ],
+                                        ),
+                            ),
+                          ],
+                        ),
+                      ),
                       GridView.count(
                         crossAxisCount: 2,
                         mainAxisSpacing: 16,
@@ -372,9 +467,12 @@ class _HomeScreenState extends State<HomeScreen> {
                               Navigator.pushNamed(context, '/captureSoilImage');
                             },
                             child: _buildCard(
-                              icon: Icons.camera_alt,
-                              title: AppLocalizations.of(context)!.soil_analysis,
-                              subtitle: AppLocalizations.of(context)!.scan_soil_with_camera,
+                              // icon: Icons.camera_alt,
+                              icon: Icons.calculate,
+                              title: 'Fertilizer calculater',
+                              // title: AppLocalizations.of(context)!.soil_analysis,
+                              subtitle: "Calculate the amount of fertilizer needed",
+                              // subtitle: AppLocalizations.of(context)!.scan_soil_with_camera,
                               badgeText: "85%",
                               badgeColor: Colors.grey.shade300,
                             ),
