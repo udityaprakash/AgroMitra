@@ -18,10 +18,10 @@ class FetchData {
       if (response.statusCode == 200) {
         return jsonDecode(response.body); // Parse JSON response
       } else {
-        throw Exception('Failed to load data: ${response.statusCode}');
+        return jsonDecode(response.body);
       }
     } catch (e) {
-      throw Exception('GET request error: $e');
+      return null;
     }
   }
 

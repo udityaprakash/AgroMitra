@@ -21,7 +21,7 @@ class AutoTranslator {
   }
 
   Widget buildTranslatedText(BuildContext context, String inputText,
-      {textColor = AppColors.textPrimary, fontSize = 16.0, fontWeight = FontWeight.w400, textAlign = TextAlign.center, isBold = true, overflow = TextOverflow.clip}) {
+      {textColor = AppColors.textPrimary, fontSize = 16.0, fontWeight = FontWeight.w400, textAlign = TextAlign.center, isBold = true, overflow = TextOverflow.clip, maxLines}) {
     return FutureBuilder<String>(
       future: translateToAppLanguage(inputText),
       builder: (context, snapshot) {
@@ -53,7 +53,8 @@ class AutoTranslator {
             fontWeight: fontWeight,
             textAlign: textAlign,
             isBold: isBold,
-            overflow: overflow 
+            overflow: overflow,
+            maxLines: maxLines,
             );
           // Text('${snapshot.data}');
         }

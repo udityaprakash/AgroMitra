@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:agromitra/constant/color.dart';
+import 'package:agromitra/functions/autotranslator.dart';
 import 'package:agromitra/functions/loading.dart';
 import 'package:agromitra/utils/data/fetchInternetData.dart';
 import 'package:agromitra/utils/ui/custom-text.dart';
@@ -76,6 +79,10 @@ class _CropPostsScreenState extends State<CropPostsScreen> {
     var response =
         FetchData(url: 'https://crop-django.onrender.com/' + widget.cropName.toLowerCase() );
     var details = await response.get();
+    if(details == null) {
+      print('error');
+      details = [];
+    }
     setState(() {
       cropPosts = details;
       isloding = false;
@@ -90,7 +97,7 @@ class _CropPostsScreenState extends State<CropPostsScreen> {
         title: CustomTextWidget(text: widget.cropName, textColor: AppColors.white, fontSize: 20),
         backgroundColor: AppColors.primary,
       ),
-      body: isloding? loading() : ListView.builder(
+      body: isloding? loading() : (cropPosts.length > 0) ? ListView.builder(
         itemCount: cropPosts.length,
         itemBuilder: (context, index) {
           final post = cropPosts[index];
@@ -108,32 +115,22 @@ class _CropPostsScreenState extends State<CropPostsScreen> {
                   post['image'],
                   height: 180,
                   width: double.infinity,
-                  fit: BoxFit.cover,
+                  fit: BoxFit.fill
                 ),
                 Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        post['title'],
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+                      AutoTranslator().buildTranslatedText(context, post['title'],),
                       const SizedBox(height: 8),
-                      Text(
-                        post['description'],
-                        maxLines: 4,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(color: Colors.grey),
-                      ),
+                      AutoTranslator().buildTranslatedText(context, post['description'], textAlign: TextAlign.justify, overflow: TextOverflow.clip, textColor: AppColors.textHint, isBold: false),
                       const SizedBox(height: 8),
                       TextButton(
+                        
                         onPressed: () {
                         },
-                        child: const Text('Read More'),
+                        child: AutoTranslator().buildTranslatedText(context, 'Read More', textColor: AppColors.primary),
                       ),
                     ],
                   ),
@@ -142,7 +139,7 @@ class _CropPostsScreenState extends State<CropPostsScreen> {
             ),
           );
         },
-      ),
+      ): Center(child: CustomTextWidget(text: 'No related posts were found', textColor: AppColors.primary, fontSize: 20)), 
     );
   }
 }
