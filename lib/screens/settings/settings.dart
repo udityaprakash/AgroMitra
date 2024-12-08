@@ -2,35 +2,37 @@ import 'dart:developer';
 
 import 'package:agromitra/constant/color.dart';
 import 'package:agromitra/functions/languageProvider.dart';
+import 'package:agromitra/main.dart';
 import 'package:agromitra/utils/data/deviceStorage.dart';
 import 'package:agromitra/utils/ui/custom-text.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 final List<Map<String, dynamic>> languages = [
-    {'name': 'English', 'code': 'en'},
-    {'name': 'हिन्दी', 'code': 'hi'},
-    {'name': 'বাংলা', 'code': 'bn'},
-    {'name': 'తెలుగు', 'code': 'te'},
-    {'name': 'मराठी', 'code': 'mr'},
-    {'name': 'தமிழ்', 'code': 'ta'},
-    {'name': 'اردو', 'code': 'ur'},
-    {'name': 'ગુજરાતી', 'code': 'gu'},
-    {'name': 'ಕನ್ನಡ', 'code': 'kn'},
-    {'name': 'മലയാളം', 'code': 'ml'},
-    {'name': 'ଓଡ଼ିଆ', 'code': 'or'},
-    {'name': 'ਪੰਜਾਬੀ', 'code': 'pa'},
-    {'name': 'অসমীয়া', 'code': 'as'},
-    {'name': 'मैथिली', 'code': 'mai'},
-    {'name': 'ᱥᱟᱱᱛᱟᱲᱤ', 'code': 'sat'},
-    {'name': 'कॉशुर', 'code': 'ks'},
-    {'name': 'संस्कृतम्', 'code': 'sa'},
-    {'name': 'سنڌي', 'code': 'sd'},
-    {'name': 'कोंकणी', 'code': 'kok'},
-    {'name': 'মৈতৈলোন', 'code': 'mni'},
-    {'name': 'डोगरी', 'code': 'dgo'},
-    {'name': 'बर\'', 'code': 'brx'},
-    {'name': 'नेपाली', 'code': 'ne'},
-  ];
+  {'name': 'English', 'code': 'en'},
+  {'name': 'हिन्दी', 'code': 'hi'},
+  {'name': 'বাংলা', 'code': 'bn'},
+  {'name': 'తెలుగు', 'code': 'te'},
+  {'name': 'मराठी', 'code': 'mr'},
+  {'name': 'தமிழ்', 'code': 'ta'},
+  {'name': 'اردو', 'code': 'ur'},
+  {'name': 'ગુજરાતી', 'code': 'gu'},
+  {'name': 'ಕನ್ನಡ', 'code': 'kn'},
+  {'name': 'മലയാളം', 'code': 'ml'},
+  {'name': 'ଓଡ଼ିଆ', 'code': 'or'},
+  {'name': 'ਪੰਜਾਬੀ', 'code': 'pa'},
+  {'name': 'অসমীয়া', 'code': 'as'},
+  {'name': 'मैथिली', 'code': 'mai'},
+  {'name': 'ᱥᱟᱱᱛᱟᱲᱤ', 'code': 'sat'},
+  {'name': 'कॉशुर', 'code': 'ks'},
+  {'name': 'संस्कृतम्', 'code': 'sa'},
+  {'name': 'سنڌي', 'code': 'sd'},
+  {'name': 'कोंकणी', 'code': 'kok'},
+  {'name': 'মৈতৈলোন', 'code': 'mni'},
+  {'name': 'डोगरी', 'code': 'dgo'},
+  {'name': 'बर\'', 'code': 'brx'},
+  {'name': 'नेपाली', 'code': 'ne'},
+];
 
 class SettingsScreen extends StatefulWidget {
   @override
@@ -42,7 +44,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
   bool marketUpdatesEnabled = false;
   bool weatherNotificationsEnabled = true;
   bool isDarkMode = false;
-  String selectedLanguageCode = LanguageProvider().selectedLocale.languageCode;
+  late String selectedLanguageCode;
+
+  void initState() {
+    super.initState();
+    selectedLanguageCode =
+        context.read<LanguageProvider>().selectedLocale.languageCode;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +58,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
       backgroundColor: AppColors.newbackground,
       appBar: AppBar(
         backgroundColor: AppColors.primary,
-        title: CustomTextWidget(text: 'Settings', textColor: AppColors.white, fontSize: 20),
+        title: CustomTextWidget(
+            text: 'Settings', textColor: AppColors.white, fontSize: 20),
       ),
       body: ListView(
         padding: EdgeInsets.all(16),
@@ -58,28 +67,26 @@ class _SettingsScreenState extends State<SettingsScreen> {
           // Language Preferences
           _buildSectionHeader('Language Preferences'),
           DropdownButtonFormField<String>(
-              value: LanguageProvider().selectedLocale.languageCode,
-              items: languages.map((language) {
-                return DropdownMenuItem<String>(
-                  value: language['code'],
-                  child: Text(language['name']),
-                );
-              }).toList(),
-              onChanged: (value) async {
-                log('Selected language code: $value'+' '+LanguageProvider().selectedLocale.languageCode);
-                LanguageProvider().setLocale(Locale(value!));
-                // await StorageManager.saveData('Lang', value);
-                setState(() {
-                  selectedLanguageCode = value!;
-                });
-
-                print('Selected language code: $selectedLanguageCode'+ ' '+LanguageProvider().selectedLocale.languageCode);
-              },
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                contentPadding: EdgeInsets.symmetric(horizontal: 12),
-              ),
+            value: context.read<LanguageProvider>().selectedLocale.languageCode,
+            items: languages.map((language) {
+              return DropdownMenuItem<String>(
+                value: language['code'],
+                child: Text(language['name']),
+              );
+            }).toList(),
+            onChanged: (value) async {
+              // LanguageProvider().setLocale(Locale(value!));
+              context.read<LanguageProvider>().setLocale(Locale(value!));
+              await StorageManager.saveData('Lang', value);
+              setState(() {
+                selectedLanguageCode = value!;
+              });
+            },
+            decoration: InputDecoration(
+              border: OutlineInputBorder(),
+              contentPadding: EdgeInsets.symmetric(horizontal: 12),
             ),
+          ),
           SizedBox(height: 24),
 
           // Account Management

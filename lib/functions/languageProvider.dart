@@ -39,7 +39,7 @@ class LanguageProvider extends ChangeNotifier {
   }
 
   void setLocale(Locale locale) async {
-    _selectedLocale = await StorageManager.readData('Lang');
+    _selectedLocale = locale;
     notifyListeners();
   }
 
