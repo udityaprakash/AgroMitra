@@ -44,6 +44,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   bool marketUpdatesEnabled = false;
   bool weatherNotificationsEnabled = true;
   bool isDarkMode = false;
+  bool locationEnabled = true;
   late String selectedLanguageCode;
 
   void initState() {
@@ -71,7 +72,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
             items: languages.map((language) {
               return DropdownMenuItem<String>(
                 value: language['code'],
-                child: Text(language['name']),
+                alignment: Alignment.center,
+                child: CustomTextWidget(
+                    text: language['name'],
+                    textColor: AppColors.textPrimary,
+                    fontSize: 16),
               );
             }).toList(),
             onChanged: (value) async {
@@ -93,14 +98,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
           _buildSectionHeader('Account Management'),
           ListTile(
             leading: Icon(Icons.person),
-            title: Text('Edit Profile'),
+            title: CustomTextWidget(
+                text: 'Edit Profile',
+                textColor: AppColors.textPrimary,
+                fontSize: 16),
             onTap: () {
               // Navigate to Edit Profile Screen
             },
           ),
           ListTile(
             leading: Icon(Icons.logout),
-            title: Text('Logout'),
+            title: CustomTextWidget(
+                text: 'Logout', textColor: AppColors.textPrimary, fontSize: 16),
             onTap: () {
               // Perform Logout
             },
@@ -109,20 +118,32 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
           // Location Settings
           _buildSectionHeader('Location Settings'),
-          ListTile(
-            leading: Icon(Icons.location_on),
-            title: Text('Change Location'),
-            onTap: () {
-              // Navigate to Change Location Screen
-            },
-          ),
+          SwitchListTile(
+                title: CustomTextWidget(
+                    text: 'Change Location',
+                    textColor: AppColors.textPrimary,
+                    fontSize: 16),
+                activeColor: AppColors.primary,
+                inactiveTrackColor: AppColors.newbackground,
+                onChanged: (value) {
+                  setState(() {
+                    cropAlertsEnabled = value;
+                  });
+                },
+                value: locationEnabled,
+              ),
           SizedBox(height: 24),
 
           // Notification Preferences
           _buildSectionHeader('Notification Preferences'),
           SwitchListTile(
-            title: Text('Crop Alerts'),
+            title: CustomTextWidget(
+                text: 'Crop Alerts',
+                textColor: AppColors.textPrimary,
+                fontSize: 16),
             value: cropAlertsEnabled,
+            activeColor: AppColors.primary,
+            inactiveTrackColor: AppColors.newbackground,
             onChanged: (value) {
               setState(() {
                 cropAlertsEnabled = value;
@@ -130,8 +151,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
             },
           ),
           SwitchListTile(
-            title: Text('Market Updates'),
+            title: CustomTextWidget(
+                text: 'Market Updates',
+                textColor: AppColors.textPrimary,
+                fontSize: 16),
             value: marketUpdatesEnabled,
+            activeColor: AppColors.primary,
+            inactiveTrackColor: AppColors.newbackground,
             onChanged: (value) {
               setState(() {
                 marketUpdatesEnabled = value;
@@ -139,8 +165,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
             },
           ),
           SwitchListTile(
-            title: Text('Weather Notifications'),
+            title: CustomTextWidget(
+                text: 'Weather Notifications',
+                textColor: AppColors.textPrimary,
+                fontSize: 16),
             value: weatherNotificationsEnabled,
+            activeColor: AppColors.primary,
+            inactiveTrackColor: AppColors.newbackground,
             onChanged: (value) {
               setState(() {
                 weatherNotificationsEnabled = value;
@@ -152,8 +183,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
           // Theme Settings
           _buildSectionHeader('Theme Settings'),
           SwitchListTile(
-            title: Text('Dark Mode'),
+            title: CustomTextWidget(
+                text: 'Dark Mode',
+                textColor: AppColors.textPrimary,
+                fontSize: 16),
             value: isDarkMode,
+            activeColor: AppColors.primary,
+            inactiveTrackColor: AppColors.newbackground,
             onChanged: (value) {
               setState(() {
                 isDarkMode = value;
@@ -166,21 +202,28 @@ class _SettingsScreenState extends State<SettingsScreen> {
           _buildSectionHeader('Help & Support'),
           ListTile(
             leading: Icon(Icons.help_outline),
-            title: Text('FAQs'),
+            title: CustomTextWidget(
+                text: 'FAQs', textColor: AppColors.textPrimary, fontSize: 16),
             onTap: () {
               // Navigate to FAQs Screen
             },
           ),
           ListTile(
             leading: Icon(Icons.contact_support),
-            title: Text('Contact Support'),
+            title: CustomTextWidget(
+                text: 'Contact Support',
+                textColor: AppColors.textPrimary,
+                fontSize: 16),
             onTap: () {
               // Navigate to Contact Support Screen
             },
           ),
           ListTile(
             leading: Icon(Icons.book),
-            title: Text('Tutorials/Guides'),
+            title: CustomTextWidget(
+                text: 'Tutorials',
+                textColor: AppColors.textPrimary,
+                fontSize: 16),
             onTap: () {
               // Navigate to Tutorials Screen
             },
@@ -191,21 +234,30 @@ class _SettingsScreenState extends State<SettingsScreen> {
           _buildSectionHeader('Privacy & Legal'),
           ListTile(
             leading: Icon(Icons.privacy_tip),
-            title: Text('Privacy Policy'),
+            title: CustomTextWidget(
+                text: 'Privacy Policy',
+                textColor: AppColors.textPrimary,
+                fontSize: 16),
             onTap: () {
               // Navigate to Privacy Policy Screen
             },
           ),
           ListTile(
             leading: Icon(Icons.gavel),
-            title: Text('Terms & Conditions'),
+            title: CustomTextWidget(
+                text: 'Terms & Conditions',
+                textColor: AppColors.textPrimary,
+                fontSize: 16),
             onTap: () {
               // Navigate to Terms & Conditions Screen
             },
           ),
           ListTile(
             leading: Icon(Icons.delete_forever),
-            title: Text('Data Deletion Request'),
+            title: CustomTextWidget(
+                text: 'Data Deletion Request',
+                textColor: AppColors.textPrimary,
+                fontSize: 16),
             onTap: () {
               // Navigate to Data Deletion Request Screen
             },
@@ -219,13 +271,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget _buildSectionHeader(String title) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Text(
-        title,
-        style: TextStyle(
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
-          color: Colors.grey[800],
-        ),
+      child: CustomTextWidget(
+        text: title,
+        textColor: AppColors.textSecondary,
+        fontSize: 18,
+        isBold: true,
       ),
     );
   }
