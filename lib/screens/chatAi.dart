@@ -8,6 +8,9 @@ import 'package:agromitra/utils/ui/custom-text.dart';
 import 'package:flutter/material.dart';
 import 'package:agromitra/constant/color.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+
 class ChatScreen extends StatefulWidget {
   @override
   _ChatScreenState createState() => _ChatScreenState();
@@ -57,7 +60,7 @@ class _ChatScreenState extends State<ChatScreen> {
     return Scaffold(
       appBar: AppBar(
         title: CustomTextWidget(
-          text: 'Krishak Ai',
+          text: AppLocalizations.of(context)!.krishak_ai,
           textColor: AppColors.white,
           fontSize: 20,
         ),
@@ -122,7 +125,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 child: Padding(
                   padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                   child: CustomTextField(
-                    hintText: 'Ask any thing related to agriculture...',
+                    hintText: AppLocalizations.of(context)!.ask_any_thing_related_to_agriculture,
                     controller: _messageController,
                     contentPadding: const EdgeInsets.symmetric(
                         vertical: 12, horizontal: 16),

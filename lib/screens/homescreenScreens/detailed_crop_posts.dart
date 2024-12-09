@@ -139,7 +139,8 @@ class _CropPostsScreenState extends State<CropPostsScreen> {
             ),
           );
         },
-      ): Center(child: CustomTextWidget(text: 'No related posts were found', textColor: AppColors.primary, fontSize: 20)), 
+      ): Center(child: CustomTextWidget(text:
+       'No related posts were found', textColor: AppColors.primary, fontSize: 20)), 
     );
   }
 }

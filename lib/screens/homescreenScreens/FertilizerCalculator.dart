@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'package:agromitra/functions/autotranslator.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:agromitra/constant/color.dart';
 import 'package:agromitra/functions/loading.dart';
@@ -169,7 +171,7 @@ class _StateAndCropSelectorState extends State<StateAndCropSelector> {
             ),
             backgroundColor: AppColors.primary,
             title: CustomTextWidget(
-              text: 'Fertilizer Calculator',
+              text: AppLocalizations.of(context)!.fertilizerCalculator,
               textColor: AppColors.white,
               fontSize: 20,
             )),
@@ -201,7 +203,7 @@ class _StateAndCropSelectorState extends State<StateAndCropSelector> {
                     ),
                     child: DropdownButton<String>(
                       hint: CustomTextWidget(
-                        text: 'Select State',
+                        text: AppLocalizations.of(context)!.selectState,
                         textColor: AppColors.textHint,
                         fontSize: 20,
                       ),
@@ -214,11 +216,15 @@ class _StateAndCropSelectorState extends State<StateAndCropSelector> {
                       items: states.map((state) {
                         return DropdownMenuItem<String>(
                           value: state['_id'],
-                          child: CustomTextWidget(
-                              text: state['name'],
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500,
-                              textColor: AppColors.textPrimary),
+                          child: AutoTranslator().buildTranslatedText(context, state['name'],
+                          fontSize: 18, fontWeight: FontWeight.w500,
+                              textColor: AppColors.textPrimary ),
+                          // child: CustomTextWidget(
+                          //   text: AutoTranslator().buildTranslatedText(context, state['name']),
+                          //     // text: state['name'],
+                          //     fontSize: 18,
+                          //     fontWeight: FontWeight.w500,
+                          //     textColor: AppColors.textPrimary),
                         );
                       }).toList(),
                       onChanged: (value) {
@@ -248,7 +254,7 @@ class _StateAndCropSelectorState extends State<StateAndCropSelector> {
                     child: DropdownButton<String>(
                       isExpanded: true,
                       hint: CustomTextWidget(
-                        text: 'Select Crop',
+                        text: AppLocalizations.of(context)!.selectCrop,
                         textColor: AppColors.textHint,
                         fontSize: 20,
                       ),
@@ -258,7 +264,11 @@ class _StateAndCropSelectorState extends State<StateAndCropSelector> {
                       items: crops.map((crop) {
                         return DropdownMenuItem<String>(
                           value: crop['id'],
-                          child: Text(crop['name']),
+                          child: CustomTextWidget(
+                              text: crop['name'],
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500,
+                              textColor: AppColors.textPrimary),
                         );
                       }).toList(),
                       onChanged: (value) {
@@ -919,14 +929,7 @@ class _StateAndCropSelectorState extends State<StateAndCropSelector> {
                                   },
                                 )
                               : Center(
-                                  child: Text(
-                                    'No Recommendations Available',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.red,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
+                                  child: CustomTextWidget(text: 'No Recommendations Available', textColor: AppColors.error),
                                 ),
                         ),
                       ],

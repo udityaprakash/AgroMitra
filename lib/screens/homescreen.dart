@@ -153,7 +153,7 @@ class _HomeScreenState extends State<HomeScreen> {
         shadowColor: AppColors.cardShadow,
         elevation: 10,
         title: CustomTextWidget(
-          text: AppLocalizations.of(context)!.namaste +" " + name,
+          text: AppLocalizations.of(context)!.namaste + " " + name,
           textColor: Colors.white,
           fontSize: 20.0,
           isBold: true,
@@ -193,12 +193,12 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Column(
               children: [
                 InkWell(
-                  onTap: (){
+                  onTap: () {
                     Navigator.pushNamed(context, '/weatherForecast',
-                      arguments: {
-                        'lat': location!.latitude,
-                        'lon': location!.longitude,
-                      });
+                        arguments: {
+                          'lat': location!.latitude,
+                          'lon': location!.longitude,
+                        });
                   },
                   child: Container(
                     height: 100,
@@ -227,7 +227,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                       MainAxisAlignment.spaceEvenly,
                                   children: [
                                     Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
                                         CustomTextWidget(
                                           text: '${data.name}',
@@ -256,7 +257,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ],
                                 ));
                               } else {
-                                return Center(child: Text('No data available'));
+                                return Center(
+                                    child: CustomTextWidget(
+                                  text: AppLocalizations.of(context)!
+                                      .noDataAvailable,
+                                  textColor: AppColors.textPrimary,
+                                  fontSize: 18.0,
+                                  overflow: TextOverflow.clip,
+                                ));
                               }
                             },
                           ),
@@ -280,12 +288,13 @@ class _HomeScreenState extends State<HomeScreen> {
                           Expanded(
                             flex: 4,
                             child: CustomTextWidget(
-                              text: AppLocalizations.of(context)!.recommended_crops,
+                              text: AppLocalizations.of(context)!
+                                  .recommended_crops,
                               textColor: AppColors.textPrimary,
                               fontSize: 18.0,
                               isBold: true,
                             ),
-                          ),  
+                          ),
                           // AutoTranslator().buildTranslatedText(
                           //     context, "Recommended Crops"),
                           // AutoTranslator().buildTranslatedText(
@@ -314,8 +323,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               margin: EdgeInsets.all(10.0),
                               width: 150,
                               decoration: BoxDecoration(
-                                color: Colors
-                                    .white,
+                                color: Colors.white,
                                 borderRadius: BorderRadius.circular(20),
                                 // border: Border.all(
                                 //   color: AppColors
@@ -333,11 +341,11 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                               child: InkWell(
                                 onTap: () {
-                                  Navigator.pushNamed(context, '/detailedCropPosts',
+                                  Navigator.pushNamed(
+                                      context, '/detailedCropPosts',
                                       arguments: {
                                         'crop_name': crop['crop_name'],
-                                      }
-                                      );
+                                      });
                                 },
                                 child: Column(
                                   mainAxisAlignment:
@@ -358,10 +366,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                     SizedBox(height: 10),
                                     Expanded(
                                       flex: 1,
-                                      child: AutoTranslator().buildTranslatedText(
-                                          context,
-                                          crop['crop_name'] ?? '--',
-                                          isBold: false),
+                                      child: AutoTranslator()
+                                          .buildTranslatedText(context,
+                                              crop['crop_name'] ?? '--',
+                                              isBold: false),
                                     ),
                                   ],
                                 ),
@@ -370,37 +378,37 @@ class _HomeScreenState extends State<HomeScreen> {
                           },
                         ),
                       ),
-          //             Container(
-          //   width: 300,
-          //   padding: const EdgeInsets.all(16),
-          //   decoration: BoxDecoration(
-          //     border: Border.all(color: Colors.grey, style: BorderStyle.values[1]),
-          //     borderRadius: BorderRadius.circular(8),
-          //   ),
-          //   child: Column(
-          //     mainAxisSize: MainAxisSize.min,
-          //     children: [
-          //       Icon(Icons.camera_alt, size: 40, color: Colors.grey),
-          //       const SizedBox(height: 16),
-          //       const Text(
-          //         'Take a picture of your soil for instant analysis',
-          //         textAlign: TextAlign.center,
-          //         style: TextStyle(fontSize: 16, color: Colors.grey),
-          //       ),
-          //       const SizedBox(height: 16),
-          //       ElevatedButton(
-          //         onPressed: () {
-          //           // Action for taking photo
-          //         },
-          //         style: ElevatedButton.styleFrom(
-          //           backgroundColor: Colors.black,
-          //           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 32),
-          //         ),
-          //         child: const Text('Take Photo', style: TextStyle(color: Colors.white)),
-          //       ),
-          //     ],
-          //   ),
-          // ),
+                      //             Container(
+                      //   width: 300,
+                      //   padding: const EdgeInsets.all(16),
+                      //   decoration: BoxDecoration(
+                      //     border: Border.all(color: Colors.grey, style: BorderStyle.values[1]),
+                      //     borderRadius: BorderRadius.circular(8),
+                      //   ),
+                      //   child: Column(
+                      //     mainAxisSize: MainAxisSize.min,
+                      //     children: [
+                      //       Icon(Icons.camera_alt, size: 40, color: Colors.grey),
+                      //       const SizedBox(height: 16),
+                      //       const Text(
+                      //         'Take a picture of your soil for instant analysis',
+                      //         textAlign: TextAlign.center,
+                      //         style: TextStyle(fontSize: 16, color: Colors.grey),
+                      //       ),
+                      //       const SizedBox(height: 16),
+                      //       ElevatedButton(
+                      //         onPressed: () {
+                      //           // Action for taking photo
+                      //         },
+                      //         style: ElevatedButton.styleFrom(
+                      //           backgroundColor: Colors.black,
+                      //           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 32),
+                      //         ),
+                      //         child: const Text('Take Photo', style: TextStyle(color: Colors.white)),
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
                       Container(
                         width: double.infinity,
                         // height: 250,
@@ -418,19 +426,19 @@ class _HomeScreenState extends State<HomeScreen> {
                           ],
                         ),
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 CustomTextWidget(
-                                  text: 'Scan Soil',
+                                  text: AppLocalizations.of(context)!.scanSoil,
                                   textColor: AppColors.textPrimary,
                                   fontSize: 18.0,
                                   isBold: true,
                                 ),
-                                Icon(Icons.science_outlined, color: AppColors.primary),
-
+                                Icon(Icons.science_outlined,
+                                    color: AppColors.primary),
                               ],
                             ),
                             SizedBox(height: 10),
@@ -440,25 +448,37 @@ class _HomeScreenState extends State<HomeScreen> {
                               dashPattern: [8, 8],
                               padding: EdgeInsets.all(20.0),
                               child: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Icon(Icons.camera_alt, size: 40, color: Colors.grey),
-                                            const SizedBox(height: 16),
-                                            CustomTextWidget(text: 'Take a picture of your soil for instant analysis', textColor: AppColors.textHint, overflow: TextOverflow.clip, textAlign: TextAlign.center,),
-                                            const SizedBox(height: 16),
-                                            ElevatedButton(
-                                              onPressed: () {
-                                                Navigator.pushNamed(context, '/captureSoilImage');
-                                              },
-                                              style: ElevatedButton.styleFrom(
-                                                backgroundColor: AppColors.primary,
-                                                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 32),
-                                              ),
-                                              child: CustomTextWidget(text: 'Take Photo', textColor: Colors.white),
-                                              // child: const Text('Take Photo', style: TextStyle(color: Colors.white)),
-                                            ),
-                                          ],
-                                        ),
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(Icons.camera_alt,
+                                      size: 40, color: Colors.grey),
+                                  const SizedBox(height: 16),
+                                  CustomTextWidget(
+                                    text: AppLocalizations.of(context)!
+                                        .scanSoilDescription,
+                                    textColor: AppColors.textHint,
+                                    overflow: TextOverflow.clip,
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  const SizedBox(height: 16),
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      Navigator.pushNamed(
+                                          context, '/captureSoilImage');
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: AppColors.primary,
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 12, horizontal: 32),
+                                    ),
+                                    child: CustomTextWidget(
+                                        text: AppLocalizations.of(context)!
+                                            .take_photo,
+                                        textColor: Colors.white),
+                                    // child: const Text('Take Photo', style: TextStyle(color: Colors.white)),
+                                  ),
+                                ],
+                              ),
                             ),
                           ],
                         ),
@@ -474,14 +494,17 @@ class _HomeScreenState extends State<HomeScreen> {
                         children: [
                           InkWell(
                             onTap: () {
-                              Navigator.pushNamed(context, '/fertiliserCalculator');
+                              Navigator.pushNamed(
+                                  context, '/fertiliserCalculator');
                             },
                             child: _buildCard(
                               // icon: Icons.camera_alt,
                               icon: Icons.calculate,
-                              title: 'Fertilizer calculater',
+                              title: AppLocalizations.of(context)!
+                                  .fertilizerCalculator,
                               // title: AppLocalizations.of(context)!.soil_analysis,
-                              subtitle: "Calculate the amount of fertilizer needed",
+                              subtitle: AppLocalizations.of(context)!
+                                  .fertilizerCalculatorDescription,
                               // subtitle: AppLocalizations.of(context)!.scan_soil_with_camera,
                               badgeText: "85%",
                               badgeColor: Colors.grey.shade300,
@@ -489,8 +512,10 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           _buildCard(
                             icon: Icons.eco,
-                            title: AppLocalizations.of(context)!.organic_solutions,
-                            subtitle: AppLocalizations.of(context)!.natural_alternatives_around_you,
+                            title:
+                                AppLocalizations.of(context)!.organic_solutions,
+                            subtitle: AppLocalizations.of(context)!
+                                .natural_alternatives_around_you,
                             badgeText: AppLocalizations.of(context)!.newk,
                             badgeTextColor: Colors.green,
                             badgeColor: Colors.green.shade100,
@@ -498,27 +523,28 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           InkWell(
                             onTap: () {
-                              if(location == null || lang == "Loading...") {
-                                
+                              if (location == null || lang == "Loading...") {
                                 return;
                               }
                               Navigator.pushNamed(context, '/soilgridmap',
                                   arguments: {
                                     'lat': location!.latitude,
                                     'lon': location!.longitude,
-                                    'lang': lang	
+                                    'lang': lang
                                   });
                             },
                             child: _buildCard(
                               icon: Icons.grid_on,
                               title: AppLocalizations.of(context)!.soil_grid,
-                              subtitle: AppLocalizations.of(context)!.digital_soil_mapping_data,
+                              subtitle: AppLocalizations.of(context)!
+                                  .digital_soil_mapping_data,
                             ),
                           ),
                           _buildCard(
                             icon: Icons.store,
                             title: AppLocalizations.of(context)!.agri_clinics,
-                            subtitle: AppLocalizations.of(context)!.find_nearby_testing_clinics,
+                            subtitle: AppLocalizations.of(context)!
+                                .find_nearby_testing_clinics,
                             iconColor: Colors.purple,
                           ),
                         ],
@@ -526,9 +552,16 @@ class _HomeScreenState extends State<HomeScreen> {
                       SizedBox(height: 20),
                       Container(
                         // width: MediaQuery.of(context).size.width * 0.6,
-                        child: CustomButton(backgroundColor: AppColors.textPrimary, textColor: AppColors.textHint, text: 'Upload Soil Health Card', onPressed: (){
-                          showSnackbarAutoTranslated(context, "Coming soon!");
-                        }),
+                        child: CustomButton(
+                            backgroundColor: AppColors.textPrimary,
+                            textColor: AppColors.textHint,
+                            text: AppLocalizations.of(context)!
+                                .uploadSoilHealthCard,
+                            onPressed: () {
+                              customShowSnackbar(context,
+                                  AppLocalizations.of(context)!.comingSoon);
+                              // showSnackbarAutoTranslated(context, AppLocalizations.of(context)!.comingSoon);
+                            }),
                       )
                     ],
                   ),
@@ -570,9 +603,27 @@ class CustomFloatingActionButton extends StatelessWidget {
         Navigator.pushNamed(context, '/chat');
         print('FAB pressed');
       },
-      icon: const Icon(Icons.chat),
-      label: AutoTranslator().buildTranslatedText(context, 'Ask Ai',
-          textColor: AppColors.background),
+      // icon: const Icon(Icons.chat),
+      label: Icon(
+        Icons.smart_toy_rounded,
+        size: 50,
+      ),
+      shape: ShapeBorder.lerp(
+        RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(50),
+        ),
+        RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(50),
+        ),
+        1,
+      ),
+      // label: const CustomTextWidget(
+      //   text: '',
+      //   // text: AppLocalizations.of(context)!.ask_a,
+      //   textColor: AppColors.background,
+      // ),
+      // label: AutoTranslator().buildTranslatedText(context, 'Ask Ai',
+      // textColor: AppColors.background),
       backgroundColor: AppColors.primary,
       foregroundColor: Colors.white,
     );

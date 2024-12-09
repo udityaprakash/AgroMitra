@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:agromitra/constant/color.dart';
 import 'package:agromitra/functions/languageProvider.dart';
@@ -60,13 +61,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
       appBar: AppBar(
         backgroundColor: AppColors.primary,
         title: CustomTextWidget(
-            text: 'Settings', textColor: AppColors.white, fontSize: 20),
+            text: AppLocalizations.of(context)!.settings, textColor: AppColors.white, fontSize: 20),
       ),
       body: ListView(
         padding: EdgeInsets.all(16),
         children: [
           // Language Preferences
-          _buildSectionHeader('Language Preferences'),
+          _buildSectionHeader(AppLocalizations.of(context)!.languagePreferences),
           DropdownButtonFormField<String>(
             value: context.read<LanguageProvider>().selectedLocale.languageCode,
             items: languages.map((language) {
@@ -95,11 +96,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
           SizedBox(height: 24),
 
           // Account Management
-          _buildSectionHeader('Account Management'),
+          _buildSectionHeader(AppLocalizations.of(context)!.accountManagement),
           ListTile(
             leading: Icon(Icons.person),
             title: CustomTextWidget(
-                text: 'Edit Profile',
+                text: AppLocalizations.of(context)!.editProfile,
                 textColor: AppColors.textPrimary,
                 fontSize: 16),
             onTap: () {
@@ -109,7 +110,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ListTile(
             leading: Icon(Icons.logout),
             title: CustomTextWidget(
-                text: 'Logout', textColor: AppColors.textPrimary, fontSize: 16),
+                text: AppLocalizations.of(context)!.logout, textColor: AppColors.textPrimary, fontSize: 16),
             onTap: () {
               // Perform Logout
             },
@@ -117,10 +118,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
           SizedBox(height: 24),
 
           // Location Settings
-          _buildSectionHeader('Location Settings'),
+          _buildSectionHeader(AppLocalizations.of(context)!.locationSettings),
           SwitchListTile(
                 title: CustomTextWidget(
-                    text: 'Change Location',
+                    text: AppLocalizations.of(context)!.changeLocation,
                     textColor: AppColors.textPrimary,
                     fontSize: 16),
                 activeColor: AppColors.primary,
@@ -135,10 +136,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
           SizedBox(height: 24),
 
           // Notification Preferences
-          _buildSectionHeader('Notification Preferences'),
+          _buildSectionHeader(AppLocalizations.of(context)!.notificationPreferences),
           SwitchListTile(
             title: CustomTextWidget(
-                text: 'Crop Alerts',
+                text: AppLocalizations.of(context)!.cropAlerts,
                 textColor: AppColors.textPrimary,
                 fontSize: 16),
             value: cropAlertsEnabled,
@@ -152,7 +153,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ),
           SwitchListTile(
             title: CustomTextWidget(
-                text: 'Market Updates',
+                text: AppLocalizations.of(context)!.marketUpdates,
                 textColor: AppColors.textPrimary,
                 fontSize: 16),
             value: marketUpdatesEnabled,
@@ -166,7 +167,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ),
           SwitchListTile(
             title: CustomTextWidget(
-                text: 'Weather Notifications',
+                text: AppLocalizations.of(context)!.weatherNotifications,
                 textColor: AppColors.textPrimary,
                 fontSize: 16),
             value: weatherNotificationsEnabled,
@@ -181,10 +182,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
           SizedBox(height: 24),
 
           // Theme Settings
-          _buildSectionHeader('Theme Settings'),
+          _buildSectionHeader(AppLocalizations.of(context)!.themeSettings),
           SwitchListTile(
             title: CustomTextWidget(
-                text: 'Dark Mode',
+                text: AppLocalizations.of(context)!.darkMode,
                 textColor: AppColors.textPrimary,
                 fontSize: 16),
             value: isDarkMode,
@@ -199,11 +200,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
           SizedBox(height: 24),
 
           // Help & Support
-          _buildSectionHeader('Help & Support'),
+          _buildSectionHeader(AppLocalizations.of(context)!.helpSupport),
           ListTile(
             leading: Icon(Icons.help_outline),
             title: CustomTextWidget(
-                text: 'FAQs', textColor: AppColors.textPrimary, fontSize: 16),
+                text: AppLocalizations.of(context)!.faqs, textColor: AppColors.textPrimary, fontSize: 16),
             onTap: () {
               // Navigate to FAQs Screen
             },
@@ -211,7 +212,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ListTile(
             leading: Icon(Icons.contact_support),
             title: CustomTextWidget(
-                text: 'Contact Support',
+                text: AppLocalizations.of(context)!.contactSupport,
                 textColor: AppColors.textPrimary,
                 fontSize: 16),
             onTap: () {
@@ -221,7 +222,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ListTile(
             leading: Icon(Icons.book),
             title: CustomTextWidget(
-                text: 'Tutorials',
+                text: AppLocalizations.of(context)!.tutorials,
                 textColor: AppColors.textPrimary,
                 fontSize: 16),
             onTap: () {
@@ -231,11 +232,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
           SizedBox(height: 24),
 
           // Privacy & Legal
-          _buildSectionHeader('Privacy & Legal'),
+          _buildSectionHeader(AppLocalizations.of(context)!.privacyLegal),
           ListTile(
             leading: Icon(Icons.privacy_tip),
             title: CustomTextWidget(
-                text: 'Privacy Policy',
+                text: AppLocalizations.of(context)!.privacyPolicy,
                 textColor: AppColors.textPrimary,
                 fontSize: 16),
             onTap: () {
@@ -245,7 +246,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ListTile(
             leading: Icon(Icons.gavel),
             title: CustomTextWidget(
-                text: 'Terms & Conditions',
+                text: AppLocalizations.of(context)!.termsAndConditions,
                 textColor: AppColors.textPrimary,
                 fontSize: 16),
             onTap: () {
@@ -255,7 +256,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ListTile(
             leading: Icon(Icons.delete_forever),
             title: CustomTextWidget(
-                text: 'Data Deletion Request',
+                text: AppLocalizations.of(context)!.dataDeletionRequest,
                 textColor: AppColors.textPrimary,
                 fontSize: 16),
             onTap: () {

@@ -1,6 +1,8 @@
 import 'package:agromitra/constant/color.dart';
+import 'package:agromitra/utils/ui/custom-text.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SoilAnalysisScreen extends StatefulWidget {
   final List<String> images;
@@ -24,7 +26,7 @@ class _SoilAnalysisScreenState extends State<SoilAnalysisScreen> {
   }
 
   void gettoanalyzedScreen() {
-    Future.delayed(Duration(seconds: 15), () {
+    Future.delayed(Duration(seconds: 5), () {
       Navigator.pushReplacementNamed(context, '/soilAnalyzedReport', arguments: {
         'soilData': {
           'ph': 6.5,
@@ -83,7 +85,7 @@ class _SoilAnalysisScreenState extends State<SoilAnalysisScreen> {
           ),
           Container(
             width: double.infinity,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               shape: BoxShape.circle,
               image: DecorationImage(
                 image: NetworkImage(
@@ -99,24 +101,9 @@ class _SoilAnalysisScreenState extends State<SoilAnalysisScreen> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(
-                "Analyzing soil images...",
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF1F2937),
-                ),
-                textAlign: TextAlign.center,
-              ),
+              CustomTextWidget(text: AppLocalizations.of(context)!.analyzingSoilImages, textColor: AppColors.textPrimary, fontSize: 20, isBold: true, overflow: TextOverflow.clip,),
               SizedBox(height: 16),
-              Text(
-                "Processing your samples for detailed analysis",
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Color(0xFF4B5563),
-                ),
-                textAlign: TextAlign.center,
-              ),
+              CustomTextWidget(text: AppLocalizations.of(context)!.processingSamples , textColor: AppColors.textPrimary)
             ],
           ),
           Container(
@@ -136,23 +123,16 @@ class _SoilAnalysisScreenState extends State<SoilAnalysisScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(
-                  "Did you know? A single gram of healthy soil can",
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Color(0xFF374151),
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(height: 8),
-                Text(
-                  "contain up to 1 billion bacteria!",
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Color(0xFF374151),
-                  ),
-                  textAlign: TextAlign.center,
-                ),
+                CustomTextWidget(text: AppLocalizations.of(context)!.didYouKnow, textColor: AppColors.textSecondary, overflow: TextOverflow.clip,),
+                // SizedBox(height: 8),
+                // Text(
+                //   "contain up to 1 billion bacteria!",
+                //   style: TextStyle(
+                //     fontSize: 14,
+                //     color: Color(0xFF374151),
+                //   ),
+                //   textAlign: TextAlign.center,
+                // ),
               ],
             ),
           ),
@@ -173,14 +153,7 @@ class _SoilAnalysisScreenState extends State<SoilAnalysisScreen> {
               ),
             ),
           ),
-          Text(
-            "This process may take a few moments",
-            style: TextStyle(
-              fontSize: 14,
-              color: Color(0xFF6B7280),
-            ),
-            textAlign: TextAlign.center,
-          ),
+          CustomTextWidget(text: AppLocalizations.of(context)!.processDuration, textColor: AppColors.textSecondary)
         ],
       ),
     );

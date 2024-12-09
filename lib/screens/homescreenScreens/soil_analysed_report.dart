@@ -1,9 +1,11 @@
 import 'dart:ui';
 
 import 'package:agromitra/constant/color.dart';
+import 'package:agromitra/functions/autotranslator.dart';
 import 'package:agromitra/utils/ui/custom-button.dart';
 import 'package:agromitra/utils/ui/custom-text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SoilDataAnalyzed extends StatefulWidget {
   final Map<String, dynamic> soilData;
@@ -21,7 +23,7 @@ class _SoilDataAnalyzedState extends State<SoilDataAnalyzed> {
     return Scaffold(
       backgroundColor: AppColors.newbackground,
       appBar: AppBar( 
-        title: CustomTextWidget(text: 'Soil Analysis', textColor: AppColors.white, fontSize: 20,),
+        title: CustomTextWidget(text: AppLocalizations.of(context)!.soil_analysis, textColor: AppColors.white, fontSize: 20,),
         backgroundColor: AppColors.primary,
         elevation: 5,
         centerTitle: true,
@@ -80,13 +82,13 @@ class _SoilDataAnalyzedState extends State<SoilDataAnalyzed> {
                 const SizedBox(width: 8),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
-                    CustomTextWidget(text: 'Current Analysis', textColor: AppColors.textPrimary, isBold: true,),
+                  children: [
+                    CustomTextWidget(text: AppLocalizations.of(context)!.currentAnalysis, textColor: AppColors.textPrimary, isBold: true,),
                     // Text(
                     //   'Current Analysis',
                     //   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     // ),
-                    CustomTextWidget(text: 'Field Section A-23', textColor: AppColors.textHint)
+                    CustomTextWidget(text: AppLocalizations.of(context)!.fieldSection, textColor: AppColors.textHint)
                   ],
                 ),
               ],
@@ -95,14 +97,14 @@ class _SoilDataAnalyzedState extends State<SoilDataAnalyzed> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                _buildStatTile('pH Level', '6.8', 0),
-                _buildStatTile('Moisture', '42%', 1),
+                _buildStatTile(AppLocalizations.of(context)!.pHLevel, '6.8', 0),
+                _buildStatTile(AppLocalizations.of(context)!.moisture, '42%', 1),
               ],
             ),
             const SizedBox(height: 16),
-            _buildNutrientBar('Nitrogen (N)', 0.75, '0.75 kg/ha'),
-            _buildNutrientBar('Phosphorus (P)', 0.60, '0.60 kg/ha'),
-            _buildNutrientBar('Potassium (K)', 0.85, '0.85 kg/ha'),
+            _buildNutrientBar(AppLocalizations.of(context)!.nitrogen, 0.75, '0.75 kg/ha'),
+            _buildNutrientBar(AppLocalizations.of(context)!.phosphorus, 0.60, '0.60 kg/ha'),
+            _buildNutrientBar(AppLocalizations.of(context)!.potassium, 0.85, '0.85 kg/ha'),
           ],
         ),
       ),
@@ -174,9 +176,10 @@ class _SoilDataAnalyzedState extends State<SoilDataAnalyzed> {
             const SizedBox(width: 8),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
-                CustomTextWidget(text: 'Soil Type', textColor: AppColors.textPrimary, isBold: true,),
-                CustomTextWidget(text: 'Clay Loamy', textColor: AppColors.textHint),
+              children:[
+                CustomTextWidget(text: AppLocalizations.of(context)!.soilType, textColor: AppColors.textPrimary, isBold: true,),
+                // CustomTextWidget(text: , textColor: AppColors.textHint),
+                AutoTranslator().buildTranslatedText(context, 'clay loamy')
               ],
             ),
           ],
@@ -189,7 +192,7 @@ class _SoilDataAnalyzedState extends State<SoilDataAnalyzed> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        CustomTextWidget(text: 'Best Crops To Grow', textColor: AppColors.textPrimary, isBold: true,),
+        CustomTextWidget(text: AppLocalizations.of(context)!.bestCropsToGrow, textColor: AppColors.textPrimary, isBold: true,),
         const SizedBox(height: 8),
         GridView.count(
           crossAxisCount: 2,
@@ -243,12 +246,12 @@ class _SoilDataAnalyzedState extends State<SoilDataAnalyzed> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CustomTextWidget(text: 'Custom Crop Selection', textColor: AppColors.textPrimary, isBold: true,fontSize: 18,),
+            CustomTextWidget(text: AppLocalizations.of(context)!.customCropSelection, textColor: AppColors.textPrimary, isBold: true,fontSize: 18,),
             const SizedBox(height: 8),
             TextField(
               style: customTextStyle(color: AppColors.textHint, size: 15),
               decoration: InputDecoration(
-                hintText: 'Search for crops...',
+                hintText: AppLocalizations.of(context)!.searchForCrops,
                 prefixIcon: Icon(Icons.search),
                 border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
               ),
@@ -257,10 +260,10 @@ class _SoilDataAnalyzedState extends State<SoilDataAnalyzed> {
             Wrap(
               spacing: 8,
               children: [
-                _buildChip('Rice'),
-                _buildChip('Cotton'),
-                _buildChip('Sugarcane'),
-                _buildChip('+ Add Custom', isAddCustom: true),
+                _buildChip(AppLocalizations.of(context)!.rice),
+                _buildChip(AppLocalizations.of(context)!.cotton),
+                _buildChip(AppLocalizations.of(context)!.sugarcane),
+                // _buildChip(AppLocalizations.of(context)!.addCustom, isAddCustom: true),
               ],
             ),
             const SizedBox(height: 16),
@@ -269,7 +272,7 @@ class _SoilDataAnalyzedState extends State<SoilDataAnalyzed> {
               children: [
                 Expanded(
                   flex: 5,
-                  child: CustomButton(backgroundColor: AppColors.primary, textColor: AppColors.white, text: 'Analyze Compatibility', onPressed: () {
+                  child: CustomButton(backgroundColor: AppColors.primary, textColor: AppColors.white, text: AppLocalizations.of(context)!.analyzeCompatibility, onPressed: () {
                   
                   }),
                 ),
@@ -324,17 +327,17 @@ class _SoilDataAnalyzedState extends State<SoilDataAnalyzed> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CustomTextWidget(text: 'Recommendations', textColor: AppColors.textPrimary, isBold: true,),
+            CustomTextWidget(text:AppLocalizations.of(context)!.recommendations, textColor: AppColors.textPrimary, isBold: true,),
             const SizedBox(height: 8),
             _buildRecommendationItem(
-              'Increase Nitrogen',
-              'Add organic compost to improve soil fertility',
+              AppLocalizations.of(context)!.increaseNitrogen,
+              AppLocalizations.of(context)!.addOrganicCompost,
               Colors.green,
             ),
             const SizedBox(height: 8),
             _buildRecommendationItem(
-              'Adjust Irrigation',
-              'Reduce watering frequency by 15%',
+              AppLocalizations.of(context)!.adjustIrrigation,
+              AppLocalizations.of(context)!.reduceWateringFrequency,
               Colors.blue,
             ),
           ],
@@ -353,7 +356,7 @@ class _SoilDataAnalyzedState extends State<SoilDataAnalyzed> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               CustomTextWidget(text: title, textColor: AppColors.textPrimary, isBold: true, overflow: TextOverflow.clip,),
-              CustomTextWidget(text: subtitle, textColor: AppColors.textHint),
+              CustomTextWidget(text: subtitle,overflow: TextOverflow.clip, textColor: AppColors.textHint),
             ],
           ),
         ),

@@ -5,18 +5,6 @@ import 'package:agromitra/utils/ui/custom-text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class HomePage extends StatefulWidget {
-  @override
-  _HomePageState createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  @override
-  Widget build(BuildContext context) {
-    return Center(child: Text('Home Page', style: TextStyle(fontSize: 24)));
-  }
-}
-
 class CommunityPage extends StatefulWidget {
   @override
   _CommunityPageState createState() => _CommunityPageState();
@@ -38,18 +26,6 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Center(child: Text('Profile Page', style: TextStyle(fontSize: 24)));
-  }
-}
-
-class SettingsPage extends StatefulWidget {
-  @override
-  _SettingsPageState createState() => _SettingsPageState();
-}
-
-class _SettingsPageState extends State<SettingsPage> {
-  @override
-  Widget build(BuildContext context) {
-    return Center(child: Text('Settings Page', style: TextStyle(fontSize: 24)));
   }
 }
 
