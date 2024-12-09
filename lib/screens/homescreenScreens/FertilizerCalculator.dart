@@ -115,6 +115,10 @@ class _StateAndCropSelectorState extends State<StateAndCropSelector> {
       }
     """;
 
+    setState(() {
+      fertilizerRecommendations = [];
+    });
+
     if (selectedStateId == null || selectedCrop == null) {
       showSnackbarAutoTranslated(context, 'State and Crop must be selected');
     }
@@ -146,15 +150,17 @@ class _StateAndCropSelectorState extends State<StateAndCropSelector> {
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
-      if(data['data']['getRecommendations'][0]['fertilizersdata'] == false ){
-        showSnackbarAutoTranslated(context, 'No Recommendations Available');
-      }else{
-
+      if (data['data']['getRecommendations'][0]['fertilizersdata'] == false) {
+        // showSnackbarAutoTranslated(context, 'No Recommendations Available');
+        customShowSnackbar(
+            context, AppLocalizations.of(context)!.noRecommendationsAvailable);
+      } else {
         fertilizerRecommendations = data['data']['getRecommendations'];
       }
       log(fertilizerRecommendations.toString());
     } else {
-      showSnackbarAutoTranslated(context, 'Failed to load recommendations');
+      customShowSnackbar(
+          context, AppLocalizations.of(context)!.somethingWentWrong);
     }
   }
 
@@ -216,15 +222,15 @@ class _StateAndCropSelectorState extends State<StateAndCropSelector> {
                       items: states.map((state) {
                         return DropdownMenuItem<String>(
                           value: state['_id'],
-                          child: AutoTranslator().buildTranslatedText(context, state['name'],
-                          fontSize: 18, fontWeight: FontWeight.w500,
-                              textColor: AppColors.textPrimary ),
-                          // child: CustomTextWidget(
-                          //   text: AutoTranslator().buildTranslatedText(context, state['name']),
-                          //     // text: state['name'],
-                          //     fontSize: 18,
-                          //     fontWeight: FontWeight.w500,
-                          //     textColor: AppColors.textPrimary),
+                          // child: AutoTranslator().buildTranslatedText(context, state['name'],
+                          // fontSize: 18, fontWeight: FontWeight.w500,
+                          //     textColor: AppColors.textPrimary ),
+                          child: CustomTextWidget(
+                              // text: AutoTranslator().buildTranslatedText(context, state['name']),
+                              text: state['name'].toString(),
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500,
+                              textColor: AppColors.textPrimary),
                         );
                       }).toList(),
                       onChanged: (value) {
@@ -299,14 +305,15 @@ class _StateAndCropSelectorState extends State<StateAndCropSelector> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   CustomTextWidget(
-                      text: 'Soil Parameters',
+                      text: AppLocalizations.of(context)!.soilParameters,
                       fontSize: 20,
                       isBold: true,
                       textColor: AppColors.textPrimary),
                   SizedBox(height: 16),
                   // Organic Carbon
                   CustomTextField(
-                      hintText: 'Organic Carbon (%)', controller: occontroller),
+                      hintText: AppLocalizations.of(context)!.organicCarbon,
+                      controller: occontroller),
                   // TextField(
                   //   decoration: InputDecoration(
                   //     labelText: 'Organic Carbon (%)',
@@ -321,7 +328,8 @@ class _StateAndCropSelectorState extends State<StateAndCropSelector> {
                   SizedBox(height: 16),
                   // Nitrogen
                   CustomTextField(
-                      hintText: 'Nitrogen (N) Kg/ha', controller: nicontroller),
+                      hintText: AppLocalizations.of(context)!.nitrogenKgHa,
+                      controller: nicontroller),
                   // TextField(
                   //   decoration: InputDecoration(
                   //     labelText: 'Nitrogen (N) Kg/ha',
@@ -332,7 +340,7 @@ class _StateAndCropSelectorState extends State<StateAndCropSelector> {
                   SizedBox(height: 16),
                   // Phosphorus
                   CustomTextField(
-                      hintText: 'Phosphorus (P) Kg/ha',
+                      hintText: AppLocalizations.of(context)!.phosphorusKgHa,
                       controller: picontroller),
                   // TextField(
                   //   decoration: InputDecoration(
@@ -344,7 +352,7 @@ class _StateAndCropSelectorState extends State<StateAndCropSelector> {
                   SizedBox(height: 16),
                   // Potassium
                   CustomTextField(
-                      hintText: 'Potassium (K) Kg/ha',
+                      hintText: AppLocalizations.of(context)!.phosphorusKgHa,
                       controller: kicontroller),
                   // TextField(
                   //   decoration: InputDecoration(
@@ -357,18 +365,20 @@ class _StateAndCropSelectorState extends State<StateAndCropSelector> {
                   // Calculate Button
                   SizedBox(
                       width: double.infinity,
-                      child: !isloading ? CustomButton(
-                          backgroundColor: AppColors.primary,
-                          textColor: AppColors.white,
-                          text: 'Get Recommendations',
-                          onPressed: () async {
-                            isloading = true;
-                            setState(() {});
-                            await fetchRecommendations();
-                            isloading = false;
-                            setState(() {});
-                          }): loading()
-                          ) ,
+                      child: !isloading
+                          ? CustomButton(
+                              backgroundColor: AppColors.primary,
+                              textColor: AppColors.white,
+                              text: AppLocalizations.of(context)!
+                                  .getRecommendations,
+                              onPressed: () async {
+                                isloading = true;
+                                setState(() {});
+                                await fetchRecommendations();
+                                isloading = false;
+                                setState(() {});
+                              })
+                          : loading()),
                 ],
               ),
             ),
@@ -626,7 +636,8 @@ class _StateAndCropSelectorState extends State<StateAndCropSelector> {
                   Row(
                     children: [
                       CustomTextWidget(
-                          text: 'Organic Recommendations',
+                          text: AppLocalizations.of(context)!
+                              .organicRecommendations,
                           textColor: AppColors.textPrimary,
                           fontSize: 18,
                           isBold: true),
@@ -660,13 +671,15 @@ class _StateAndCropSelectorState extends State<StateAndCropSelector> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 CustomTextWidget(
-                                    text: 'Farmyard Manure',
+                                    text: AppLocalizations.of(context)!
+                                        .farmyardManure,
                                     textColor: AppColors.textPrimary,
                                     fontSize: 15,
                                     isBold: true),
                                 SizedBox(height: 4),
                                 CustomTextWidget(
-                                  text: 'Application rate: 5-6tons/ha',
+                                  text: AppLocalizations.of(context)!
+                                      .applicationRate5To6,
                                   textColor: AppColors.textPrimary,
                                   fontSize: 14,
                                   overflow: TextOverflow.clip,
@@ -706,13 +719,15 @@ class _StateAndCropSelectorState extends State<StateAndCropSelector> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 CustomTextWidget(
-                                    text: 'Vermicompost',
+                                    text: AppLocalizations.of(context)!
+                                        .vermicompost,
                                     textColor: AppColors.textPrimary,
                                     fontSize: 15,
                                     isBold: true),
                                 SizedBox(height: 4),
                                 CustomTextWidget(
-                                  text: 'Application Rate: 2.5 tons/ha',
+                                  text: AppLocalizations.of(context)!
+                                      .applicationRate25,
                                   textColor: AppColors.textPrimary,
                                   fontSize: 14,
                                   overflow: TextOverflow.clip,
@@ -728,129 +743,30 @@ class _StateAndCropSelectorState extends State<StateAndCropSelector> {
               ),
             ),
             SizedBox(height: 16),
-            Container(
-              // height: 330,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black12,
-                    blurRadius: 8,
-                    offset: Offset(0, 2),
-                  ),
-                ],
-              ),
-              padding: EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  CustomTextWidget(
-                    text: 'Chemical Recommendations',
-                    fontSize: 20,
-                    isBold: true,
-                    textColor: AppColors.textPrimary,
-                  ),
-                  SizedBox(height: 16),
-                  Container(
-                    child: (fertilizerRecommendations.isNotEmpty &&
-                            fertilizerRecommendations[0]['fertilizersdata'] !=
-                                null &&
-                            fertilizerRecommendations[0]['fertilizersdata']
-                                .isNotEmpty)
-                        ? ListView.builder(
-                            shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
-                            itemCount: fertilizerRecommendations[0]
-                                    ['fertilizersdata']
-                                .length,
-                            itemBuilder: (context, index) {
-                              final recommendation =
-                                  fertilizerRecommendations[0]
-                                      ['fertilizersdata'][index];
-                              return Card(
-                                elevation: 2,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(16.0),
-                                  child: Row(
-                                    children: [
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            CustomTextWidget(
-                                                text: recommendation['name'] ??
-                                                    'Unknown',
-                                                textColor:
-                                                    AppColors.textPrimary,
-                                                fontSize: 16,
-                                                isBold: true),
-                                            SizedBox(height: 4),
-                                            CustomTextWidget(
-                                                text:
-                                                    'Application Rate: ${recommendation['values']} ${recommendation['unit']}',
-                                                textColor:
-                                                    AppColors.textPrimary,
-                                                overflow: TextOverflow.clip,
-                                                fontSize: 14),
-                                          ],
-                                        ),
-                                      ),
-                                      Container(
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 8, vertical: 4),
-                                        decoration: BoxDecoration(
-                                          color: Colors.green[100],
-                                          borderRadius:
-                                              BorderRadius.circular(12),
-                                        ),
-                                        child: CustomTextWidget(
-                                            text: 'Recommended',
-                                            textColor: Colors.green,
-                                            fontSize: 12,
-                                            isBold: true),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            },
-                          )
-                        : Center(
-                            child: Text(
-                              'No Recommendations Available',
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.red,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                  ),
-                  SizedBox(height: 16),
-                  Container(
+
+            (fertilizerRecommendations.isNotEmpty &&
+                    fertilizerRecommendations[0]['fertilizersdata'] != null &&
+                    fertilizerRecommendations[0]['fertilizersdata'].isNotEmpty)
+                ? Container(
                     // height: 330,
-                    // decoration: BoxDecoration(
-                    //   color: Colors.white,
-                    //   borderRadius: BorderRadius.circular(12),
-                    //   boxShadow: [
-                    //     BoxShadow(
-                    //       color: Colors.black12,
-                    //       blurRadius: 8,
-                    //       offset: Offset(0, 2),
-                    //     ),
-                    //   ],
-                    // ),
-                    // padding: EdgeInsets.all(16.0),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black12,
+                          blurRadius: 8,
+                          offset: Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    padding: EdgeInsets.all(16.0),
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         CustomTextWidget(
-                          text: 'OR',
+                          text: AppLocalizations.of(context)!
+                              .chemicalRecommendations,
                           fontSize: 20,
                           isBold: true,
                           textColor: AppColors.textPrimary,
@@ -873,7 +789,7 @@ class _StateAndCropSelectorState extends State<StateAndCropSelector> {
                                   itemBuilder: (context, index) {
                                     final recommendation =
                                         fertilizerRecommendations[0]
-                                            ['fertilizersdatacombTwo'][index];
+                                            ['fertilizersdata'][index];
                                     return Card(
                                       elevation: 2,
                                       shape: RoundedRectangleBorder(
@@ -891,7 +807,9 @@ class _StateAndCropSelectorState extends State<StateAndCropSelector> {
                                                   CustomTextWidget(
                                                       text: recommendation[
                                                               'name'] ??
-                                                          'Unknown',
+                                                          AppLocalizations.of(
+                                                                  context)!
+                                                              .unknown,
                                                       textColor:
                                                           AppColors.textPrimary,
                                                       fontSize: 16,
@@ -899,7 +817,7 @@ class _StateAndCropSelectorState extends State<StateAndCropSelector> {
                                                   SizedBox(height: 4),
                                                   CustomTextWidget(
                                                       text:
-                                                          'Application Rate: ${recommendation['values']} ${recommendation['unit']}',
+                                                          '${AppLocalizations.of(context)!.applicationRate} ${recommendation['values']} ${recommendation['unit']}',
                                                       textColor:
                                                           AppColors.textPrimary,
                                                       overflow:
@@ -917,7 +835,9 @@ class _StateAndCropSelectorState extends State<StateAndCropSelector> {
                                                     BorderRadius.circular(12),
                                               ),
                                               child: CustomTextWidget(
-                                                  text: 'Alternate',
+                                                  text: AppLocalizations.of(
+                                                          context)!
+                                                      .recommended,
                                                   textColor: Colors.green,
                                                   fontSize: 12,
                                                   isBold: true),
@@ -929,15 +849,139 @@ class _StateAndCropSelectorState extends State<StateAndCropSelector> {
                                   },
                                 )
                               : Center(
-                                  child: CustomTextWidget(text: 'No Recommendations Available', textColor: AppColors.error),
+                                  child: CustomTextWidget(
+                                      text: AppLocalizations.of(context)!
+                                          .noRecommendationsAvailable,
+                                      textColor: AppColors.error),
                                 ),
                         ),
+                        SizedBox(height: 16),
+                        Container(
+                          // height: 330,
+                          // decoration: BoxDecoration(
+                          //   color: Colors.white,
+                          //   borderRadius: BorderRadius.circular(12),
+                          //   boxShadow: [
+                          //     BoxShadow(
+                          //       color: Colors.black12,
+                          //       blurRadius: 8,
+                          //       offset: Offset(0, 2),
+                          //     ),
+                          //   ],
+                          // ),
+                          // padding: EdgeInsets.all(16.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              CustomTextWidget(
+                                text: AppLocalizations.of(context)!.or,
+                                fontSize: 20,
+                                isBold: true,
+                                textColor: AppColors.textPrimary,
+                              ),
+                              SizedBox(height: 16),
+                              Container(
+                                child: (fertilizerRecommendations.isNotEmpty &&
+                                        fertilizerRecommendations[0]
+                                                ['fertilizersdata'] !=
+                                            null &&
+                                        fertilizerRecommendations[0]
+                                                ['fertilizersdata']
+                                            .isNotEmpty)
+                                    ? ListView.builder(
+                                        shrinkWrap: true,
+                                        physics: NeverScrollableScrollPhysics(),
+                                        itemCount: fertilizerRecommendations[0]
+                                                ['fertilizersdata']
+                                            .length,
+                                        itemBuilder: (context, index) {
+                                          final recommendation =
+                                              fertilizerRecommendations[0]
+                                                      ['fertilizersdatacombTwo']
+                                                  [index];
+                                          return Card(
+                                            elevation: 2,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                            ),
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(16.0),
+                                              child: Row(
+                                                children: [
+                                                  Expanded(
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        CustomTextWidget(
+                                                            text: recommendation[
+                                                                    'name'] ??
+                                                                AppLocalizations.of(
+                                                                        context)!
+                                                                    .unknown,
+                                                            textColor: AppColors
+                                                                .textPrimary,
+                                                            fontSize: 16,
+                                                            isBold: true),
+                                                        SizedBox(height: 4),
+                                                        CustomTextWidget(
+                                                            text:
+                                                                '${AppLocalizations.of(context)!.applicationRate} ${recommendation['values']} ${recommendation['unit']}',
+                                                            textColor: AppColors
+                                                                .textPrimary,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .clip,
+                                                            fontSize: 14),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  Container(
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                            horizontal: 8,
+                                                            vertical: 4),
+                                                    decoration: BoxDecoration(
+                                                      color: Colors.green[100],
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              12),
+                                                    ),
+                                                    child: CustomTextWidget(
+                                                        text:
+                                                            AppLocalizations.of(
+                                                                    context)!
+                                                                .alternate,
+                                                        textColor: Colors.green,
+                                                        fontSize: 12,
+                                                        isBold: true),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      )
+                                    : Center(
+                                        child: CustomTextWidget(
+                                            text: AppLocalizations.of(context)!
+                                                .noRecommendationsAvailable,
+                                            textColor: AppColors.error),
+                                      ),
+                              ),
+                            ],
+                          ),
+                        )
                       ],
                     ),
                   )
-                ],
-              ),
-            ),
+                : CustomTextWidget(
+                    text: AppLocalizations.of(context)!
+                        .noRecommendationsAvailable,
+                    textColor: AppColors.error),
           ]),
         )));
   }
