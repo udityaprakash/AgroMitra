@@ -97,14 +97,14 @@ class _SoilDataAnalyzedState extends State<SoilDataAnalyzed> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                _buildStatTile(AppLocalizations.of(context)!.pHLevel, '6.8', 0),
+                _buildStatTile(AppLocalizations.of(context)!.pHLevel, (widget.soilData['ph_value']).toString(), 0),
                 _buildStatTile(AppLocalizations.of(context)!.moisture, '42%', 1),
               ],
             ),
             const SizedBox(height: 16),
-            _buildNutrientBar(AppLocalizations.of(context)!.nitrogen, 0.75, '0.75 kg/ha'),
-            _buildNutrientBar(AppLocalizations.of(context)!.phosphorus, 0.60, '0.60 kg/ha'),
-            _buildNutrientBar(AppLocalizations.of(context)!.potassium, 0.85, '0.85 kg/ha'),
+            _buildNutrientBar(AppLocalizations.of(context)!.nitrogen, widget.soilData['n_value'] * 100, '%'),
+            _buildNutrientBar(AppLocalizations.of(context)!.phosphorus, widget.soilData['p_value'], 'ppm'),
+            _buildNutrientBar(AppLocalizations.of(context)!.potassium, widget.soilData['k_value'], 'ppm'),
           ],
         ),
       ),

@@ -1,4 +1,11 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:agromitra/constant/color.dart';
+import 'package:agromitra/functions/showsnackbar.dart';
+import 'package:agromitra/utils/data/fetchInternetData.dart';
+import 'package:agromitra/utils/data/models/npk_values.dart';
+import 'package:agromitra/utils/data/urls.dart';
 import 'package:agromitra/utils/ui/custom-text.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
@@ -22,20 +29,79 @@ class _SoilAnalysisScreenState extends State<SoilAnalysisScreen> {
     super.initState();
     simulateProgress();
     cycleImages();
-    gettoanalyzedScreen();
+    // gettoanalyzedScreen();
+    fetchAndNavigate();
   }
 
-  void gettoanalyzedScreen() {
+  void gettoanalyzedScreen() async {
+    // _soilDataFuture = _soilDataService.fetchSoilData(widget.images);
+    // log(_soilDataFutur);
+
     Future.delayed(Duration(seconds: 5), () {
-      Navigator.pushReplacementNamed(context, '/soilAnalyzedReport', arguments: {
-        'soilData': {
-          'ph': 6.5,
-          'nitrogen': 0.5,
-          'phosphorus': 0.3,
-          'potassium': 0.2,
-        },
-      });
+      Navigator.pushReplacementNamed(context, '/soilAnalyzedReport',
+          arguments: {
+            // 'soilData': {
+            //   'ph': 6.5,
+            //   'nitrogen': 0.5,
+            //   'phosphorus': 0.3,
+            //   'potassium': 0.2,
+            // },
+          });
     });
+  }
+
+  Future<void> fetchAndNavigate() async {
+    try {
+      final response = await fetchSoilData(widget.images);
+
+      if (response['success'] == true) {
+        log(response.toString());
+        Navigator.pushReplacementNamed(
+          context,
+          '/soilAnalyzedReport',
+          arguments: {
+            'soilData': response, // Pass the data to the next screen
+          },
+        );
+      } else {
+        log(response.toString());
+        log('Soil analysis failed: ${response.toString()}');
+        customShowSnackbar(context, 'Some of the image does not contain soil');
+        // ScaffoldMessenger.of(context).showSnackBar(
+        //   SnackBar(content: Text('this image does not contain soil')),
+        // );
+        Navigator.of(context).pop();
+      }
+    } catch (e) {
+      log('Error fetching soil data: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error fetching soil data.')),
+      );
+    }
+  }
+
+  Future<Map<String, dynamic>> fetchSoilData(List<String> imageUrls) async {
+    const String apiUrl = UrlProvider.getNPKValuesUrl;
+
+    // Prepare request body
+    final Map<String, dynamic> body = {
+      'image_urls': imageUrls,
+    };
+
+    try {
+      FetchData fetchData = FetchData(
+        url: apiUrl,
+        headers: {"Content-Type": "application/json"},
+        body: body,
+      );
+
+      final response = await fetchData.postUnhandled();
+      // log(response.toString());
+      // Parse and return the response
+      return response as Map<String, dynamic>;
+    } catch (e) {
+      throw Exception('Error fetching soil data: $e');
+    }
   }
 
   void simulateProgress() {
@@ -101,9 +167,17 @@ class _SoilAnalysisScreenState extends State<SoilAnalysisScreen> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              CustomTextWidget(text: AppLocalizations.of(context)!.analyzingSoilImages, textColor: AppColors.textPrimary, fontSize: 20, isBold: true, overflow: TextOverflow.clip,),
+              CustomTextWidget(
+                text: AppLocalizations.of(context)!.analyzingSoilImages,
+                textColor: AppColors.textPrimary,
+                fontSize: 20,
+                isBold: true,
+                overflow: TextOverflow.clip,
+              ),
               SizedBox(height: 16),
-              CustomTextWidget(text: AppLocalizations.of(context)!.processingSamples , textColor: AppColors.textPrimary)
+              CustomTextWidget(
+                  text: AppLocalizations.of(context)!.processingSamples,
+                  textColor: AppColors.textPrimary)
             ],
           ),
           Container(
@@ -123,7 +197,11 @@ class _SoilAnalysisScreenState extends State<SoilAnalysisScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                CustomTextWidget(text: AppLocalizations.of(context)!.didYouKnow, textColor: AppColors.textSecondary, overflow: TextOverflow.clip,),
+                CustomTextWidget(
+                  text: AppLocalizations.of(context)!.didYouKnow,
+                  textColor: AppColors.textSecondary,
+                  overflow: TextOverflow.clip,
+                ),
                 // SizedBox(height: 8),
                 // Text(
                 //   "contain up to 1 billion bacteria!",
@@ -153,7 +231,9 @@ class _SoilAnalysisScreenState extends State<SoilAnalysisScreen> {
               ),
             ),
           ),
-          CustomTextWidget(text: AppLocalizations.of(context)!.processDuration, textColor: AppColors.textSecondary)
+          CustomTextWidget(
+              text: AppLocalizations.of(context)!.processDuration,
+              textColor: AppColors.textSecondary)
         ],
       ),
     );

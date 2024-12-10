@@ -79,4 +79,20 @@ class FetchData {
       throw Exception('POST request error: $e');
     }
   }
+
+  Future<dynamic> postUnhandled() async {
+    try {
+      final response = await http.post(
+        Uri.parse(url),
+        headers: headers,
+        body: body != null
+            ? jsonEncode(body)
+            : null, // Encode body to JSON if provided
+      );
+      log('here $response');
+      return jsonDecode(response.body);
+    } catch (e) {
+      throw Exception('POST request error: $e');
+    }
+  }
 }
