@@ -1,5 +1,6 @@
 import 'package:agromitra/constant/color.dart';
 import 'package:agromitra/screens/homescreen.dart';
+import 'package:agromitra/screens/notification.dart';
 import 'package:agromitra/screens/settings/settings.dart';
 import 'package:agromitra/utils/ui/custom-text.dart';
 import 'package:flutter/material.dart';
@@ -40,6 +41,7 @@ class _MainScreenState extends State<MainScreen> {
   // List of StatefulWidgets (pages) to display on index change
   final List<Widget> _pages = [
     HomeScreen(),
+    NotificationScreen(),
     CommunityPage(),
     SettingsScreen(),
     ProfilePage(),
@@ -74,6 +76,10 @@ class _MainScreenState extends State<MainScreen> {
             label: AppLocalizations.of(context)!.home,
           ),
           BottomNavigationBarItem(
+            icon: Icon(Icons.notifications, size: 24),
+            label: AppLocalizations.of(context)!.notification,
+          ),
+          BottomNavigationBarItem(
             icon: Icon(Icons.groups, size: 24),
             label: AppLocalizations.of(context)!.community,
           ),
@@ -90,7 +96,7 @@ class _MainScreenState extends State<MainScreen> {
         selectedItemColor: AppColors.primary,
         unselectedItemColor: AppColors.textSecondary,
       ),
-      floatingActionButton: (_selectedIndex == 0) ? CustomFloatingActionButton() : null,
+      // floatingActionButton: (_selectedIndex == 0) ? CustomFloatingActionButton() : null,
     );
   }
 }

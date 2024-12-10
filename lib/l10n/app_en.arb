@@ -168,6 +168,8 @@
   "ok": "Ok",
   "get_soil_analysed": "Get Soil Analysed",
 
+  "notification":"Notification",
+
 
   "languagePreferences": "Language Preferences",
   "locationSettings": "Location Settings",

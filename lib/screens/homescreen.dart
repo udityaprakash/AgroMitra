@@ -11,14 +11,12 @@ import 'package:agromitra/utils/data/urls.dart';
 import 'package:agromitra/utils/ui/custom-button.dart';
 import 'package:agromitra/utils/ui/weatherwidget.dart';
 import 'package:dotted_border/dotted_border.dart';
-import 'package:floating_bottom_bar/animated_bottom_navigation_bar.dart'
-    as floa;
 import 'package:flutter/material.dart';
 import 'package:agromitra/constant/color.dart';
 import 'package:agromitra/utils/ui/custom-text.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'dart:developer' as developer;
-
+import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 import 'package:weather_icons/weather_icons.dart'; // Add this for log functionality
@@ -39,6 +37,8 @@ class _HomeScreenState extends State<HomeScreen> {
   bool isRefreshing = false;
   var weatherResponse;
   List<dynamic> crops = [];
+  late List<Placemark> placemarks = [];
+  var locationName = "";
   var i = 0;
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -61,6 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
       location = await determinePosition();
       // log('Location: $location');
       futureWeather = fetchWeather();
+      getlocationplacemark();
       await _getRecommendedCrops();
     } catch (e) {
       log('Error getting location: $e');
@@ -72,6 +73,26 @@ class _HomeScreenState extends State<HomeScreen> {
       name = fetchedname;
     });
   }
+
+  void getlocationplacemark() async {
+    placemarks = await placemarkFromCoordinates(location!.latitude, location!.longitude);
+    Placemark place = placemarks[0];
+    String name = place.name.toString();
+    String subLocality = place.subLocality.toString();
+    String locality = place.locality.toString();
+    String administrativeArea = place.administrativeArea.toString();
+    String postalCode = place.postalCode.toString();
+    String country = place.country.toString();
+    String address =
+        "${name} ${subLocality} ${locality} ${administrativeArea} ${postalCode} ${country}";
+    log('Address: $address');
+    locationName = address;
+    setState(() {
+      
+    });
+  }
+
+  // List<Placemark> placemarks = await placemarkFromCoordinates(52.2165157, 6.9437819);
 
   Future<WeatherResponse> fetchWeather() async {
     if (location == null) {
@@ -152,20 +173,49 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         shadowColor: AppColors.cardShadow,
         elevation: 10,
-        title: CustomTextWidget(
-          text: AppLocalizations.of(context)!.namaste + " " + name,
-          textColor: Colors.white,
-          fontSize: 20.0,
-          isBold: true,
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            CustomTextWidget(
+              text: AppLocalizations.of(context)!.namaste + " " + name,
+              textColor: Colors.white,
+              fontSize: 20.0,
+              isBold: true,
+            ),
+            (placemarks != [])
+                    ? Row(
+              children: [
+                Icon(
+                  Icons.location_on,
+                  color: Colors.white,
+                  size: 15,
+                ),
+                (placemarks != [])
+                    ? CustomTextWidget(
+                        text:
+                            locationName,
+                        textColor: Colors.white,
+                        fontSize: 10.0,
+                        isBold: true,
+                      )
+                    : CustomTextWidget(
+                        text: '--',
+                        textColor: Colors.white,
+                        fontSize: 10.0,
+                        isBold: true,
+                      ),
+              ],
+            ) : SizedBox(),
+          ],
         ),
         backgroundColor: AppColors.primary,
         actions: [
           IconButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/settings');
+                Navigator.pushNamed(context, '/chat');
               },
               icon: Icon(
-                Icons.notifications,
+                Icons.chat,
                 color: AppColors.white,
               )),
           SizedBox(width: 10.0),
