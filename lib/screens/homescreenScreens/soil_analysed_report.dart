@@ -97,14 +97,14 @@ class _SoilDataAnalyzedState extends State<SoilDataAnalyzed> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                _buildStatTile(AppLocalizations.of(context)!.pHLevel, (widget.soilData['ph_value']).toString(), 0),
+                _buildStatTile(AppLocalizations.of(context)!.pHLevel, (widget.soilData['ph_value']).toStringAsFixed(3), 0),
                 _buildStatTile(AppLocalizations.of(context)!.moisture, '42%', 1),
               ],
             ),
             const SizedBox(height: 16),
-            _buildNutrientBar(AppLocalizations.of(context)!.nitrogen, widget.soilData['n_value'] * 100, '%'),
-            _buildNutrientBar(AppLocalizations.of(context)!.phosphorus, widget.soilData['p_value'], 'ppm'),
-            _buildNutrientBar(AppLocalizations.of(context)!.potassium, widget.soilData['k_value'], 'ppm'),
+            _buildNutrientBar(AppLocalizations.of(context)!.nitrogen, widget.soilData['n_value'] * 10 , '${widget.soilData['n_value'].toStringAsFixed(3)} %'),
+            _buildNutrientBar(AppLocalizations.of(context)!.phosphorus, widget.soilData['p_value'] / 10, '${widget.soilData['p_value'].toStringAsFixed(3)} ppm'),
+            _buildNutrientBar(AppLocalizations.of(context)!.potassium, widget.soilData['k_value'] / 400, '${widget.soilData['k_value'].toStringAsFixed(2)} ppm'),
           ],
         ),
       ),
@@ -179,7 +179,7 @@ class _SoilDataAnalyzedState extends State<SoilDataAnalyzed> {
               children:[
                 CustomTextWidget(text: AppLocalizations.of(context)!.soilType, textColor: AppColors.textPrimary, isBold: true,),
                 // CustomTextWidget(text: , textColor: AppColors.textHint),
-                AutoTranslator().buildTranslatedText(context, 'clay loamy')
+                AutoTranslator().buildTranslatedText(context, widget.soilData['soil_type']),
               ],
             ),
           ],
