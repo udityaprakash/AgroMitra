@@ -46,7 +46,7 @@ class _CaptureSoilImageState extends State<CaptureSoilImage>
 
   Future<void> _pickImage(ImageSource source, String corner) async {
     try {
-      final pickedFile = await _picker.pickImage(source: source);
+      final pickedFile = await _picker.pickImage(source: source, imageQuality: 50);
       if (pickedFile != null) {
         setState(() {
           switch (corner) {
@@ -218,7 +218,7 @@ class _CaptureSoilImageState extends State<CaptureSoilImage>
 
   Future<void> _pickIndoorImage(ImageSource source) async {
     try {
-      final pickedFile = await _picker.pickImage(source: source);
+      final pickedFile = await _picker.pickImage(source: source, imageQuality: 50);
       if (pickedFile != null) {
         setState(() {
           _indoorImages.add(File(pickedFile.path));

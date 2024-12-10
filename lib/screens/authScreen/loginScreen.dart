@@ -270,7 +270,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           var res = await continuewithgoogle(
                             user.id.toString(),
                             user.email.toString(), 
-                            user.displayName.toString(), context);
+                            user.displayName.toString(), user.photoUrl.toString() ,context);
                             log("res is " + res.toString());
                           // _handlelogin(
                           //     user.email.toString(), user.id.toString(), 'google');

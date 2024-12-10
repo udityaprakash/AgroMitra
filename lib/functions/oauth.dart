@@ -6,7 +6,7 @@ import 'package:agromitra/utils/data/fetchInternetData.dart';
 import 'package:agromitra/utils/data/urls.dart';
 import 'package:flutter/material.dart';
 
-dynamic continuewithgoogle(id, email, fullname, context) async {
+dynamic continuewithgoogle(id, email, fullname,photoUrl, context) async {
   try {
     final lang = await StorageManager.readData('Lang');
     log('here languagereceived is :'+lang.toString());
@@ -18,6 +18,7 @@ dynamic continuewithgoogle(id, email, fullname, context) async {
         "email": email,
         "fullname": fullname,
         "language": lang.toString(),
+        "profile_pic":photoUrl.toString(),
         "loginType": "google"
       },
     );
