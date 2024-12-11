@@ -324,145 +324,12 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                   ),
                 ),
-                // CustomTextWidget(
-                //   text:
-                //       "Welcome to the Home Screen! $lang and $token location is $location",
-                //   textColor: AppColors.textPrimary,
-                //   fontSize: 18.0,
-                //   overflow: TextOverflow.clip,
-                // ),
 
                 Container(
                   width: double.infinity,
                   child: Column(
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                            flex: 4,
-                            child: CustomTextWidget(
-                              text: AppLocalizations.of(context)!
-                                  .recommended_crops,
-                              textColor: AppColors.textPrimary,
-                              fontSize: 18.0,
-                              isBold: true,
-                            ),
-                          ),
-                          // AutoTranslator().buildTranslatedText(
-                          //     context, "Recommended Crops"),
-                          // AutoTranslator().buildTranslatedText(
-                          //     context, "See All",
-                          //     textColor: AppColors.textHint),
-                          // Expanded(
-                          //   // flex: 2,
-                          //   // child: CustomTextWidget(
-                          //   //   text: AppLocalizations.of(context)!.see_all,
-                          //   //   textColor: AppColors.textHint,
-                          //   //   fontSize: 18.0,
-                          //   //   isBold: true,
-                          //   // ),
-                          // ),
-                        ],
-                      ),
-                      Container(
-                        height: 200,
-                        margin: EdgeInsets.only(bottom: 10.0),
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: crops.length,
-                          itemBuilder: (context, index) {
-                            final crop = crops[index];
-                            return Container(
-                              margin: EdgeInsets.all(10.0),
-                              width: 150,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(20),
-                                // border: Border.all(
-                                //   color: AppColors
-                                //       .background, // Replace with AppColors.cardShadow
-                                //   width: 1,
-                                // ),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey
-                                        .shade300, // Replace with AppColors.cardShadow
-                                    blurRadius: 10,
-                                    offset: Offset(0, 5),
-                                  ),
-                                ],
-                              ),
-                              child: InkWell(
-                                onTap: () {
-                                  Navigator.pushNamed(
-                                      context, '/detailedCropPosts',
-                                      arguments: {
-                                        'crop_name': crop['crop_name'],
-                                      });
-                                },
-                                child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Expanded(
-                                      flex: 3,
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.vertical(
-                                            top: Radius.circular(20)),
-                                        child: Image.network(
-                                          crop['image_url'] ?? '',
-                                          fit: BoxFit.cover,
-                                          width: double.infinity,
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(height: 10),
-                                    Expanded(
-                                      flex: 1,
-                                      child: AutoTranslator()
-                                          .buildTranslatedText(context,
-                                              crop['crop_name'] ?? '--',
-                                              isBold: false),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                      //             Container(
-                      //   width: 300,
-                      //   padding: const EdgeInsets.all(16),
-                      //   decoration: BoxDecoration(
-                      //     border: Border.all(color: Colors.grey, style: BorderStyle.values[1]),
-                      //     borderRadius: BorderRadius.circular(8),
-                      //   ),
-                      //   child: Column(
-                      //     mainAxisSize: MainAxisSize.min,
-                      //     children: [
-                      //       Icon(Icons.camera_alt, size: 40, color: Colors.grey),
-                      //       const SizedBox(height: 16),
-                      //       const Text(
-                      //         'Take a picture of your soil for instant analysis',
-                      //         textAlign: TextAlign.center,
-                      //         style: TextStyle(fontSize: 16, color: Colors.grey),
-                      //       ),
-                      //       const SizedBox(height: 16),
-                      //       ElevatedButton(
-                      //         onPressed: () {
-                      //           // Action for taking photo
-                      //         },
-                      //         style: ElevatedButton.styleFrom(
-                      //           backgroundColor: Colors.black,
-                      //           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 32),
-                      //         ),
-                      //         child: const Text('Take Photo', style: TextStyle(color: Colors.white)),
-                      //       ),
-                      //     ],
-                      //   ),
-                      // ),
+                      
                       Container(
                         width: double.infinity,
                         // height: 250,
@@ -486,7 +353,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 CustomTextWidget(
-                                  text: AppLocalizations.of(context)!.scanSoil,
+                                  text: AppLocalizations.of(context)!
+                                  .fertilizerCalculator,
                                   textColor: AppColors.textPrimary,
                                   fontSize: 18.0,
                                   isBold: true,
@@ -504,12 +372,12 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  Icon(Icons.camera_alt,
+                                  Icon(Icons.calculate,
                                       size: 40, color: Colors.grey),
                                   const SizedBox(height: 16),
                                   CustomTextWidget(
-                                    text: AppLocalizations.of(context)!
-                                        .scanSoilDescription,
+                                    text:AppLocalizations.of(context)!
+                                  .fertilizerCalculatorDescription ,
                                     textColor: AppColors.textHint,
                                     overflow: TextOverflow.clip,
                                     textAlign: TextAlign.center,
@@ -518,7 +386,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ElevatedButton(
                                     onPressed: () {
                                       Navigator.pushNamed(
-                                          context, '/captureSoilImage');
+                                  context, '/fertiliserCalculator');
                                     },
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: AppColors.primary,
@@ -527,7 +395,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                     child: CustomTextWidget(
                                         text: AppLocalizations.of(context)!
-                                            .take_photo,
+                                            .fertilizerCalculator,
                                         textColor: Colors.white),
                                     // child: const Text('Take Photo', style: TextStyle(color: Colors.white)),
                                   ),
@@ -549,16 +417,16 @@ class _HomeScreenState extends State<HomeScreen> {
                           InkWell(
                             onTap: () {
                               Navigator.pushNamed(
-                                  context, '/fertiliserCalculator');
+                                          context, '/captureSoilImage');
+                              
                             },
                             child: _buildCard(
                               // icon: Icons.camera_alt,
-                              icon: Icons.calculate,
-                              title: AppLocalizations.of(context)!
-                                  .fertilizerCalculator,
+                              icon: Icons.camera_alt,
+                              title: AppLocalizations.of(context)!.scanSoil,
                               // title: AppLocalizations.of(context)!.soil_analysis,
                               subtitle: AppLocalizations.of(context)!
-                                  .fertilizerCalculatorDescription,
+                                        .scanSoilDescription,
                               // subtitle: AppLocalizations.of(context)!.scan_soil_with_camera,
                               badgeText: "85%",
                               badgeColor: Colors.grey.shade300,
@@ -615,6 +483,84 @@ class _HomeScreenState extends State<HomeScreen> {
                         ],
                       ),
                       SizedBox(height: 20),
+                      
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            flex: 4,
+                            child: CustomTextWidget(
+                              text: AppLocalizations.of(context)!
+                                  .recommended_crops,
+                              textColor: AppColors.textPrimary,
+                              fontSize: 18.0,
+                              isBold: true,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Container(
+                        height: 200,
+                        margin: EdgeInsets.only(bottom: 10.0),
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: crops.length,
+                          itemBuilder: (context, index) {
+                            final crop = crops[index];
+                            return Container(
+                              margin: EdgeInsets.all(10.0),
+                              width: 150,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(20),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey
+                                        .shade300,
+                                    blurRadius: 10,
+                                    offset: Offset(0, 5),
+                                  ),
+                                ],
+                              ),
+                              child: InkWell(
+                                onTap: () {
+                                  Navigator.pushNamed(
+                                      context, '/detailedCropPosts',
+                                      arguments: {
+                                        'crop_name': crop['crop_name'],
+                                      });
+                                },
+                                child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                      flex: 3,
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.vertical(
+                                            top: Radius.circular(20)),
+                                        child: Image.network(
+                                          crop['image_url'] ?? '',
+                                          fit: BoxFit.cover,
+                                          width: double.infinity,
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(height: 10),
+                                    Expanded(
+                                      flex: 1,
+                                      child: AutoTranslator()
+                                          .buildTranslatedText(context,
+                                              crop['crop_name'] ?? '--',
+                                              isBold: false),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
                       Container(
                         // width: MediaQuery.of(context).size.width * 0.6,
                         child: CustomButton(
@@ -627,7 +573,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   AppLocalizations.of(context)!.comingSoon);
                               // showSnackbarAutoTranslated(context, AppLocalizations.of(context)!.comingSoon);
                             }),
-                      )
+                      ),
                     ],
                   ),
                 ),

@@ -1,5 +1,6 @@
 import 'package:agromitra/constant/color.dart';
 import 'package:agromitra/functions/loading.dart';
+import 'package:agromitra/utils/data/urls.dart';
 import 'package:agromitra/utils/ui/custom-text.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -23,7 +24,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
 
   // Fetch notifications from the API
   Future<void> fetchNotifications() async {
-    const String url = 'https://sih-agromitra-new-server-psi.vercel.app/notifications'; // API URL
+    const String url = '${UrlProvider.baseUrlbytushar}/notifications'; // API URL
     try {
       final response = await http.get(Uri.parse(url));
 

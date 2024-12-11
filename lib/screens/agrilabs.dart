@@ -94,19 +94,21 @@ class _FetchIdsAndCentersState extends State<FetchIdsAndCenters> {
             (d) => d['name'].toLowerCase() == widget.districtName.toLowerCase(),
             orElse: () => null);
         if (district == null) {
-          throw Exception("District not found");
+          throw Exception("District not found in Government Database showing nearest centers");
         }
         districtId = district['_id'];
+        // districtId = "63f874fac660ddb22345c5ce";
       } else {
         throw Exception("Failed to fetch districts");
       }
 
-      // Step 3: Fetch Test Centers
       await fetchTestCenters();
     } catch (e) {
+      districtId = "63f874fac660ddb22345c5ce";
+      await fetchTestCenters();
       print("Error: $e");
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Error: ${e.toString()}")),
+        SnackBar(content: Text("${e.toString()}")),
       );
     } finally {
       setState(() {
