@@ -25,6 +25,10 @@ class UrlProvider {
   static const String getNPKValuesUrl =
       "https://npk-final-api.onrender.com/predict_npk";
 
+  static const String getcropsrecommendedonNPMUrl =
+      "${baseUrlOfMl}/cropDetail";    
+
+
   //home screen
   static const String fetchweatherUrl = "${authBaseUrl}/weather/";
   static const String recommendcropURL = "${baseUrlOfMl}/predict/";

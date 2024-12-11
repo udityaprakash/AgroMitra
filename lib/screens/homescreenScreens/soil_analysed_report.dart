@@ -1,4 +1,8 @@
+import 'dart:convert';
+import 'dart:developer';
 import 'dart:ui';
+import 'package:agromitra/utils/data/urls.dart';
+import 'package:http/http.dart' as http;
 
 import 'package:agromitra/constant/color.dart';
 import 'package:agromitra/functions/autotranslator.dart';
@@ -16,14 +20,46 @@ class SoilDataAnalyzed extends StatefulWidget {
   _SoilDataAnalyzedState createState() => _SoilDataAnalyzedState();
 }
 
-
 class _SoilDataAnalyzedState extends State<SoilDataAnalyzed> {
+  List<dynamic> crops = [];
+  bool isLoadingCrops = true;
+
+  @override
+  void initState() {
+    super.initState(); // Correct usage of super
+    fetchBestCrops();
+  }
+
+  Future<void> fetchBestCrops() async {
+    final url = Uri.parse(UrlProvider.getcropsrecommendedonNPMUrl);
+    try {
+      final response = await http.get(url);
+        final data = jsonDecode(response.body);
+        log(data['success'].toString());
+        if (data['success']) {
+          crops = data['Crops'];
+          setState(() {
+            isLoadingCrops = false;
+          });
+        }
+    } catch (error) {
+      log('Error fetching crops: $error');
+      setState(() {
+        isLoadingCrops = false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.newbackground,
-      appBar: AppBar( 
-        title: CustomTextWidget(text: AppLocalizations.of(context)!.soil_analysis, textColor: AppColors.white, fontSize: 20,),
+      appBar: AppBar(
+        title: CustomTextWidget(
+          text: AppLocalizations.of(context)!.soil_analysis,
+          textColor: AppColors.white,
+          fontSize: 20,
+        ),
         backgroundColor: AppColors.primary,
         elevation: 5,
         centerTitle: true,
@@ -34,33 +70,41 @@ class _SoilDataAnalyzedState extends State<SoilDataAnalyzed> {
           },
         ),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildCurrentAnalysisCard(),
+      body: RefreshIndicator(
+        onRefresh: () async {
+          setState(() {
+            isLoadingCrops = true;
+          });
+          await fetchBestCrops();
+        },
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildCurrentAnalysisCard(),
 
-            const SizedBox(height: 16),
+              const SizedBox(height: 16),
 
-            _buildSoilTypeCard(),
+              _buildSoilTypeCard(),
 
-            const SizedBox(height: 16),
+              const SizedBox(height: 16),
 
-            _buildBestCropsToGrow(),
+              _buildBestCropsToGrow(),
 
-            const SizedBox(height: 16),
+              const SizedBox(height: 16),
 
-            _buildCustomCropSelection(),
+              _buildCustomCropSelection(),
 
-            const SizedBox(height: 16),
+              const SizedBox(height: 16),
 
-            // _buildRecentSamples(),
+              // _buildRecentSamples(),
 
-            // const SizedBox(height: 16),
+              // const SizedBox(height: 16),
 
-            _buildRecommendations(),
-          ],
+              _buildRecommendations(),
+            ],
+          ),
         ),
       ),
     );
@@ -83,12 +127,18 @@ class _SoilDataAnalyzedState extends State<SoilDataAnalyzed> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    CustomTextWidget(text: AppLocalizations.of(context)!.currentAnalysis, textColor: AppColors.textPrimary, isBold: true,),
+                    CustomTextWidget(
+                      text: AppLocalizations.of(context)!.currentAnalysis,
+                      textColor: AppColors.textPrimary,
+                      isBold: true,
+                    ),
                     // Text(
                     //   'Current Analysis',
                     //   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     // ),
-                    CustomTextWidget(text: AppLocalizations.of(context)!.fieldSection, textColor: AppColors.textHint)
+                    CustomTextWidget(
+                        text: AppLocalizations.of(context)!.fieldSection,
+                        textColor: AppColors.textHint)
                   ],
                 ),
               ],
@@ -97,14 +147,25 @@ class _SoilDataAnalyzedState extends State<SoilDataAnalyzed> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                _buildStatTile(AppLocalizations.of(context)!.pHLevel, (widget.soilData['ph_value']).toStringAsFixed(3), 0),
-                _buildStatTile(AppLocalizations.of(context)!.moisture, '42%', 1),
+                _buildStatTile(AppLocalizations.of(context)!.pHLevel,
+                    (widget.soilData['ph_value']).toStringAsFixed(3), 0),
+                _buildStatTile(
+                    AppLocalizations.of(context)!.moisture, '42%', 1),
               ],
             ),
             const SizedBox(height: 16),
-            _buildNutrientBar(AppLocalizations.of(context)!.nitrogen, widget.soilData['n_value'] * 10 , '${widget.soilData['n_value'].toStringAsFixed(3)} %'),
-            _buildNutrientBar(AppLocalizations.of(context)!.phosphorus, widget.soilData['p_value'] / 10, '${widget.soilData['p_value'].toStringAsFixed(3)} ppm'),
-            _buildNutrientBar(AppLocalizations.of(context)!.potassium, widget.soilData['k_value'] / 400, '${widget.soilData['k_value'].toStringAsFixed(2)} ppm'),
+            _buildNutrientBar(
+                AppLocalizations.of(context)!.nitrogen,
+                widget.soilData['n_value'] * 10,
+                '${widget.soilData['n_value'].toStringAsFixed(3)} %'),
+            _buildNutrientBar(
+                AppLocalizations.of(context)!.phosphorus,
+                widget.soilData['p_value'] / 10,
+                '${widget.soilData['p_value'].toStringAsFixed(3)} ppm'),
+            _buildNutrientBar(
+                AppLocalizations.of(context)!.potassium,
+                widget.soilData['k_value'] / 400,
+                '${widget.soilData['k_value'].toStringAsFixed(2)} ppm'),
           ],
         ),
       ),
@@ -117,14 +178,27 @@ class _SoilDataAnalyzedState extends State<SoilDataAnalyzed> {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
-        color: index == 0 ? Color.fromARGB(255, 232, 255, 237) :const Color.fromARGB(255, 213, 234, 255),
+        color: index == 0
+            ? Color.fromARGB(255, 232, 255, 237)
+            : const Color.fromARGB(255, 213, 234, 255),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CustomTextWidget(text: title,isBold: true, textColor: index == 0 ? const Color.fromARGB(255, 33, 99, 24) : const Color.fromARGB(255, 18, 86, 212)),
+          CustomTextWidget(
+              text: title,
+              isBold: true,
+              textColor: index == 0
+                  ? const Color.fromARGB(255, 33, 99, 24)
+                  : const Color.fromARGB(255, 18, 86, 212)),
           const SizedBox(height: 8),
-          CustomTextWidget(text: value, textColor: index == 0 ? const Color.fromARGB(255, 33, 99, 24) : const Color.fromARGB(255, 18, 86, 212), fontSize: 25, isBold: true),
+          CustomTextWidget(
+              text: value,
+              textColor: index == 0
+                  ? const Color.fromARGB(255, 33, 99, 24)
+                  : const Color.fromARGB(255, 18, 86, 212),
+              fontSize: 25,
+              isBold: true),
         ],
       ),
     );
@@ -165,21 +239,27 @@ class _SoilDataAnalyzedState extends State<SoilDataAnalyzed> {
         child: Row(
           children: [
             Container(
-                height: 48,
-                width: 48,
-                decoration: BoxDecoration(
-                  color: Colors.grey[300],
-                  borderRadius: BorderRadius.circular(24),
-                ),
-              child: Icon(Icons.terrain, size: 32, color: const Color.fromARGB(255, 130, 103, 27)),
+              height: 48,
+              width: 48,
+              decoration: BoxDecoration(
+                color: Colors.grey[300],
+                borderRadius: BorderRadius.circular(24),
               ),
+              child: Icon(Icons.terrain,
+                  size: 32, color: const Color.fromARGB(255, 130, 103, 27)),
+            ),
             const SizedBox(width: 8),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children:[
-                CustomTextWidget(text: AppLocalizations.of(context)!.soilType, textColor: AppColors.textPrimary, isBold: true,),
+              children: [
+                CustomTextWidget(
+                  text: AppLocalizations.of(context)!.soilType,
+                  textColor: AppColors.textPrimary,
+                  isBold: true,
+                ),
                 // CustomTextWidget(text: , textColor: AppColors.textHint),
-                AutoTranslator().buildTranslatedText(context, widget.soilData['soil_type']),
+                AutoTranslator()
+                    .buildTranslatedText(context, widget.soilData['soil_type']),
               ],
             ),
           ],
@@ -192,27 +272,64 @@ class _SoilDataAnalyzedState extends State<SoilDataAnalyzed> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        CustomTextWidget(text: AppLocalizations.of(context)!.bestCropsToGrow, textColor: AppColors.textPrimary, isBold: true,),
-        const SizedBox(height: 8),
-        GridView.count(
-          crossAxisCount: 2,
-          shrinkWrap: true,
-          crossAxisSpacing: 8,
-          mainAxisSpacing: 8,
-          physics: const NeverScrollableScrollPhysics(),
-          children: [
-            _buildCropCard('https://imgs.search.brave.com/5wCarlbEu2qsKumvJ94-tV0jeoE0uYIvzv2kHMekLq8/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5pc3RvY2twaG90/by5jb20vaWQvNDgz/Njc3NjU5L3Bob3Rv/L3doZWF0LWdyYWlu/cy5qcGc_cz02MTJ4/NjEyJnc9MCZrPTIw/JmM9Zm16ZmhzMFdw/b0JjaEk3Z2hoNkx6/dkVfXy1YR2ZFVDFX/OGxEZ0F0aXNxST0','Wheat', 'High success rate'),
-
-            _buildCropCard('https://imgs.search.brave.com/m5FHIf_K8jpld4PXfDXdwCf0jIsI8PO-CWqYUZ6ssGQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5pc3RvY2twaG90/by5jb20vaWQvMTgw/MTk4MTA3L3Bob3Rv/L2Nvcm4tZmllbGQu/anBnP3M9NjEyeDYx/MiZ3PTAmaz0yMCZj/PTNmTG1TdU1ESVRl/eEd5MjhLOTF3S3VH/Rk84cTc3OElPZ05E/eUZvLTNhOEU9','Corn', 'Good compatibility'),
-            _buildCropCard('https://imgs.search.brave.com/yUtvh7YQufmJgmUXjmX28oBvxLJAqVlWKlP41Aa9Uzs/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTIw/NDQ3MTkyNi9waG90/by9zb3liZWFuLWNy/b3AtMjAyMC1pbi10/aGUtc3RhdGUtb2Yt/cGFyYW4lQzMlQTEt/aW4tYnJhemlsLmpw/Zz9zPTYxMng2MTIm/dz0wJms9MjAmYz1x/NkxtSjB5dnY5YVYx/MVBqZ0VaM3dxaENp/UXZHNGJLTy1sbG5h/c2tWdldrPQ','Soybean', 'Optimal conditions'),
-            _buildCropCard('https://imgs.search.brave.com/Ck55_SHaJeXHTq-G56YW0rz6Nd0DSjyd-IUZLxY7Ghc/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzAxLzAzLzI2LzQx/LzM2MF9GXzEwMzI2/NDEzMl9WRFFJZkp2/YUVNcEw1WmpVM1g5/a3JhRUppcmJSQ1pr/WS5qcGc','Barley', 'Suitable pH level'),
-          ],
+        CustomTextWidget(
+          text: AppLocalizations.of(context)!.bestCropsToGrow,
+          textColor: AppColors.textPrimary,
+          isBold: true,
         ),
+        const SizedBox(height: 8),
+        isLoadingCrops
+            ? const Center(child: CircularProgressIndicator())
+            : crops.length == 0
+                ? const Text('No crops found.')
+                : GridView.builder(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 8,
+                      mainAxisSpacing: 8,
+                    ),
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: crops.length < 6 ? crops.length : 6,
+                    itemBuilder: (context, index) {
+                      final crop = crops[index];
+                      return _buildCropCard(
+                        crop['image_url'] ?? '',
+                        crop['crop_name'] ?? 'Unknown',
+                        'High success rate',
+                      );
+                    },
+                  ),
       ],
     );
   }
 
-  Widget _buildCropCard(String imageurl,String title, String subtitle) {
+  // Widget _buildBestCropsToGrow() {
+  //   return Column(
+  //     crossAxisAlignment: CrossAxisAlignment.start,
+  //     children: [
+  //       CustomTextWidget(text: AppLocalizations.of(context)!.bestCropsToGrow, textColor: AppColors.textPrimary, isBold: true,),
+  //       const SizedBox(height: 8),
+  //       GridView.count(
+  //         crossAxisCount: 2,
+  //         shrinkWrap: true,
+  //         crossAxisSpacing: 8,
+  //         mainAxisSpacing: 8,
+  //         physics: const NeverScrollableScrollPhysics(),
+  //         children: [
+  //           _buildCropCard('https://imgs.search.brave.com/5wCarlbEu2qsKumvJ94-tV0jeoE0uYIvzv2kHMekLq8/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5pc3RvY2twaG90/by5jb20vaWQvNDgz/Njc3NjU5L3Bob3Rv/L3doZWF0LWdyYWlu/cy5qcGc_cz02MTJ4/NjEyJnc9MCZrPTIw/JmM9Zm16ZmhzMFdw/b0JjaEk3Z2hoNkx6/dkVfXy1YR2ZFVDFX/OGxEZ0F0aXNxST0','Wheat', 'High success rate'),
+
+  //           _buildCropCard('https://imgs.search.brave.com/m5FHIf_K8jpld4PXfDXdwCf0jIsI8PO-CWqYUZ6ssGQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5pc3RvY2twaG90/by5jb20vaWQvMTgw/MTk4MTA3L3Bob3Rv/L2Nvcm4tZmllbGQu/anBnP3M9NjEyeDYx/MiZ3PTAmaz0yMCZj/PTNmTG1TdU1ESVRl/eEd5MjhLOTF3S3VH/Rk84cTc3OElPZ05E/eUZvLTNhOEU9','Corn', 'Good compatibility'),
+  //           _buildCropCard('https://imgs.search.brave.com/yUtvh7YQufmJgmUXjmX28oBvxLJAqVlWKlP41Aa9Uzs/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTIw/NDQ3MTkyNi9waG90/by9zb3liZWFuLWNy/b3AtMjAyMC1pbi10/aGUtc3RhdGUtb2Yt/cGFyYW4lQzMlQTEt/aW4tYnJhemlsLmpw/Zz9zPTYxMng2MTIm/dz0wJms9MjAmYz1x/NkxtSjB5dnY5YVYx/MVBqZ0VaM3dxaENp/UXZHNGJLTy1sbG5h/c2tWdldrPQ','Soybean', 'Optimal conditions'),
+  //           _buildCropCard('https://imgs.search.brave.com/Ck55_SHaJeXHTq-G56YW0rz6Nd0DSjyd-IUZLxY7Ghc/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzAxLzAzLzI2LzQx/LzM2MF9GXzEwMzI2/NDEzMl9WRFFJZkp2/YUVNcEw1WmpVM1g5/a3JhRUppcmJSQ1pr/WS5qcGc','Barley', 'Suitable pH level'),
+  //         ],
+  //       ),
+  //     ],
+  //   );
+  // }
+
+  Widget _buildCropCard(String imageurl, String title, String subtitle) {
     return Card(
       color: AppColors.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
@@ -228,13 +345,44 @@ class _SoilDataAnalyzedState extends State<SoilDataAnalyzed> {
               child: Image.network(imageurl, fit: BoxFit.cover),
             ),
             const SizedBox(height: 8),
-            CustomTextWidget(text: title, textColor: AppColors.textPrimary, isBold: true,),
-            CustomTextWidget(text: subtitle, textColor: AppColors.textHint)
+            CustomTextWidget(
+              text: title,
+              textColor: AppColors.textPrimary,
+              isBold: true,
+            ),
+            CustomTextWidget(
+              text: subtitle,
+              textColor: AppColors.textHint,
+            ),
           ],
         ),
       ),
     );
   }
+
+  // Widget _buildCropCard(String imageurl,String title, String subtitle) {
+  //   return Card(
+  //     color: AppColors.white,
+  //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+  //     child: Padding(
+  //       padding: const EdgeInsets.all(8),
+  //       child: Column(
+  //         crossAxisAlignment: CrossAxisAlignment.start,
+  //         children: [
+  //           Container(
+  //             height: 100,
+  //             width: double.infinity,
+  //             color: Colors.grey[300],
+  //             child: Image.network(imageurl, fit: BoxFit.cover),
+  //           ),
+  //           const SizedBox(height: 8),
+  //           CustomTextWidget(text: title, textColor: AppColors.textPrimary, isBold: true,),
+  //           CustomTextWidget(text: subtitle, textColor: AppColors.textHint)
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
 
   Widget _buildCustomCropSelection() {
     return Card(
@@ -246,14 +394,20 @@ class _SoilDataAnalyzedState extends State<SoilDataAnalyzed> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CustomTextWidget(text: AppLocalizations.of(context)!.customCropSelection, textColor: AppColors.textPrimary, isBold: true,fontSize: 18,),
+            CustomTextWidget(
+              text: AppLocalizations.of(context)!.customCropSelection,
+              textColor: AppColors.textPrimary,
+              isBold: true,
+              fontSize: 18,
+            ),
             const SizedBox(height: 8),
             TextField(
               style: customTextStyle(color: AppColors.textHint, size: 15),
               decoration: InputDecoration(
                 hintText: AppLocalizations.of(context)!.searchForCrops,
                 prefixIcon: Icon(Icons.search),
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                border:
+                    OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
               ),
             ),
             const SizedBox(height: 16),
@@ -272,11 +426,18 @@ class _SoilDataAnalyzedState extends State<SoilDataAnalyzed> {
               children: [
                 Expanded(
                   flex: 5,
-                  child: CustomButton(backgroundColor: AppColors.primary, textColor: AppColors.white, text: AppLocalizations.of(context)!.analyzeCompatibility, onPressed: () {
-                  
-                  }),
+                  child: CustomButton(
+                      backgroundColor: AppColors.primary,
+                      textColor: AppColors.white,
+                      text: AppLocalizations.of(context)!.analyzeCompatibility,
+                      onPressed: () {}),
                 ),
-                CustomTextWidget(text: '   56%', textColor: AppColors.error, isBold: true, fontSize: 16,),
+                CustomTextWidget(
+                  text: '   56%',
+                  textColor: AppColors.error,
+                  isBold: true,
+                  fontSize: 16,
+                ),
               ],
             ),
           ],
@@ -327,7 +488,11 @@ class _SoilDataAnalyzedState extends State<SoilDataAnalyzed> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CustomTextWidget(text:AppLocalizations.of(context)!.recommendations, textColor: AppColors.textPrimary, isBold: true,),
+            CustomTextWidget(
+              text: AppLocalizations.of(context)!.recommendations,
+              textColor: AppColors.textPrimary,
+              isBold: true,
+            ),
             const SizedBox(height: 8),
             _buildRecommendationItem(
               AppLocalizations.of(context)!.increaseNitrogen,
@@ -346,7 +511,8 @@ class _SoilDataAnalyzedState extends State<SoilDataAnalyzed> {
     );
   }
 
-  Widget _buildRecommendationItem(String title, String subtitle, Color iconColor) {
+  Widget _buildRecommendationItem(
+      String title, String subtitle, Color iconColor) {
     return Row(
       children: [
         Icon(Icons.circle, color: iconColor, size: 12),
@@ -355,8 +521,16 @@ class _SoilDataAnalyzedState extends State<SoilDataAnalyzed> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              CustomTextWidget(text: title, textColor: AppColors.textPrimary, isBold: true, overflow: TextOverflow.clip,),
-              CustomTextWidget(text: subtitle,overflow: TextOverflow.clip, textColor: AppColors.textHint),
+              CustomTextWidget(
+                text: title,
+                textColor: AppColors.textPrimary,
+                isBold: true,
+                overflow: TextOverflow.clip,
+              ),
+              CustomTextWidget(
+                  text: subtitle,
+                  overflow: TextOverflow.clip,
+                  textColor: AppColors.textHint),
             ],
           ),
         ),
