@@ -61,13 +61,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
       appBar: AppBar(
         backgroundColor: AppColors.primary,
         title: CustomTextWidget(
-            text: AppLocalizations.of(context)!.settings, textColor: AppColors.white, fontSize: 20),
+            text: AppLocalizations.of(context)!.settings,
+            textColor: AppColors.white,
+            fontSize: 20),
       ),
       body: ListView(
         padding: EdgeInsets.all(16),
         children: [
           // Language Preferences
-          _buildSectionHeader(AppLocalizations.of(context)!.languagePreferences),
+          _buildSectionHeader(
+              AppLocalizations.of(context)!.languagePreferences),
           DropdownButtonFormField<String>(
             value: context.read<LanguageProvider>().selectedLocale.languageCode,
             items: languages.map((language) {
@@ -110,9 +113,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ListTile(
             leading: Icon(Icons.logout),
             title: CustomTextWidget(
-                text: AppLocalizations.of(context)!.logout, textColor: AppColors.textPrimary, fontSize: 16),
-            onTap: () {
-              // Perform Logout
+                text: AppLocalizations.of(context)!.logout,
+                textColor: AppColors.textPrimary,
+                fontSize: 16),
+            onTap: () async {
+              await StorageManager.deleteAllData();
+              Navigator.pushReplacementNamed(context, '/login');
             },
           ),
           SizedBox(height: 24),
@@ -120,23 +126,24 @@ class _SettingsScreenState extends State<SettingsScreen> {
           // Location Settings
           _buildSectionHeader(AppLocalizations.of(context)!.locationSettings),
           SwitchListTile(
-                title: CustomTextWidget(
-                    text: AppLocalizations.of(context)!.changeLocation,
-                    textColor: AppColors.textPrimary,
-                    fontSize: 16),
-                activeColor: AppColors.primary,
-                inactiveTrackColor: AppColors.newbackground,
-                onChanged: (value) {
-                  setState(() {
-                    cropAlertsEnabled = value;
-                  });
-                },
-                value: locationEnabled,
-              ),
+            title: CustomTextWidget(
+                text: AppLocalizations.of(context)!.changeLocation,
+                textColor: AppColors.textPrimary,
+                fontSize: 16),
+            activeColor: AppColors.primary,
+            inactiveTrackColor: AppColors.newbackground,
+            onChanged: (value) {
+              setState(() {
+                cropAlertsEnabled = value;
+              });
+            },
+            value: locationEnabled,
+          ),
           SizedBox(height: 24),
 
           // Notification Preferences
-          _buildSectionHeader(AppLocalizations.of(context)!.notificationPreferences),
+          _buildSectionHeader(
+              AppLocalizations.of(context)!.notificationPreferences),
           SwitchListTile(
             title: CustomTextWidget(
                 text: AppLocalizations.of(context)!.cropAlerts,
@@ -204,7 +211,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ListTile(
             leading: Icon(Icons.help_outline),
             title: CustomTextWidget(
-                text: AppLocalizations.of(context)!.faqs, textColor: AppColors.textPrimary, fontSize: 16),
+                text: AppLocalizations.of(context)!.faqs,
+                textColor: AppColors.textPrimary,
+                fontSize: 16),
             onTap: () {
               // Navigate to FAQs Screen
             },
@@ -259,8 +268,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 text: AppLocalizations.of(context)!.dataDeletionRequest,
                 textColor: AppColors.textPrimary,
                 fontSize: 16),
-            onTap: () {
-              // Navigate to Data Deletion Request Screen
+            onTap: () async {
+              await StorageManager.deleteAllData();
+              // Navigator.pop(context);
+              Navigator.pushReplacementNamed(context, '/login');
             },
           ),
         ],
