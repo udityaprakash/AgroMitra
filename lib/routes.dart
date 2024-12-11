@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:agromitra/constant/color.dart';
 import 'package:agromitra/functions/internet-connectivity.dart';
+import 'package:agromitra/screens/agrilabs.dart';
 import 'package:agromitra/screens/authScreen/emailScreenforgetPassword.dart';
 import 'package:agromitra/screens/authScreen/enterOtpScreen.dart';
 import 'package:agromitra/screens/authScreen/loginScreen.dart';
@@ -100,6 +101,12 @@ class CustomRoute {
         case "/weatherForecast":
         final args = settings.arguments as Map<String, dynamic>;
           return WeatherForecastScreen( latitude: args['lat'], longitude: args['lon']);
+
+        case "/agriLabs":
+        final args = settings.arguments as Map<String, dynamic>;
+          return FetchIdsAndCenters(districtName: args['districtName'], stateName: args['stateName']); 
+
+
       }
       log("Settings name: " + (settings.name).toString());
       return SomethingWentWrong();

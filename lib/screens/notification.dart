@@ -137,14 +137,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                 color: Colors.black54,
                               ),
                             ),
-                            title: Text(
-                              notification['title'] ?? '',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
-                              ),
-                            ),
-                            subtitle: Text(notification['description'] ?? ''),
+                            title: CustomTextWidget(text: notification['title'] ?? '', textColor: AppColors.textPrimary, isBold: true),
+                            subtitle: CustomTextWidget(text: notification['description'] ?? '', textColor: AppColors.textPrimary, overflow: TextOverflow.clip,),
                             trailing: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
@@ -155,12 +149,12 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                     // Update the state if necessary
                                   },
                                 ),
-                                IconButton(
-                                  icon: Icon(Icons.share, color: Colors.blue),
-                                  onPressed: () {
-                                    // Handle share functionality
-                                  },
-                                ),
+                                // IconButton(
+                                //   icon: Icon(Icons.share, color: Colors.blue),
+                                //   onPressed: () {
+                                //     // Handle share functionality
+                                //   },
+                                // ),
                               ],
                             ),
                           ),

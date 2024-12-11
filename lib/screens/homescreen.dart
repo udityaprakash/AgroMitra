@@ -39,6 +39,8 @@ class _HomeScreenState extends State<HomeScreen> {
   List<dynamic> crops = [];
   late List<Placemark> placemarks = [];
   var locationName = "";
+  var stateName = "";
+  var districtName = "";
   var i = 0;
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -87,6 +89,8 @@ class _HomeScreenState extends State<HomeScreen> {
         "${name} ${subLocality} ${locality} ${administrativeArea} ${postalCode} ${country}";
     log('Address: $address');
     locationName = address;
+    stateName = administrativeArea;
+    districtName = locality;
     setState(() {
       
     });
@@ -590,12 +594,23 @@ class _HomeScreenState extends State<HomeScreen> {
                                   .digital_soil_mapping_data,
                             ),
                           ),
-                          _buildCard(
-                            icon: Icons.store,
-                            title: AppLocalizations.of(context)!.agri_clinics,
-                            subtitle: AppLocalizations.of(context)!
-                                .find_nearby_testing_clinics,
-                            iconColor: Colors.purple,
+                          InkWell(
+                            onTap: () {
+                              if(stateName == "" || districtName == "") {
+                                return;
+                              }
+                              Navigator.pushNamed(context, '/agriLabs', arguments: {
+                                'districtName': districtName,
+                                'stateName': stateName,
+                              });
+                            },
+                            child: _buildCard(
+                              icon: Icons.store,
+                              title: AppLocalizations.of(context)!.agri_clinics,
+                              subtitle: AppLocalizations.of(context)!
+                                  .find_nearby_testing_clinics,
+                              iconColor: Colors.purple,
+                            ),
                           ),
                         ],
                       ),

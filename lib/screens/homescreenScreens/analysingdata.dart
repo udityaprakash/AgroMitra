@@ -96,7 +96,7 @@ class _SoilAnalysisScreenState extends State<SoilAnalysisScreen> {
       );
 
       final response = await fetchData.postUnhandled();
-      // log(response.toString());
+      log(response.toString());
       // Parse and return the response
       return response as Map<String, dynamic>;
     } catch (e) {
