@@ -405,6 +405,23 @@ class _HomeScreenState extends State<HomeScreen> {
                           ],
                         ),
                       ),
+                      Container(
+                        // width: MediaQuery.of(context).size.width * 0.6,
+                        child: CustomButton(
+                            backgroundColor: AppColors.textPrimary,
+                            textColor: AppColors.textHint,
+                            text: AppLocalizations.of(context)!
+                                .uploadSoilHealthCard,
+                            onPressed: () {
+                              
+                              Navigator.pushNamed(
+                                  context, '/uploadsoilheathcard');
+                              // customShowSnackbar(context,
+                              //     AppLocalizations.of(context)!.comingSoon);
+                              // showSnackbarAutoTranslated(context, AppLocalizations.of(context)!.comingSoon);
+                            }),
+                      ),
+                      SizedBox(height:20.0),
                       GridView.count(
                         crossAxisCount: 2,
                         mainAxisSpacing: 16,
@@ -573,19 +590,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           },
                         ),
                       ),
-                      Container(
-                        // width: MediaQuery.of(context).size.width * 0.6,
-                        child: CustomButton(
-                            backgroundColor: AppColors.textPrimary,
-                            textColor: AppColors.textHint,
-                            text: AppLocalizations.of(context)!
-                                .uploadSoilHealthCard,
-                            onPressed: () {
-                              customShowSnackbar(context,
-                                  AppLocalizations.of(context)!.comingSoon);
-                              // showSnackbarAutoTranslated(context, AppLocalizations.of(context)!.comingSoon);
-                            }),
-                      ),
+                      
                     ],
                   ),
                 ),

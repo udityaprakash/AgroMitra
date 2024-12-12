@@ -21,6 +21,7 @@ import 'package:agromitra/screens/homescreenScreens/getnpkautofromgov.dart';
 import 'package:agromitra/screens/homescreenScreens/sevendayforecast.dart';
 import 'package:agromitra/screens/homescreenScreens/soil_analysed_report.dart';
 import 'package:agromitra/screens/homescreenScreens/soilgridmaps.dart';
+import 'package:agromitra/screens/homescreenScreens/uploadsoilhealthcard.dart';
 import 'package:agromitra/screens/mainScreen.dart';
 import 'package:agromitra/screens/splashScreen.dart';
 import 'package:agromitra/utils/ui/custom-text.dart';
@@ -110,6 +111,8 @@ class CustomRoute {
         final args = settings.arguments as Map<String, dynamic>;
           return FetchIdsAndCenters(districtName: args['districtName'], stateName: args['stateName']); 
 
+        case "/uploadsoilheathcard":
+          return UploadSoilHeathCard();
 
       }
       log("Settings name: " + (settings.name).toString());
