@@ -93,6 +93,7 @@ flutter:
     - assets/svgs/features/0.svg
     - assets/svgs/features/1.svg
     - assets/svgs/features/2.svg
+    - assets/svgs/features/qwe.png
 
     - assets/fonts/Parkinsans-VariableFont_wght.ttf
 

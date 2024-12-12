@@ -131,7 +131,7 @@ class _IntoScreenState extends State<IntroScreen> {
                     // ),
                 Container(
                   height: size.height / 2,
-                  child:
+                  child:(index == 2) ? Image.asset('assets/svgs/features/qwe.png') :
                       SvgPicture.asset("assets/svgs/features/${data[index]['image']}"),
                 ),
                 Row(

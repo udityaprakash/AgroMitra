@@ -25,9 +25,7 @@ class _UploadSoilHeathCardState extends State<UploadSoilHeathCard> {
   dynamic nutrientData;
   bool isloading = false;
   void _showIndoorImagePicker() {
-    setState(){
-      isloading = true;
-    }
+    
     showModalBottomSheet(
       context: context,
       builder: (context) => SafeArea(
@@ -41,6 +39,9 @@ class _UploadSoilHeathCardState extends State<UploadSoilHeathCard> {
                   fontSize: 18,
                   textColor: AppColors.textPrimary),
               onTap: () {
+                setState(){
+                  isloading = true;
+                }
                 Navigator.of(context).pop();
                 _pickIndoorImage(ImageSource.camera);
               },
@@ -52,6 +53,9 @@ class _UploadSoilHeathCardState extends State<UploadSoilHeathCard> {
                   fontSize: 18,
                   textColor: AppColors.textPrimary),
               onTap: () {
+                setState(){
+                  isloading = true;
+                }
                 Navigator.of(context).pop();
                 _pickIndoorImage(ImageSource.gallery);
               },
@@ -128,22 +132,22 @@ class _UploadSoilHeathCardState extends State<UploadSoilHeathCard> {
                     textColor: AppColors.textPrimary,
                   ),
                   CustomTextWidget(
-                    text: "N: ${nutrientData['data']['Nitrogen']}",
+                    text: "N: ${nutrientData['data']['Nitrogen']} kg/ha",
                     fontSize: 18,
                     textColor: AppColors.textPrimary,
                   ),
                   CustomTextWidget(
-                    text: "OC: ${nutrientData['data']['Organic Carbon']}",
+                    text: "OC: ${nutrientData['data']['Organic Carbon']} %",
                     fontSize: 18,
                     textColor: AppColors.textPrimary,
                   ),
                   CustomTextWidget(
-                    text: "K: ${nutrientData['data']['Phosphorus']}",
+                    text: "K: ${nutrientData['data']['Phosphorus']} kg/ha",
                     fontSize: 18,
                     textColor: AppColors.textPrimary,
                   ),
                   CustomTextWidget(
-                    text: "P: ${nutrientData['data']['Potassium']}",
+                    text: "P: ${nutrientData['data']['Potassium']} kg/ha",
                     fontSize: 18,
                     textColor: AppColors.textPrimary,
                   ),
