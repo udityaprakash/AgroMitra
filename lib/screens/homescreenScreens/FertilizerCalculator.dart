@@ -22,6 +22,7 @@ class _StateAndCropSelectorState extends State<StateAndCropSelector> {
   List<dynamic> states = [];
   List<dynamic> crops = [];
   List<dynamic> fertilizerRecommendations = [];
+  List<dynamic> organicRecommendations = [];
   String? selectedStateId;
   String? selectedCrop;
   var occontroller = TextEditingController();
@@ -158,11 +159,62 @@ class _StateAndCropSelectorState extends State<StateAndCropSelector> {
         fertilizerRecommendations = data['data']['getRecommendations'];
       }
       log(fertilizerRecommendations.toString());
+      await organic_Recommendations();
     } else {
       customShowSnackbar(
           context, AppLocalizations.of(context)!.somethingWentWrong);
     }
   }
+
+  Future<void> organic_Recommendations() async {
+
+    setState(() {
+      organicRecommendations = [];
+    });
+
+    final Map<String, dynamic> variables = {
+      "soil_type": 'black',
+      "n_value": nicontroller.text,
+      "p_value":  picontroller.text,
+      "k_value": kicontroller.text,
+      "oc_value": occontroller.text,
+      "crop_type": selectedCrop,
+      };
+
+    final response = await http.post(
+      Uri.parse('https://npk-final-api.onrender.com/recommend_fertilizer'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode(variables),
+    );
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      // log(data.toString());
+      if (await data['organic']) {
+        // showSnackbarAutoTranslated(context, 'No Recommendations Available');
+        organicRecommendations =await data['organic'];
+        log(await organicRecommendations.toString());
+        setState(() {
+      isloading = false;
+    });
+      } else {
+        customShowSnackbar(
+            context, AppLocalizations.of(context)!.noRecommendationsAvailable);
+            setState(() {
+      isloading = false;
+    });
+      }
+      // log(.toString());
+    } else {
+      customShowSnackbar(
+          context, AppLocalizations.of(context)!.somethingWentWrong);
+    }
+    setState(() {
+      isloading = false;
+    });
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -397,350 +449,87 @@ class _StateAndCropSelectorState extends State<StateAndCropSelector> {
                 ],
               ),
               padding: EdgeInsets.all(16.0),
-              // child: DefaultTabController(
-              //   length: 2,
-              //   child: Column(
-              //     crossAxisAlignment: CrossAxisAlignment.start,
-              //     children: [
-              //       TabBar(
-              //         indicatorColor: Colors.black,
-              //         labelColor: Colors.black,
-              //         unselectedLabelColor: Colors.grey,
-              //         tabs: [
-              //           Tab(text: 'Organic'),
-              //           Tab(text: 'Chemical'),
-              //         ],
-              //       ),
-              //       SizedBox(height: 16),
-              //       Expanded(
-              //         child: TabBarView(
-              //           physics:
-              //               BouncingScrollPhysics(), // For swipe transition effect
-              //           children: [
-              //             // Organic Tab Content
-              //             ListView(
-              //               children: [
-              //                 // First Organic Item
-              //                 Card(
-              //                   elevation: 2,
-              //                   shape: RoundedRectangleBorder(
-              //                     borderRadius: BorderRadius.circular(8),
-              //                   ),
-              //                   child: Padding(
-              //                     padding: const EdgeInsets.all(16.0),
-              //                     child: Row(
-              //                       children: [
-              //                         ClipRRect(
-              //                           borderRadius:
-              //                               BorderRadius.circular(8),
-              //                           child: Image.network(
-              //                             'https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Misthaufen16.JPG/340px-Misthaufen16.JPG',
-              //                             width: 60,
-              //                             height: 60,
-              //                             fit: BoxFit.cover,
-              //                           ),
-              //                         ),
-              //                         SizedBox(width: 16),
-              //                         Expanded(
-              //                           child: Column(
-              //                             crossAxisAlignment:
-              //                                 CrossAxisAlignment.start,
-              //                             children: [
-              //                               Text(
-              //                                 'Farmyard Manure',
-              //                                 style: TextStyle(
-              //                                   fontSize: 16,
-              //                                   fontWeight: FontWeight.bold,
-              //                                 ),
-              //                               ),
-              //                               SizedBox(height: 4),
-              //                               Text(
-              //                                 'Application Rate: 5-6 tons/hectare\nEstimated Cost: \$120-150/ton',
-              //                                 style: TextStyle(
-              //                                     fontSize: 14,
-              //                                     color: Colors.grey[700]),
-              //                               ),
-              //                             ],
-              //                           ),
-              //                         ),
-              //                         Container(
-              //                           padding: EdgeInsets.symmetric(
-              //                               horizontal: 8, vertical: 4),
-              //                           decoration: BoxDecoration(
-              //                             color: Colors.green[100],
-              //                             borderRadius:
-              //                                 BorderRadius.circular(12),
-              //                           ),
-              //                           child: Text(
-              //                             'Recommended',
-              //                             style: TextStyle(
-              //                               color: Colors.green[800],
-              //                               fontWeight: FontWeight.bold,
-              //                               fontSize: 12,
-              //                             ),
-              //                           ),
-              //                         ),
-              //                       ],
-              //                     ),
-              //                   ),
-              //                 ),
-              //                 SizedBox(height: 16),
-              //                 // Second Organic Item
-              //                 Card(
-              //                   elevation: 2,
-              //                   shape: RoundedRectangleBorder(
-              //                     borderRadius: BorderRadius.circular(8),
-              //                   ),
-              //                   child: Padding(
-              //                     padding: const EdgeInsets.all(16.0),
-              //                     child: Row(
-              //                       children: [
-              //                         ClipRRect(
-              //                           borderRadius:
-              //                               BorderRadius.circular(8),
-              //                           child: Image.network(
-              //                             'https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Misthaufen16.JPG/340px-Misthaufen16.JPG',
-              //                             width: 60,
-              //                             height: 60,
-              //                             fit: BoxFit.cover,
-              //                           ),
-              //                         ),
-              //                         SizedBox(width: 16),
-              //                         Expanded(
-              //                           child: Column(
-              //                             crossAxisAlignment:
-              //                                 CrossAxisAlignment.start,
-              //                             children: [
-              //                               Text(
-              //                                 'Vermicompost',
-              //                                 style: TextStyle(
-              //                                   fontSize: 16,
-              //                                   fontWeight: FontWeight.bold,
-              //                                 ),
-              //                               ),
-              //                               SizedBox(height: 4),
-              //                               Text(
-              //                                 'Application Rate: 2.5 tons/hectare\nEstimated Cost: \$200-250/ton',
-              //                                 style: TextStyle(
-              //                                     fontSize: 14,
-              //                                     color: Colors.grey[700]),
-              //                               ),
-              //                             ],
-              //                           ),
-              //                         ),
-              //                         Container(
-              //                           padding: EdgeInsets.symmetric(
-              //                               horizontal: 8, vertical: 4),
-              //                           decoration: BoxDecoration(
-              //                             color: Colors.yellow[100],
-              //                             borderRadius:
-              //                                 BorderRadius.circular(12),
-              //                           ),
-              //                           child: Text(
-              //                             'Alternative',
-              //                             style: TextStyle(
-              //                               color: Colors.orange[800],
-              //                               fontWeight: FontWeight.bold,
-              //                               fontSize: 12,
-              //                             ),
-              //                           ),
-              //                         ),
-              //                       ],
-              //                     ),
-              //                   ),
-              //                 ),
-              //               ],
-              //             ),
-              //             // Chemical Tab Content
-              //             ListView.builder(
-              //               itemBuilder: (context, index) {
-              //                 final recommendation =
-              //                     fertilizerRecommendations[index];
-              //                 return Card(
-              //                   elevation: 2,
-              //                   shape: RoundedRectangleBorder(
-              //                     borderRadius: BorderRadius.circular(8),
-              //                   ),
-              //                   child: Padding(
-              //                     padding: const EdgeInsets.all(16.0),
-              //                     child: Row(
-              //                       children: [
-              //                         ClipRRect(
-              //                           borderRadius:
-              //                               BorderRadius.circular(8),
-              //                           child: Image.network(
-              //                             'https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Misthaufen16.JPG/340px-Misthaufen16.JPG',
-              //                             width: 60,
-              //                             height: 60,
-              //                             fit: BoxFit.cover,
-              //                           ),
-              //                         ),
-              //                         SizedBox(width: 16),
-              //                         Expanded(
-              //                           child: Column(
-              //                             crossAxisAlignment:
-              //                                 CrossAxisAlignment.start,
-              //                             children: [
-              //                               Text(
-              //                                 recommendation['name'],
-              //                                 style: TextStyle(
-              //                                   fontSize: 16,
-              //                                   fontWeight: FontWeight.bold,
-              //                                 ),
-              //                               ),
-              //                               SizedBox(height: 4),
-              //                               Text(
-              //                                 'Application Rate: ${recommendation['rate']} Kg/hectare\nEstimated Cost: \$${recommendation['cost']}',
-              //                                 style: TextStyle(
-              //                                     fontSize: 14,
-              //                                     color: Colors.grey[700]),
-              //                               ),
-              //                             ],
-              //                           ),
-              //                         ),
-              //                         Container(
-              //                           padding: EdgeInsets.symmetric(
-              //                               horizontal: 8, vertical: 4),
-              //                           decoration: BoxDecoration(
-              //                             color: Colors.green[100],
-              //                             borderRadius:
-              //                                 BorderRadius.circular(12),
-              //                           ),
-              //                           child: Text(
-              //                             'Recommended',
-              //                             style: TextStyle(
-              //                               color: Colors.green[800],
-              //                               fontWeight: FontWeight.bold,
-              //                               fontSize: 12,
-              //                             ),
-              //                           ),
-              //                         ),
-              //                       ],
-              //                     ),
-              //                   ),
-              //                 );
-              //               },
-              //               itemCount: fertilizerRecommendations.length
-              //               ),
-
-              //           ],
-              //         ),
-              //       ),
-              //     ],
-              //   ),
-              // ),
-              child: ListView(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                children: [
-                  Row(
+              child: Container(
+  decoration: BoxDecoration(
+    color: Colors.white,
+    borderRadius: BorderRadius.circular(12),
+    boxShadow: [
+      BoxShadow(
+        color: Colors.black12,
+        blurRadius: 8,
+        offset: Offset(0, 2),
+      ),
+    ],
+  ),
+  padding: EdgeInsets.all(16.0),
+  child: ListView(
+    shrinkWrap: true,
+    physics: NeverScrollableScrollPhysics(),
+    children: [
+      Row(
+        children: [
+          CustomTextWidget(
+            text: AppLocalizations.of(context)!.organicRecommendations,
+            textColor: AppColors.textPrimary,
+            fontSize: 18,
+            isBold: true,
+          ),
+        ],
+      ),
+      SizedBox(height: 16),
+      ...organicRecommendations.map((recommendation) {
+        return Card(
+          color: AppColors.newbackground,
+          elevation: 2,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
+              children: [
+                Expanded(
+                  flex: 2,
+                  child: AspectRatio(
+                    aspectRatio: 1,
+                    child: Icon(
+                      Icons.eco, // Placeholder for an image
+                      size: 40,
+                      color: AppColors.textPrimary,
+                    ),
+                  ),
+                ),
+                SizedBox(width: 16),
+                Expanded(
+                  flex: 6,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       CustomTextWidget(
-                          text: AppLocalizations.of(context)!
-                              .organicRecommendations,
-                          textColor: AppColors.textPrimary,
-                          fontSize: 18,
-                          isBold: true),
+                        text: recommendation['fertilizer_name'],
+                        textColor: AppColors.textPrimary,
+                        fontSize: 15,
+                        isBold: true,
+                      ),
+                      SizedBox(height: 4),
+                      CustomTextWidget(
+                        text: "${recommendation['fertilizer_quantity']}",
+                        textColor: AppColors.textPrimary,
+                        fontSize: 14,
+                        overflow: TextOverflow.clip,
+                      ),
                     ],
                   ),
-                  SizedBox(height: 16),
-                  Card(
-                    color: AppColors.newbackground,
-                    elevation: 2,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            flex: 2,
-                            child: AspectRatio(
-                              aspectRatio: 1,
-                              child: Image.network(
-                                'https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Misthaufen16.JPG/340px-Misthaufen16.JPG',
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          ),
-                          SizedBox(width: 16),
-                          Expanded(
-                            flex: 6,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                CustomTextWidget(
-                                    text: AppLocalizations.of(context)!
-                                        .farmyardManure,
-                                    textColor: AppColors.textPrimary,
-                                    fontSize: 15,
-                                    isBold: true),
-                                SizedBox(height: 4),
-                                CustomTextWidget(
-                                  text: AppLocalizations.of(context)!
-                                      .applicationRate5To6,
-                                  textColor: AppColors.textPrimary,
-                                  fontSize: 14,
-                                  overflow: TextOverflow.clip,
-                                ),
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 16),
-                  Card(
-                    color: AppColors.newbackground,
-                    elevation: 2,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            flex: 2,
-                            child: AspectRatio(
-                              aspectRatio: 1,
-                              child: Image.network(
-                                'https://t3.ftcdn.net/jpg/09/01/48/68/240_F_901486804_PwR6feYQbndkwf3jAfwfikVDBZL2IeXK.webp',
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          ),
-                          SizedBox(width: 16),
-                          Expanded(
-                            flex: 6,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                CustomTextWidget(
-                                    text: AppLocalizations.of(context)!
-                                        .vermicompost,
-                                    textColor: AppColors.textPrimary,
-                                    fontSize: 15,
-                                    isBold: true),
-                                SizedBox(height: 4),
-                                CustomTextWidget(
-                                  text: AppLocalizations.of(context)!
-                                      .applicationRate25,
-                                  textColor: AppColors.textPrimary,
-                                  fontSize: 14,
-                                  overflow: TextOverflow.clip,
-                                ),
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  )
-                ],
-              ),
+                ),
+              ],
+            ),
+          ),
+        );
+      }).toList(),
+    ],
+  ),
+),
+
             ),
             SizedBox(height: 16),
 
