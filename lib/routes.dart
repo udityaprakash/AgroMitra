@@ -17,6 +17,7 @@ import 'package:agromitra/screens/homescreenScreens/FertilizerCalculator.dart';
 import 'package:agromitra/screens/homescreenScreens/analysingdata.dart';
 import 'package:agromitra/screens/homescreenScreens/captureSoilImage.dart';
 import 'package:agromitra/screens/homescreenScreens/detailed_crop_posts.dart';
+import 'package:agromitra/screens/homescreenScreens/getnpkautofromgov.dart';
 import 'package:agromitra/screens/homescreenScreens/sevendayforecast.dart';
 import 'package:agromitra/screens/homescreenScreens/soil_analysed_report.dart';
 import 'package:agromitra/screens/homescreenScreens/soilgridmaps.dart';
@@ -101,6 +102,9 @@ class CustomRoute {
         case "/weatherForecast":
         final args = settings.arguments as Map<String, dynamic>;
           return WeatherForecastScreen( latitude: args['lat'], longitude: args['lon']);
+        case "/GetNPKFromStateGOV":
+        final args = settings.arguments as Map<String, dynamic>;
+          return GetNPKFromStateGOV(districtName: args['districtName'], stateName: args['stateName']);  
 
         case "/agriLabs":
         final args = settings.arguments as Map<String, dynamic>;

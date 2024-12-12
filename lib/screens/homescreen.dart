@@ -432,16 +432,28 @@ class _HomeScreenState extends State<HomeScreen> {
                               badgeColor: Colors.grey.shade300,
                             ),
                           ),
-                          _buildCard(
-                            icon: Icons.eco,
-                            title:
-                                AppLocalizations.of(context)!.organic_solutions,
-                            subtitle: AppLocalizations.of(context)!
-                                .natural_alternatives_around_you,
-                            badgeText: AppLocalizations.of(context)!.newk,
-                            badgeTextColor: Colors.green,
-                            badgeColor: Colors.green.shade100,
-                            iconColor: Colors.green,
+                          InkWell(
+                            onTap: (){
+                              if(stateName == "" || districtName == "") {
+                                return;
+                              }
+                              Navigator.pushNamed(context, '/GetNPKFromStateGOV',
+                                  arguments: {
+                                    'districtName': districtName,
+                                    'stateName': stateName,
+                                  });
+                            },
+                            child: _buildCard(
+                              icon: Icons.eco,
+                              title:
+                                  AppLocalizations.of(context)!.organic_solutions,
+                              subtitle: AppLocalizations.of(context)!
+                                  .natural_alternatives_around_you,
+                              badgeText: AppLocalizations.of(context)!.newk,
+                              badgeTextColor: Colors.green,
+                              badgeColor: Colors.green.shade100,
+                              iconColor: Colors.green,
+                            ),
                           ),
                           InkWell(
                             onTap: () {
