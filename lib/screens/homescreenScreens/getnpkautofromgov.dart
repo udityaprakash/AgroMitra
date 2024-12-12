@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'package:agromitra/functions/autotranslator.dart';
+import 'package:agromitra/functions/functionsfornpkvalues.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:agromitra/constant/color.dart';
@@ -72,16 +73,16 @@ class _GetNPKFromStateGOVState extends State<GetNPKFromStateGOV> {
         setState(() {
           states = data['data']['getState'];
           final state = states.firstWhere(
-            (s) => s['name'].toLowerCase() == widget.stateName.toLowerCase(),
-            orElse: () => null);
+              (s) => s['name'].toLowerCase() == widget.stateName.toLowerCase(),
+              orElse: () => null);
           if (state == null) {
             if (state == null) {
-          throw Exception("State not found");
-        }
-        selectedStateId = "63f871f5c660ddb223457dca";
-          throw Exception("State not found");
-        }
-        selectedStateId = state['_id'];  
+              throw Exception("State not found");
+            }
+            selectedStateId = "63f871f5c660ddb223457dca";
+            throw Exception("State not found");
+          }
+          selectedStateId = state['_id'];
         });
       } else {
         throw Exception('Failed to load states');
@@ -110,10 +111,10 @@ class _GetNPKFromStateGOVState extends State<GetNPKFromStateGOV> {
     try {
       var body = jsonEncode({
         "query": """
-          query GetdistrictAndSubdistrictBystate(\$state: ID!, \$subdistrict: Boolean) {
-            getdistrictAndSubdistrictBystate(state: \$state, subdistrict: \$subdistrict)
-          }
-        """,
+        query GetdistrictAndSubdistrictBystate(\$state: ID!, \$subdistrict: Boolean) {
+          getdistrictAndSubdistrictBystate(state: \$state, subdistrict: \$subdistrict)
+        }
+      """,
         "variables": {"state": stateId, "subdistrict": false},
       });
 
@@ -123,37 +124,40 @@ class _GetNPKFromStateGOVState extends State<GetNPKFromStateGOV> {
 
       if (districtsResponse.statusCode == 200) {
         final districtsData = jsonDecode(districtsResponse.body);
-          districts = districtsData['data']['getdistrictAndSubdistrictBystate'];
-          if(districts.length == 0){
-            throw Exception("No District Data found");
-          }
-          selectedDistrictId = districts.firstWhere(
-            (s) => s['name'].toLowerCase() == widget.stateName.toLowerCase(),
-            orElse: () => null);
-        setState(() {
-          
+        districts = districtsData['data']['getdistrictAndSubdistrictBystate'];
 
-        });
-        if(selectedDistrictId == null && districts.length > 0){
-          selectedDistrictId = "63f9cf23519359b7438e8c12";
-          throw Exception("District near by you");
+        if (districts.isEmpty) {
+          throw Exception("No District Data found for current state");
         }
+
+        // Find district matching widget's district name
+        var matchedDistrict = districts.firstWhere(
+            (d) => d['name'].toLowerCase() == widget.districtName.toLowerCase(),
+            orElse: () => null);
+
+        // Set selectedDistrictId, preferring matched district or first district
+        selectedDistrictId = matchedDistrict?['_id'] ?? districts[0]['_id'];
       } else {
         throw Exception("Failed to fetch districts");
       }
     } catch (e) {
-      if(selectedDistrictId == null && districts.length > 0){
-          selectedDistrictId = "63f9cf23519359b7438e8c12";
-          throw Exception("District near by you");
-        }
       print("Error fetching districts: $e");
+
+      // Fallback to a default district if possible
+      if (districts.isNotEmpty) {
+        selectedDistrictId = districts[0]['_id'];
+      }
+
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Exact District not found in Government Database showing nearest centers")),
+        SnackBar(
+            content: Text(
+                "Exact District not found in Government Database showing nearest centers")),
       );
     } finally {
       setState(() {
         isDistrictLoading = false;
       });
+      // Ensure crops are fetched for the current state
       await fetchCrops(stateId);
     }
   }
@@ -268,6 +272,99 @@ class _GetNPKFromStateGOVState extends State<GetNPKFromStateGOV> {
     }
   }
 
+  Future<void> fetchNutrientDashboard() async {
+    try {
+      final query = r"""query GetNutrientDashboardForPortal($state: ID, $district: ID,$block: ID, $village: ID, $cycle: String, $count: Boolean) {\n        getNutrientDashboardForPortal(state: $state, district: $district, village: $village, block: $block, cycle: $cycle, count: $count)\n      }""";
+
+
+      final response = await http.post(
+        Uri.parse('https://soilhealth4.dac.gov.in'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          "query": query,
+          "variables": {
+            "count": true,
+            "cycle": "2024-25",
+            "district": selectedDistrictId,
+            "state": selectedStateId
+          }
+        }),
+      );
+    // log(await response.toString());
+
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+        log(response.statusCode.toString());
+
+        // Assign values to controllers
+        setState(() {
+          assignNutrientControllerValues(jsonResponse);
+        });
+      }
+    } catch (e) {
+      log('Error fetching nutrient dashboard: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to fetch nutrient data')),
+      );
+    }
+  }
+
+  void assignNutrientControllerValues(Map<String, dynamic> response) {
+    try {
+      // Check if the response has the expected structure
+      if (response['data'] != null &&
+          response['data']['getNutrientDashboardForPortal'] != null &&
+          response['data']['getNutrientDashboardForPortal'].isNotEmpty) {
+        // Get the first (and likely only) item in the list
+        var nutrientData = response['data']['getNutrientDashboardForPortal'][0];
+
+        // Check if results exist
+        if (nutrientData['results'] != null) {
+          var results = nutrientData['results'];
+          log(results.toString());
+
+          // Assign Nitrogen (N)
+          if (results['n'] != null) {
+            int lowN = results['n']['Low'] ?? 0;
+            int mediumN = results['n']['Medium'] ?? 0;
+            int highN = results['n']['High'] ?? 0;
+            nicontroller.text = getnvalue(lowN, mediumN, highN).toString();
+          }
+
+          // Assign Phosphorus (P)
+          if (results['p'] != null) {
+            int lowP = results['p']['Low'] ?? 0;
+            int mediumP = results['p']['Medium'] ?? 0;
+            int highP = results['p']['High'] ?? 0;
+            picontroller.text = getpvalue(lowP, mediumP, highP).toString();
+          }
+
+          // Assign Potassium (K)
+          if (results['k'] != null) {
+            int lowK = results['k']['Low'] ?? 0;
+            int mediumK = results['k']['Medium'] ?? 0;
+            int highK = results['k']['High'] ?? 0;
+            kicontroller.text = getkvalue(lowK, mediumK, highK).toString();
+          }
+
+          // Assign Organic Carbon (OC)
+          if (results['OC'] != null) {
+            int lowOC = results['OC']['Low'] ?? 0;
+            int mediumOC = results['OC']['Medium'] ?? 0;
+            int highOC = results['OC']['High'] ?? 0;
+            occontroller.text = getocvalue(lowOC, mediumOC, highOC).toString();
+          }
+        }
+      }
+    } catch (e) {
+      print('Error assigning nutrient controller values: $e');
+      // Optionally show a snackbar or handle the error
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to parse nutrient data')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -332,7 +429,7 @@ class _GetNPKFromStateGOVState extends State<GetNPKFromStateGOV> {
                               textColor: AppColors.textPrimary),
                         );
                       }).toList(),
-                      onChanged: (value) {
+                      onChanged: (value) async {
                         setState(() {
                           selectedStateId = value;
                           districts = [];
@@ -341,7 +438,13 @@ class _GetNPKFromStateGOVState extends State<GetNPKFromStateGOV> {
                           selectedCrop = null;
                         });
                         if (value != null) {
-                          fetchDistricts(value);
+                          await fetchDistricts(value);
+                        }
+                        // Call the function if all dropdowns have selected values
+                        if (selectedStateId != null &&
+                            selectedDistrictId != null &&
+                            selectedCrop != null) {
+                          await fetchNutrientDashboard();
                         }
                       },
                     ),
@@ -374,14 +477,20 @@ class _GetNPKFromStateGOVState extends State<GetNPKFromStateGOV> {
                               textColor: AppColors.textPrimary),
                         );
                       }).toList(),
-                      onChanged: (value) {
+                      onChanged: (value) async {
                         setState(() {
                           selectedDistrictId = value;
                           crops = [];
                           selectedCrop = null;
                         });
-                        if (value != null) {
-                          fetchCrops(value);
+                        if (value != null && selectedStateId != null) {
+                          await fetchCrops(selectedStateId!);
+                        }
+                        // Call the function if all dropdowns have selected values
+                        if (selectedStateId != null &&
+                            selectedDistrictId != null &&
+                            selectedCrop != null) {
+                          await fetchNutrientDashboard();
                         }
                       },
                     ),
@@ -416,10 +525,17 @@ class _GetNPKFromStateGOVState extends State<GetNPKFromStateGOV> {
                               textColor: AppColors.textPrimary),
                         );
                       }).toList(),
-                      onChanged: (value) {
+                      onChanged: (value) async {
                         setState(() {
                           selectedCrop = value;
                         });
+                        // Call the function if all dropdowns have selected values
+                        if (selectedStateId != null &&
+                            selectedDistrictId != null &&
+                            selectedCrop != null) {
+                        // log("here it is"+selectedCrop.toString()+" "+selectedStateId.toString()+" "+selectedDistrictId.toString());
+                          await fetchNutrientDashboard();
+                        }
                       },
                     ),
                   ),
