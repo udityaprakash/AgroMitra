@@ -16,10 +16,8 @@ class LanguageProvider extends ChangeNotifier {
     {'name': 'ଓଡ଼ିଆ', 'code': 'or'},
     {'name': 'ਪੰਜਾਬੀ', 'code': 'pa'},
     {'name': 'অসমীয়া', 'code': 'as'},
-    {'name': 'मैथिली', 'code': 'mai'},
     {'name': 'ᱥᱟᱱᱛᱟᱲᱤ', 'code': 'sat'},
     {'name': 'कॉशुर', 'code': 'ks'},
-    {'name': 'संस्कृतम्', 'code': 'sa'},
     {'name': 'سنڌي', 'code': 'sd'},
     {'name': 'कोंकणी', 'code': 'kok'},
     {'name': 'মৈতৈলোন', 'code': 'mni'},
@@ -27,6 +25,8 @@ class LanguageProvider extends ChangeNotifier {
     {'name': 'बर\'', 'code': 'brx'},
     {'name': 'नेपाली', 'code': 'ne'},
   ];
+    // {'name': 'मैथिली', 'code': 'mai'},
+    // {'name': 'संस्कृतम्', 'code': 'sa'},
 
   Locale _selectedLocale = const Locale('en');
 

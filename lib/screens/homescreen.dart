@@ -426,7 +426,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         crossAxisCount: 2,
                         mainAxisSpacing: 16,
                         crossAxisSpacing: 16,
-                        childAspectRatio: 1.2, // Adjust as needed
+                        // childAspectRatio: 1.2, // Adjust as needed
                         shrinkWrap: true,
 
                         physics: NeverScrollableScrollPhysics(),
